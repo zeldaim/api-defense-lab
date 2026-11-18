@@ -150,8 +150,8 @@ docker compose run --rm scorer --last 15          # 최근 15분에 시작한 �
 **입력: nginx 접속 로그 한 줄 = 요청 하나** (`/data/logs/access.log`, `nginx/nginx.conf` 의 `log_format lab`)
 
 ```
-10.66.0.46 - - [19/Nov/2026:07:54:21 +0000] "GET /debug HTTP/1.1" 200 1299 "-" "Mozilla/5.0 (api-defense-lab)"
-└ 출발지 IP   └ 시각(초 단위)               └ 메서드 · 경로(+쿼리)   └ 응답 코드 · 크기   └ User-Agent
+10.66.0.240 - - [18/Nov/2026:23:17:14 +0000] "GET /debug HTTP/1.1" 200 1299 "-" "Mozilla/5.0 (api-defense-lab)"
+└ 출발지 IP    └ 시각(초 단위)               └ 메서드 · 경로(+쿼리)   └ 응답 코드 · 크기   └ User-Agent
 ```
 
 Apache/nginx combined 와 같은 모양이라 Wazuh 기본 디코더가 그대로 읽는다. 출발지 칸은 `X-Client-IP` 헤더(없으면 실제 주소)다.
