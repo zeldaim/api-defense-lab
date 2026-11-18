@@ -145,6 +145,44 @@ docker compose run --rm scorer --last 15          # 최근 15분에 시작한 �
 | `LAB_ES` | `auto` | ES 주소: `auto`(dashboard 모듈이 있으면) · URL · 빈 값(안 보냄) |
 | `COMPOSE_PROFILES` | (없음) | 켤 모듈 — 예: `wazuh,dashboard` |
 
+## 로그 · 기록 형식
+
+**입력: nginx 접속 로그 한 줄 = 요청 하나** (`/data/logs/access.log`, `nginx/nginx.conf` 의 `log_format lab`)
+
+```
+10.66.0.46 - - [19/Nov/2026:07:54:21 +0000] "GET /debug HTTP/1.1" 200 1299 "-" "Mozilla/5.0 (api-defense-lab)"
+└ 출발지 IP   └ 시각(초 단위)               └ 메서드 · 경로(+쿼리)   └ 응답 코드 · 크기   └ User-Agent
+```
+
+Apache/nginx combined 와 같은 모양이라 Wazuh 기본 디코더가 그대로 읽는다. 출발지 칸은 `X-Client-IP` 헤더(없으면 실제 주소)다.
+
+| 로그 칸 | Wazuh (`web-accesslog` 디코더, 룰 31100 계열 → 100500) | Sigma (`category: webserver`) | ML 특징 (`detector/features_v2.py`) |
+|---|---|---|---|
+| 출발지 IP | `srcip` | `c-ip` | 행위 단위 — IP × 5분 창 |
+| 메서드 | `protocol` | `cs-method` | 명세 밖 비율 (`offspec_ratio`) |
+| 경로 + 쿼리 | `url` (쿼리 포함) | `cs-uri-stem` (경로) · `cs-uri-query` | 경로 틀 · 객체 ID · 연속 ID (`seq_id_run` · `id_span_log` …) |
+| 응답 코드 | `id` | `sc-status` | 오류 비율 (`err_ratio`) |
+| User-Agent | — | `cs-user-agent` | UA 수 (`n_ua`) |
+
+nginx 차단 응답은 `403` · 본문 53바이트(`{"detail":"blocked by api-defense-lab auto-response"}`)다 — 채점기는 이 크기로 앱 자체의 403 과 nginx 차단을 구분한다.
+
+**정답지** `/data/run/labels.jsonl` (traffic 이 씀, 한 행위자 = 시작 줄 + 끝 줄)
+
+```json
+{"run": "20261118T231614Z-56d0", "ip": "10.77.0.37", "role": "bola", "scenario": "demo", "start": "2026-11-18T23:18:51.953598+00:00", "end": "2026-11-18T23:19:52.674886+00:00"}
+```
+
+**판정 기록** `/data/run/events.jsonl` (detector 가 씀 — 채점기의 입력. `type` 별)
+
+| `type` | 주요 칸 |
+|---|---|
+| `alert` | `rule.id` · `rule.level` · `rule.groups` · `data.client_ip` · `data.method` · `data.path` · `data.status` |
+| `ml` | `client_ip` · `level`(high · medium) · `score` · `n_req` · `seq_id_run` · `window_start` |
+| `block` | `client_ip` · `source`(룰 · ML) · `reason` · `detail` |
+| `allowlisted` | 허용 목록이라 차단하지 않은 판정 |
+
+내 탐지기를 따로 만들어도 이 형식으로 `events.jsonl` 을 쓰면 같은 채점을 받는다.
+
 ## 내 룰로 채점받기 (Sigma · 코어)
 
 1. `rules/sigma/` 에 내 Sigma 룰(`.yml`)을 넣는다 (`logsource: category: webserver`, 필드 `c-ip` · `cs-method` · `cs-uri-stem` · `cs-uri-query` · `sc-status` · `cs-user-agent`).
