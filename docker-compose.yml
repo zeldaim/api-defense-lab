@@ -1,0 +1,141 @@
+# api-defense-lab — API 방어 연습장
+#   docker compose up -d --build          전부 올리기 (처음엔 이미지 빌드 · 내려받기로 5~10분)
+#   docker compose run --rm traffic demo  정상 + 공격 시나리오 (정답지 자동 기록)
+#   docker compose run --rm scorer        채점표 + reports/ 에 HTML 보고서
+#   docker compose down -v                전부 지우기 (로그 · 정답지 · 차단 목록 포함)
+# 포트는 모두 127.0.0.1 에만 연다 — 일부러 취약한 앱(DVRA)이 들어 있다.
+name: api-defense-lab
+
+x-tools: &tools
+  build: .
+  image: api-defense-lab/tools:0.1
+  volumes:
+    - labdata:/data
+    - ./model:/lab/model:ro
+  environment:
+    LAB_MODEL: ${LAB_MODEL:-/lab/model/dvra_v1}
+
+services:
+  # ── 대상 앱: Damn Vulnerable RESTaurant (GPL-3.0, theowni) — 코드는 이 레포에 없고 고정 커밋에서 빌드한다
+  dvra-db:
+    image: postgres:15.4-alpine
+    environment: {POSTGRES_USER: admin, POSTGRES_PASSWORD: password, POSTGRES_DB: restaurant}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d restaurant -U admin"]
+      interval: 5s
+      retries: 20
+  dvra-web:
+    build:
+      context: https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game.git#d32d09972aec7830f5f1d4a5d274cac7aae7eb82
+    image: api-defense-lab/dvra:d32d099
+    command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8091 --workers 1"
+    privileged: false                     # 원본 compose 의 privileged · SYS_ADMIN 은 주지 않는다
+    environment: {POSTGRES_USER: admin, POSTGRES_PASSWORD: password, POSTGRES_SERVER: dvra-db, POSTGRES_PORT: "5432", POSTGRES_DB: restaurant}
+    depends_on: {dvra-db: {condition: service_healthy}}
+    healthcheck:                          # nginx 를 거치지 않고 직접 — 접속 로그에 헬스체크가 섞이지 않게
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8091/healthcheck')"]
+      interval: 5s
+      retries: 30
+
+  # ── 앞단: 접속 기록 + 차단 목록 (목록이 바뀌면 1초 안에 다시 읽음)
+  nginx:
+    image: nginx:1.27-alpine
+    command: ["sh", "/lab/run.sh"]
+    ports: ["127.0.0.1:8089:80"]
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/run.sh:/lab/run.sh:ro
+      - labdata:/data
+    depends_on: {dvra-web: {condition: service_healthy}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/__lab/health"]
+      interval: 5s
+      retries: 20
+
+  # ── 룰 탐지: Wazuh manager — 접속 로그 실시간, rules/wazuh/*.xml. 취약점 탐지는 꺼 둔다 (README 디스크 경고)
+  wazuh:
+    build: ./wazuh
+    image: api-defense-lab/wazuh:4.14.6
+    volumes:
+      - labdata:/data:ro
+      - ./rules/wazuh:/lab/rules:ro
+      - wazuh-alerts:/var/ossec/logs/alerts
+    depends_on: {nginx: {condition: service_healthy}}
+    healthcheck:
+      test: ["CMD-SHELL", "test -S /var/ossec/queue/sockets/logtest && pgrep -f wazuh-analysisd >/dev/null"]
+      interval: 10s
+      start_period: 60s
+      retries: 30
+
+  # ── ML 탐지 + 자동 차단 파이프라인
+  detector:
+    <<: *tools
+    command: ["python", "detector/pipeline.py"]
+    restart: unless-stopped
+    volumes:
+      - labdata:/data
+      - ./model:/lab/model:ro
+      - wazuh-alerts:/alerts:ro
+    environment:
+      LAB_MODEL: ${LAB_MODEL:-/lab/model/dvra_v1}
+      LAB_ALLOW: ${LAB_ALLOW:-10.1.0.1}
+      LAB_BLOCK_MIN_REQ: ${LAB_BLOCK_MIN_REQ:-15}
+      LAB_BLOCK_GROUPS: ${LAB_BLOCK_GROUPS:-shadow_api_exploit,shadow_api_recon_burst,shadow_api_mass_exfil,lab_block}
+    depends_on:
+      elasticsearch: {condition: service_healthy}
+      wazuh: {condition: service_healthy}
+
+  # ── 대시보드: Elasticsearch + Grafana (http://localhost:3000)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.5.5
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "false"
+      ES_JAVA_OPTS: -Xms1g -Xmx1g
+      # 디스크가 90% 넘게 차도 쓰기를 막지 않는다 — 연습장 데이터는 작고, 막히면 대시보드가 조용히 멈춘다
+      cluster.routing.allocation.disk.threshold_enabled: "false"
+    mem_limit: 2g
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fs 'http://127.0.0.1:9200/_cluster/health?wait_for_status=yellow&timeout=5s' >/dev/null"]
+      interval: 10s
+      retries: 30
+  grafana:
+    image: grafana/grafana:11.6.0
+    ports: ["127.0.0.1:3000:3000"]
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin    # 127.0.0.1 에서만 열리는 연습장이라 로그인 없이
+      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/lab.json
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on: {elasticsearch: {condition: service_healthy}}
+
+  # ── 도구 (docker compose run --rm <이름> 으로 실행)
+  traffic:
+    <<: *tools
+    profiles: [tools]
+    entrypoint: ["python", "traffic/lab_traffic.py"]
+    command: ["--help"]
+    depends_on: {nginx: {condition: service_healthy}}
+  scorer:
+    <<: *tools
+    profiles: [tools]
+    entrypoint: ["python", "scorer/score.py"]
+    command: []
+    volumes:
+      - labdata:/data:ro
+      - ./reports:/reports
+  trainer:
+    <<: *tools
+    profiles: [tools]
+    entrypoint: ["python", "detector/train.py"]
+    command: []
+    volumes:
+      - labdata:/data:ro
+      - ./model:/lab/model
+
+volumes:
+  labdata:
+  wazuh-alerts:

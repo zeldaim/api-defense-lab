@@ -1,0 +1,46 @@
+title: 'Shadow API L2 발견 — 명세 밖 호출이 401/403 (숨은 API 가 있다는 뜻)'
+id: 192e6934-e25b-5b7c-8bcf-5332808cfa61
+status: experimental
+description: |
+  Damn Vulnerable RESTaurant 명세에 없는 (메서드, 경로) 호출 중 응답 코드가 ^40[13]$ 인 것.
+  명세에서 자동 생성 (tools/gen_sigma.py, 명세 dvra_openapi.json) — Wazuh 룰 100511 와 같은 판정.
+references:
+  - https://github.com/zeldaim/api-defense-lab
+author: YHC
+date: 2026-11-19
+tags:
+  - attack.initial-access
+  - attack.t1190
+logsource:
+  category: webserver
+detection:
+  selection:
+    sc-status|re: '^40[13]$'
+  filter_root:
+    cs-uri-stem: '/'
+  filter_static:
+    cs-uri-stem|re: '\.(?:css|js|png|jpe?g|gif|svg|ico|woff2?|ttf|map|html?|txt)$'
+  filter_spec_delete:
+    cs-method: DELETE
+    cs-uri-stem|re: '^(?:/menu/\d+)/*$'
+  filter_spec_get:
+    cs-method: GET
+    cs-uri-stem|re: '^(?:/admin/stats/disk|/discount-coupons|/healthcheck|/menu|/orders|/orders/\d+|/orders/status/\d+|/profile|/referral-code)/*$'
+  filter_spec_patch:
+    cs-method: PATCH
+    cs-uri-stem|re: '^(?:/profile)/*$'
+  filter_spec_post:
+    cs-method: POST
+    cs-uri-stem|re: '^(?:/apply-referral|/orders|/register|/reset-password|/reset-password/new-password|/token)/*$'
+  filter_spec_put:
+    cs-method: PUT
+    cs-uri-stem|re: '^(?:/menu|/menu/\d+|/profile|/users/update_role)/*$'
+  condition: selection and not 1 of filter_*
+fields:
+  - c-ip
+  - cs-method
+  - cs-uri-stem
+  - sc-status
+falsepositives:
+  - 명세가 실제 앱보다 오래됐을 때 (새 API 가 명세에 아직 없음) — 명세를 고치고 다시 생성
+level: medium

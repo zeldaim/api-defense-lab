@@ -1,0 +1,16 @@
+title: 'Shadow API F2 대량 유출 — 60초 안에 L3 10회 이상'
+id: fd00c73e-99b6-5cbd-a943-278d0ebf624c
+status: experimental
+description: 같은 출발지 IP 가 60s 안에 L3 판정 10회 이상 — Wazuh 룰 F1/F2 와 같은 판정.
+author: YHC
+date: 2026-11-19
+correlation:
+  type: event_count
+  rules:
+    - 52ee21af-1501-5dfb-ad73-f65dbcd587e3
+  group-by:
+    - c-ip
+  timespan: 60s
+  condition:
+    gte: 10
+level: critical

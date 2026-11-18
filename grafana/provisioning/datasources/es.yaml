@@ -1,0 +1,6 @@
+apiVersion: 1
+datasources:
+  - {name: 요청, uid: lab-access, type: elasticsearch, access: proxy, url: "http://elasticsearch:9200", jsonData: {index: lab-access, timeField: timestamp}}
+  - {name: 룰 경보, uid: lab-alerts, type: elasticsearch, access: proxy, url: "http://elasticsearch:9200", jsonData: {index: lab-alerts, timeField: timestamp}}
+  - {name: ML, uid: lab-ml, type: elasticsearch, access: proxy, url: "http://elasticsearch:9200", jsonData: {index: lab-ml, timeField: timestamp}}
+  - {name: 자동 차단, uid: lab-response, type: elasticsearch, access: proxy, url: "http://elasticsearch:9200", jsonData: {index: lab-response, timeField: timestamp}}

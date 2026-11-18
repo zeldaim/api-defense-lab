@@ -1,0 +1,16 @@
+title: 'Shadow API F1 자동화 정찰 — 30초 안에 L1 20회 이상'
+id: 80445457-4d0a-5355-8248-4fce3ce28392
+status: experimental
+description: 같은 출발지 IP 가 30s 안에 L1 판정 20회 이상 — Wazuh 룰 F1/F2 와 같은 판정.
+author: YHC
+date: 2026-11-19
+correlation:
+  type: event_count
+  rules:
+    - c6716b25-1cf3-5341-a50d-b2bcdd71cdaf
+  group-by:
+    - c-ip
+  timespan: 30s
+  condition:
+    gte: 20
+level: high
