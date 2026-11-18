@@ -2,11 +2,12 @@
 """탐지 파이프라인 (detector 컨테이너) — 2초마다 (LAB_EVERY)
   ① nginx 접속 로그 새 줄          → ES lab-access
   ② 룰 경보                       → ES lab-alerts   (사용자 룰 범위 100000~199999 만)
-       LAB_ENGINE=wazuh (기본): Wazuh manager 의 alerts.json 새 줄
-       LAB_ENGINE=sigma (lite 판): rules/sigma/*.yml 을 접속 로그 한 줄마다 바로 적용 (sigma_engine.py)
+       wazuh 모듈이 켜져 있으면: Wazuh manager 의 alerts.json 새 줄
+       없으면(코어만):          rules/sigma/*.yml 을 접속 로그 한 줄마다 바로 적용 (sigma_engine.py)
+       LAB_ENGINE=auto(기본) · wazuh · sigma — auto 는 30초마다 'wazuh' 컨테이너가 있는지 본다
   ③ ML 모델로 IP × 5분 창 채점     → ES lab-ml
   ④ 차단 정책에 걸리면 차단 목록(ips.map)에 추가 (nginx 가 다시 읽어 403) → ES lab-response
-  LAB_ES 가 비어 있으면 ES 로 보내지 않는다 (lite 판). 모든 판정은 /data/run/events.jsonl 에도 남는다 — 채점기(scorer)가 이 파일을 정답지와 맞춰 본다.
+  ES 는 dashboard 모듈이 켜져 있을 때만 (LAB_ES=auto 기본: 'elasticsearch' 컨테이너가 있으면). 모든 판정은 /data/run/events.jsonl 에도 남는다 — 채점기(scorer)가 이 파일을 정답지와 맞춰 본다.
 
 차단 정책 (README 와 같게 유지)
   ML high (그 창 요청 LAB_BLOCK_MIN_REQ 건 이상)   → 자동 차단 (명세 안 BOLA — 룰이 못 잡는다)
@@ -20,6 +21,7 @@ import argparse
 import json
 import os
 import re
+import socket
 import sys
 import time
 import urllib.error
@@ -132,8 +134,8 @@ def main():
     p.add_argument("--model", default=env("LAB_MODEL", "/lab/model/dvra_v1"))
     p.add_argument("--blocked", default="/data/blocked/ips.map")
     p.add_argument("--run", default="/data/run")
-    p.add_argument("--es", default=env("LAB_ES", "http://elasticsearch:9200"), help="비우면 ES 없이 (lite)")
-    p.add_argument("--engine", default=env("LAB_ENGINE", "wazuh"), choices=["wazuh", "sigma"])
+    p.add_argument("--es", default=env("LAB_ES", "auto"), help="auto(dashboard 모듈이 있으면) · URL · 빈 값(안 씀)")
+    p.add_argument("--engine", default=env("LAB_ENGINE", "auto"), choices=["auto", "wazuh", "sigma"])
     p.add_argument("--sigma-rules", default=env("LAB_SIGMA_RULES", "/lab/rules/sigma"))
     p.add_argument("--every", type=float, default=float(env("LAB_EVERY", "2")), help="주기 (초)")
     p.add_argument("--window", type=int, default=5, help="ML 창 (분) — 모델을 학습한 창과 같아야 한다")
@@ -159,9 +161,25 @@ def main():
     state_path = os.path.join(a.run, "pipeline_state.json")
     st = json.load(open(state_path)) if os.path.exists(state_path) else {}
 
-    for idx, m in (MAPS.items() if a.es else []):    # 이미 있으면 그대로 (재시작해도 데이터 유지)
-        es("PUT", f"{a.es}/{idx}", json.dumps({"settings": {"number_of_replicas": 0, "refresh_interval": "2s"},
-                                               "mappings": {"properties": m}}).encode())
+    S = {"es": "", "wazuh": False, "checked": 0}     # 지금 켜져 있는 모듈 (30초마다 다시 본다)
+
+    def has(host):
+        try:
+            socket.gethostbyname(host)
+            return True
+        except OSError:
+            return False
+
+    def detect():
+        es_url = ("http://elasticsearch:9200" if has("elasticsearch") else "") if a.es == "auto" else a.es
+        wz = has("wazuh") if a.engine == "auto" else a.engine == "wazuh"
+        if es_url and es_url != S["es"]:
+            for idx, m in MAPS.items():              # 이미 있으면 그대로 (재시작해도 데이터 유지)
+                es("PUT", f"{es_url}/{idx}", json.dumps({"settings": {"number_of_replicas": 0, "refresh_interval": "2s"},
+                                                         "mappings": {"properties": m}}).encode())
+        if (es_url, wz) != (S["es"], S["wazuh"]):
+            print(f"[모듈] 룰 판정 {'Wazuh' if wz else 'Sigma (detector 안)'} · 대시보드 ES {es_url or '없음'}", flush=True)
+        S.update(es=es_url, wazuh=wz, checked=time.time())
 
     blocked = {}
     for l in open(a.blocked, encoding="utf-8"):
@@ -186,16 +204,14 @@ def main():
             f.write(f"{ip} 1;\n")
         ev = {"timestamp": iso(now), "client_ip": ip, "source": source, "reason": reason, "detail": detail,
               "label": labels.get(ip)}
-        bulk(a.es, "lab-response", [ev])
+        bulk(S["es"], "lab-response", [ev])
         emit({"type": "block", **ev})
         print(f"[차단] {ip} ← {source}: {reason} ({detail})", flush=True)
 
     acc, alr = Tail(a.log, st.get("access", 0)), Tail(a.alerts, st.get("alerts", 0))
-    sigma = None
-    if a.engine == "sigma":
-        import sigma_engine
-        sigma = sigma_engine.Engine(a.sigma_rules)
-    print(f"[룰 판정] {a.engine} · ES {a.es or '(없음)'}", flush=True)
+    import sigma_engine
+    sigma = sigma_engine.Engine(a.sigma_rules)
+    detect()
     ml_seen = {}                   # (ip, 창) → 마지막으로 기록한 판정
     print(f"[시작] 모델 {a.model} (학습 창 {meta.get('n_windows')}) · high<{HI} · medium<{MD} · "
           f"차단: ML high(요청 {a.block_min_req}+) / 룰 그룹 {sorted(block_groups)} · 허용 {sorted(allow)}", flush=True)
@@ -203,6 +219,9 @@ def main():
 
     def step():
         nonlocal rows
+        if time.time() - S["checked"] > 30:
+            detect()
+        use_sigma = not S["wazuh"]
         # ① 접속 로그
         docs, pending = [], []
         for line in acc.lines():
@@ -216,7 +235,7 @@ def main():
                 continue
             path, _, q = url.partition("?")
             rows.append((ip, t, meth, path, int(code), ua, q))
-            if sigma:
+            if use_sigma:
                 ev = {"c-ip": ip, "cs-method": meth, "cs-uri-stem": path, "cs-uri-query": q, "sc-status": code,
                       "cs-user-agent": ua}
                 for al in sigma.evaluate(ev, t):
@@ -224,11 +243,11 @@ def main():
                     pending.append(al)
             docs.append({"timestamp": iso(t), "client_ip": ip, "method": meth, "path": path, "status": int(code),
                          "label": labels.get(ip), "blocked": ip in blocked and int(code) == 403})
-        bulk(a.es, "lab-access", docs)
+        bulk(S["es"], "lab-access", docs)
 
         # ② Wazuh 경보 — 사용자 룰(100000~199999)만. 기본 룰(웹 400 오류 등)은 이 연습장의 대상이 아니다
         adocs = []
-        if sigma:
+        if use_sigma:
             src = pending
         else:
             src = []
@@ -260,7 +279,7 @@ def main():
             hit = block_groups & set(g)
             if ip and hit:
                 block(ip, "룰", f"{sorted(hit)[0]} (레벨 {al['rule'].get('level')})", doc["data"]["path"])
-        bulk(a.es, "lab-alerts", adocs)
+        bulk(S["es"], "lab-alerts", adocs)
 
         # ③ ML — 최근 두 창만 채점 (지난 창은 끝난 값으로 고정됨)
         if rows:
@@ -281,7 +300,7 @@ def main():
                           "score": round(s, 5), "n_req": ft["n_req"], "seq_id_run": ft["seq_id_run"], "label": labels.get(ip)})
                 if lvl == "high" and ft["n_req"] >= a.block_min_req:
                     block(ip, "ML", "BOLA 의심 (high)", f"점수 {s:.3f} · 요청 {ft['n_req']} · 연속 ID {ft['seq_id_run']}")
-            bulk(a.es, "lab-ml", mdocs, ids)
+            bulk(S["es"], "lab-ml", mdocs, ids)
             rows = [r for r in rows if r[1] >= now - 3 * a.window * 60]
         events.flush()
         json.dump({"access": acc.pos, "alerts": alr.pos}, open(state_path, "w"))

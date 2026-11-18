@@ -1,8 +1,14 @@
-# api-defense-lab — API 방어 연습장
-#   docker compose up -d --build          전부 올리기 (처음엔 이미지 빌드 · 내려받기로 5~10분)
-#   docker compose run --rm traffic demo  정상 + 공격 시나리오 (정답지 자동 기록)
-#   docker compose run --rm scorer        채점표 + reports/ 에 HTML 보고서
-#   docker compose down -v                전부 지우기 (로그 · 정답지 · 차단 목록 포함)
+# api-defense-lab — API 방어 연습장 (코어 + 업무별 모듈)
+#   코어(항상): DVRA · nginx 차단 · detector(Sigma 룰 + ML + 자동 차단) · traffic · scorer · trainer
+#   모듈 wazuh     : Wazuh manager 가 룰 판정 (Wazuh 룰 작성 연습)            — 이미지 +2.5GB
+#   모듈 dashboard : Elasticsearch + Grafana 실시간 대시보드 (관제 연습)       — 이미지 +3.5GB
+#
+#   docker compose up -d --build                                       코어만
+#   docker compose --profile wazuh --profile dashboard up -d --build   전부
+#   docker compose run --rm traffic demo                               정상 + 공격 (정답지 자동 기록)
+#   docker compose run --rm scorer                                     채점표 + reports/report.html
+#   docker compose --profile "*" down -v                               전부 지우기 (로그 · 정답지 · 차단 목록 포함)
+# detector 는 켜진 모듈을 스스로 찾는다 (30초마다): wazuh 가 있으면 Wazuh 경보, 없으면 Sigma 를 직접 적용.
 # 포트는 모두 127.0.0.1 에만 연다 — 일부러 취약한 앱(DVRA)이 들어 있다.
 name: api-defense-lab
 
@@ -52,8 +58,9 @@ services:
       interval: 5s
       retries: 20
 
-  # ── 룰 탐지: Wazuh manager — 접속 로그 실시간, rules/wazuh/*.xml. 취약점 탐지는 꺼 둔다 (README 디스크 경고)
+  # ── [모듈 wazuh] 룰 탐지: Wazuh manager — 접속 로그 실시간, rules/wazuh/*.xml. 취약점 탐지는 꺼 둔다 (README 디스크 경고)
   wazuh:
+    profiles: [wazuh]
     build: ./wazuh
     image: api-defense-lab/wazuh:4.14.6
     volumes:
@@ -67,7 +74,7 @@ services:
       start_period: 60s
       retries: 30
 
-  # ── ML 탐지 + 자동 차단 파이프라인
+  # ── [코어] 룰(Sigma 또는 Wazuh 경보) + ML 탐지 + 자동 차단
   detector:
     <<: *tools
     command: ["python", "detector/pipeline.py"]
@@ -76,17 +83,20 @@ services:
       - labdata:/data
       - ./model:/lab/model:ro
       - wazuh-alerts:/alerts:ro
+      - ./rules/sigma:/lab/rules/sigma:ro
     environment:
       LAB_MODEL: ${LAB_MODEL:-/lab/model/dvra_v1}
       LAB_ALLOW: ${LAB_ALLOW:-10.1.0.1}
       LAB_BLOCK_MIN_REQ: ${LAB_BLOCK_MIN_REQ:-15}
       LAB_BLOCK_GROUPS: ${LAB_BLOCK_GROUPS:-shadow_api_exploit,shadow_api_recon_burst,shadow_api_mass_exfil,lab_block}
-    depends_on:
-      elasticsearch: {condition: service_healthy}
-      wazuh: {condition: service_healthy}
+    depends_on:                              # 모듈이 꺼져 있으면 기다리지 않는다 (required: false)
+      nginx: {condition: service_healthy}
+      elasticsearch: {condition: service_healthy, required: false}
+      wazuh: {condition: service_healthy, required: false}
 
-  # ── 대시보드: Elasticsearch + Grafana (http://localhost:3000)
+  # ── [모듈 dashboard] Elasticsearch + Grafana (http://localhost:3000)
   elasticsearch:
+    profiles: [dashboard]
     image: docker.elastic.co/elasticsearch/elasticsearch:9.5.5
     environment:
       discovery.type: single-node
@@ -100,6 +110,7 @@ services:
       interval: 10s
       retries: 30
   grafana:
+    profiles: [dashboard]
     image: grafana/grafana:11.6.0
     ports: ["127.0.0.1:3000:3000"]
     environment:
