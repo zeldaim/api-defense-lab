@@ -4,6 +4,9 @@
   명세 원본 : e2e_story/v2_1_portable/dvra_ml_2026-11-18_run2/state/spec.yaml
   명세 SHA256: 97ad8622bae2a589c0384617ccd19ed46bd996fa06ff4ceb4af096637909442b
   명세 작업 수: 21 (예외 목록 0건 포함)
+  예외 (api-defense-lab 에서 손으로 추가, 2026-11-19): GET /docs · /docs/oauth2-redirect · /redoc · /openapi.json
+    — FastAPI 가 내보내는 공개 문서 화면. 정상 사용자(개발자)가 열 때 L3 로 차단되던 오탐을 막는다.
+    tools/gen_sigma.py 의 ALLOW 와 같게 유지할 것
   검사 범위 : ^/(?!(?:\?|$))(?![^?]*\.(?:css|js|png|jpe?g|gif|svg|ico|woff2?|ttf|map|html?|txt)(?:\?|$))
   필드: url(경로+쿼리) · protocol(메서드) · id(응답 코드) · srcip — Wazuh web-accesslog 디코더
     DELETE  /menu/{item_id}
@@ -54,11 +57,11 @@
     <group>shadow_api_undocumented,</group>
   </rule>
 
-  <!-- 명세 밖 판정: GET 인데 명세의 GET 경로(9개) 어디에도 맞지 않음 -->
+  <!-- 명세 밖 판정: GET 인데 명세의 GET 경로(9개) · 예외(문서 화면 4개) 어디에도 맞지 않음 -->
   <rule id="100503" level="6">
     <if_sid>100500</if_sid>
     <protocol type="pcre2">^GET$</protocol>
-    <url type="pcre2" negate="yes">^(?:/admin/stats/disk|/discount\-coupons|/healthcheck|/menu|/orders|/orders/\d+|/orders/status/\d+|/profile|/referral\-code)/*(?:\?.*)?$</url>
+    <url type="pcre2" negate="yes">^(?:/admin/stats/disk|/discount\-coupons|/healthcheck|/menu|/orders|/orders/\d+|/orders/status/\d+|/profile|/referral\-code|/docs|/docs/oauth2\-redirect|/openapi\.json|/redoc)/*(?:\?.*)?$</url>
     <description>[Shadow API] 명세 밖 호출: $(srcip) $(protocol) $(url)</description>
     <group>shadow_api_undocumented,</group>
   </rule>

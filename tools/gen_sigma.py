@@ -6,7 +6,7 @@
 판정: 웹 서버 로그에서 "명세에 없는 (메서드, 경로)" 호출을 응답 코드로 나눈다.
   L1 정찰 404·405 / L2 발견 401·403 / L3 악용 2xx / L3-E 서버 오류 5xx
   F1 같은 IP 30초 안에 L1 20회 이상 / F2 같은 IP 60초 안에 L3 10회 이상 (Sigma 상관 룰)
-범위: 루트(/)와 정적 파일(.css .js .png …)은 뺀다. 경로 파라미터는 명세 형식대로(integer → 숫자).
+범위: 루트(/)와 정적 파일(.css .js .png …)은 뺀다. 예외 ALLOW(문서 화면 GET 4개)는 명세처럼 다룬다. 경로 파라미터는 명세 형식대로(integer → 숫자).
 필드: Sigma webserver 표준 — cs-method · cs-uri-stem(쿼리 뺀 경로) · sc-status · c-ip
 표준 라이브러리만 쓴다. id 는 명세 경로 + 룰 이름에서 uuid5 로 만든다 (다시 만들어도 같은 id).
 """
@@ -20,6 +20,8 @@ from datetime import date
 
 STATIC = r"\.(?:css|js|png|jpe?g|gif|svg|ico|woff2?|ttf|map|html?|txt)$"
 METHODS = ("get", "post", "put", "patch", "delete", "head", "options")
+# 명세에는 없지만 정상인 호출 — FastAPI 공개 문서 화면. rules/wazuh 룰 100503 의 예외와 같게 유지한다
+ALLOW = {"GET": [r"/docs", r"/docs/oauth2-redirect", r"/openapi\.json", r"/redoc"]}
 NS = uuid.UUID("6c1f0c1e-7a57-4d1b-9a55-0a91de5e1ab0")
 
 LEVELS = [  # 이름, 제목, 응답 코드 정규식, Sigma level, Wazuh 룰 대응
@@ -45,6 +47,8 @@ def spec_ops(path):
                     fm[pr["name"]] = r"\d+" if sc.get("type") == "integer" else r"[^/]+"
             rx = re.sub(r"\\\{([^}]+)\\\}", lambda mm: fm.get(mm.group(1), r"[^/]+"), re.escape(p))
             ops[m.upper()].append(rx.replace("\\-", "-").replace("\\_", "_"))
+    for m, rxs in ALLOW.items():
+        ops[m] += rxs
     return dict(sorted(ops.items())), doc.get("info", {}).get("title", path)
 
 
@@ -126,7 +130,8 @@ def main():
         p = os.path.join(a.out, f"shadow_api_{n}.yml")
         open(p, "w", encoding="utf-8", newline="\n").write(text)
         print(f"→ {p}")
-    print(f"명세 작업 {sum(len(v) for v in ops.values())}개 ({app})")
+    n_allow = sum(len(v) for v in ALLOW.values())
+    print(f"명세 작업 {sum(len(v) for v in ops.values()) - n_allow}개 + 예외 {n_allow}개 ({app})")
 
 
 if __name__ == "__main__":

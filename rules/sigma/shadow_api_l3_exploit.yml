@@ -25,7 +25,7 @@ detection:
     cs-uri-stem|re: '^(?:/menu/\d+)/*$'
   filter_spec_get:
     cs-method: GET
-    cs-uri-stem|re: '^(?:/admin/stats/disk|/discount-coupons|/healthcheck|/menu|/orders|/orders/\d+|/orders/status/\d+|/profile|/referral-code)/*$'
+    cs-uri-stem|re: '^(?:/admin/stats/disk|/discount-coupons|/docs|/docs/oauth2-redirect|/healthcheck|/menu|/openapi\.json|/orders|/orders/\d+|/orders/status/\d+|/profile|/redoc|/referral-code)/*$'
   filter_spec_patch:
     cs-method: PATCH
     cs-uri-stem|re: '^(?:/profile)/*$'
