@@ -177,7 +177,7 @@ def main():
             for idx, m in MAPS.items():              # 이미 있으면 그대로 (재시작해도 데이터 유지)
                 es("PUT", f"{es_url}/{idx}", json.dumps({"settings": {"number_of_replicas": 0, "refresh_interval": "2s"},
                                                          "mappings": {"properties": m}}).encode())
-        if (es_url, wz) != (S["es"], S["wazuh"]):
+        if (es_url, wz) != (S["es"], S["wazuh"]) or not S["checked"]:
             print(f"[모듈] 룰 판정 {'Wazuh' if wz else 'Sigma (detector 안)'} · 대시보드 ES {es_url or '없음'}", flush=True)
         S.update(es=es_url, wazuh=wz, checked=time.time())
 
