@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """탐지 파이프라인 (detector 컨테이너) — 2초마다 (LAB_EVERY)
   ① nginx 접속 로그 새 줄          → ES lab-access
-  ② Wazuh 경보(alerts.json) 새 줄  → ES lab-alerts   (사용자 룰 범위 100000~199999 만)
+  ② 룰 경보                       → ES lab-alerts   (사용자 룰 범위 100000~199999 만)
+       LAB_ENGINE=wazuh (기본): Wazuh manager 의 alerts.json 새 줄
+       LAB_ENGINE=sigma (lite 판): rules/sigma/*.yml 을 접속 로그 한 줄마다 바로 적용 (sigma_engine.py)
   ③ ML 모델로 IP × 5분 창 채점     → ES lab-ml
   ④ 차단 정책에 걸리면 차단 목록(ips.map)에 추가 (nginx 가 다시 읽어 403) → ES lab-response
-  모든 판정은 /data/run/events.jsonl 에도 남는다 — 채점기(scorer)가 이 파일을 정답지와 맞춰 본다.
+  LAB_ES 가 비어 있으면 ES 로 보내지 않는다 (lite 판). 모든 판정은 /data/run/events.jsonl 에도 남는다 — 채점기(scorer)가 이 파일을 정답지와 맞춰 본다.
 
 차단 정책 (README 와 같게 유지)
   ML high (그 창 요청 LAB_BLOCK_MIN_REQ 건 이상)   → 자동 차단 (명세 안 BOLA — 룰이 못 잡는다)
@@ -78,7 +80,7 @@ def es(method, url, body=None, ctype="application/json", tries=6):
 
 
 def bulk(base, index, docs, ids=None):
-    if not docs:
+    if not docs or not base:
         return
     lines = []
     for i, d in enumerate(docs):
@@ -130,7 +132,9 @@ def main():
     p.add_argument("--model", default=env("LAB_MODEL", "/lab/model/dvra_v1"))
     p.add_argument("--blocked", default="/data/blocked/ips.map")
     p.add_argument("--run", default="/data/run")
-    p.add_argument("--es", default=env("LAB_ES", "http://elasticsearch:9200"))
+    p.add_argument("--es", default=env("LAB_ES", "http://elasticsearch:9200"), help="비우면 ES 없이 (lite)")
+    p.add_argument("--engine", default=env("LAB_ENGINE", "wazuh"), choices=["wazuh", "sigma"])
+    p.add_argument("--sigma-rules", default=env("LAB_SIGMA_RULES", "/lab/rules/sigma"))
     p.add_argument("--every", type=float, default=float(env("LAB_EVERY", "2")), help="주기 (초)")
     p.add_argument("--window", type=int, default=5, help="ML 창 (분) — 모델을 학습한 창과 같아야 한다")
     p.add_argument("--allow", default=env("LAB_ALLOW", "10.1.0.1"), help="차단하지 않을 IP (쉼표) — 헬스체크 · 모니터링")
@@ -155,7 +159,7 @@ def main():
     state_path = os.path.join(a.run, "pipeline_state.json")
     st = json.load(open(state_path)) if os.path.exists(state_path) else {}
 
-    for idx, m in MAPS.items():                      # 이미 있으면 그대로 (재시작해도 데이터 유지)
+    for idx, m in (MAPS.items() if a.es else []):    # 이미 있으면 그대로 (재시작해도 데이터 유지)
         es("PUT", f"{a.es}/{idx}", json.dumps({"settings": {"number_of_replicas": 0, "refresh_interval": "2s"},
                                                "mappings": {"properties": m}}).encode())
 
@@ -187,6 +191,11 @@ def main():
         print(f"[차단] {ip} ← {source}: {reason} ({detail})", flush=True)
 
     acc, alr = Tail(a.log, st.get("access", 0)), Tail(a.alerts, st.get("alerts", 0))
+    sigma = None
+    if a.engine == "sigma":
+        import sigma_engine
+        sigma = sigma_engine.Engine(a.sigma_rules)
+    print(f"[룰 판정] {a.engine} · ES {a.es or '(없음)'}", flush=True)
     ml_seen = {}                   # (ip, 창) → 마지막으로 기록한 판정
     print(f"[시작] 모델 {a.model} (학습 창 {meta.get('n_windows')}) · high<{HI} · medium<{MD} · "
           f"차단: ML high(요청 {a.block_min_req}+) / 룰 그룹 {sorted(block_groups)} · 허용 {sorted(allow)}", flush=True)
@@ -195,7 +204,7 @@ def main():
     def step():
         nonlocal rows
         # ① 접속 로그
-        docs = []
+        docs, pending = [], []
         for line in acc.lines():
             m = LINE.match(line)
             if not m:
@@ -207,15 +216,29 @@ def main():
                 continue
             path, _, q = url.partition("?")
             rows.append((ip, t, meth, path, int(code), ua, q))
+            if sigma:
+                ev = {"c-ip": ip, "cs-method": meth, "cs-uri-stem": path, "cs-uri-query": q, "sc-status": code,
+                      "cs-user-agent": ua}
+                for al in sigma.evaluate(ev, t):
+                    al["_t"] = time.time()          # Wazuh 처럼 '판정한 시각' (로그 시각은 초 단위라 탐지 시간이 0 이 된다)
+                    pending.append(al)
             docs.append({"timestamp": iso(t), "client_ip": ip, "method": meth, "path": path, "status": int(code),
                          "label": labels.get(ip), "blocked": ip in blocked and int(code) == 403})
         bulk(a.es, "lab-access", docs)
 
         # ② Wazuh 경보 — 사용자 룰(100000~199999)만. 기본 룰(웹 400 오류 등)은 이 연습장의 대상이 아니다
         adocs = []
-        for line in alr.lines():
+        if sigma:
+            src = pending
+        else:
+            src = []
+            for line in alr.lines():
+                try:
+                    src.append(json.loads(line))
+                except ValueError:
+                    pass
+        for al in src:
             try:
-                al = json.loads(line)
                 rid = int(al.get("rule", {}).get("id", 0))
             except ValueError:
                 continue
@@ -225,7 +248,7 @@ def main():
             d = al.get("data", {})
             ip = d.get("srcip", "")
             try:
-                t = datetime.strptime(al.get("timestamp", ""), "%Y-%m-%dT%H:%M:%S.%f%z").timestamp()
+                t = al["_t"] if "_t" in al else datetime.strptime(al.get("timestamp", ""), "%Y-%m-%dT%H:%M:%S.%f%z").timestamp()
             except ValueError:
                 t = time.time()
             doc = {"timestamp": iso(t), "rule": {k: al["rule"].get(k) for k in ("id", "level", "description", "groups")},

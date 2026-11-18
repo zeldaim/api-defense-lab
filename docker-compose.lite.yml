@@ -1,0 +1,97 @@
+# api-defense-lab — 가벼운 판 (lite): Wazuh · Elasticsearch · Grafana 없이
+#   docker compose -f docker-compose.lite.yml up -d --build
+#   docker compose -f docker-compose.lite.yml run --rm traffic demo
+#   docker compose -f docker-compose.lite.yml run --rm scorer
+#   docker compose -f docker-compose.lite.yml down -v
+# 룰 판정은 detector 가 rules/sigma/*.yml 을 직접 적용한다 (detector/sigma_engine.py). ML · 차단 정책 · 정답지 · 채점은 기본판과 같다.
+# 대시보드는 없다 — 결과는 scorer 의 reports/report.html 과 `logs -f detector` 로 본다.
+# 기본판과 포트(8089)가 같아서 둘을 동시에 띄울 수 없다. 데이터(볼륨)는 따로다 (프로젝트 이름이 다름).
+name: api-defense-lab-lite
+
+x-tools: &tools
+  build: .
+  image: api-defense-lab/tools:0.1
+  volumes:
+    - labdata:/data
+    - ./model:/lab/model:ro
+  environment:
+    LAB_MODEL: ${LAB_MODEL:-/lab/model/dvra_v1}
+
+services:
+  dvra-db:
+    image: postgres:15.4-alpine
+    environment: {POSTGRES_USER: admin, POSTGRES_PASSWORD: password, POSTGRES_DB: restaurant}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d restaurant -U admin"]
+      interval: 5s
+      retries: 20
+  dvra-web:
+    build:
+      context: https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game.git#d32d09972aec7830f5f1d4a5d274cac7aae7eb82
+    image: api-defense-lab/dvra:d32d099
+    command: bash -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8091 --workers 1"
+    privileged: false
+    environment: {POSTGRES_USER: admin, POSTGRES_PASSWORD: password, POSTGRES_SERVER: dvra-db, POSTGRES_PORT: "5432", POSTGRES_DB: restaurant}
+    depends_on: {dvra-db: {condition: service_healthy}}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8091/healthcheck')"]
+      interval: 5s
+      retries: 30
+
+  nginx:
+    image: nginx:1.27-alpine
+    command: ["sh", "/lab/run.sh"]
+    ports: ["127.0.0.1:8089:80"]
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/run.sh:/lab/run.sh:ro
+      - labdata:/data
+    depends_on: {dvra-web: {condition: service_healthy}}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/__lab/health"]
+      interval: 5s
+      retries: 20
+
+  # ── 룰(Sigma) + ML + 자동 차단을 한 컨테이너에서
+  detector:
+    <<: *tools
+    command: ["python", "detector/pipeline.py"]
+    restart: unless-stopped
+    volumes:
+      - labdata:/data
+      - ./model:/lab/model:ro
+      - ./rules/sigma:/lab/rules/sigma:ro
+    environment:
+      LAB_ENGINE: sigma
+      LAB_ES: ""
+      LAB_MODEL: ${LAB_MODEL:-/lab/model/dvra_v1}
+      LAB_ALLOW: ${LAB_ALLOW:-10.1.0.1}
+      LAB_BLOCK_MIN_REQ: ${LAB_BLOCK_MIN_REQ:-15}
+      LAB_BLOCK_GROUPS: ${LAB_BLOCK_GROUPS:-shadow_api_exploit,shadow_api_recon_burst,shadow_api_mass_exfil,lab_block}
+    depends_on: {nginx: {condition: service_healthy}}
+
+  traffic:
+    <<: *tools
+    profiles: [tools]
+    entrypoint: ["python", "traffic/lab_traffic.py"]
+    command: ["--help"]
+    depends_on: {nginx: {condition: service_healthy}}
+  scorer:
+    <<: *tools
+    profiles: [tools]
+    entrypoint: ["python", "scorer/score.py"]
+    command: []
+    volumes:
+      - labdata:/data:ro
+      - ./reports:/reports
+  trainer:
+    <<: *tools
+    profiles: [tools]
+    entrypoint: ["python", "detector/train.py"]
+    command: []
+    volumes:
+      - labdata:/data:ro
+      - ./model:/lab/model
+
+volumes:
+  labdata:
