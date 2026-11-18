@@ -1,54 +1,64 @@
 # api-defense-lab — API 방어 연습장
 
-> **A reproducible practice range for API *defenders*.** One `docker compose up` gives you a deliberately vulnerable API (DVRA), an nginx front that logs and blocks, real-time Wazuh rules for undocumented ("shadow") API calls, an ML detector for in-spec BOLA, automatic blocking, an answer key for every synthetic actor, and a scorer that grades *your* rules and model against it. Traffic is synthetic. This is a lab, not a security product.
+> **A reproducible practice range for API *defenders*.** A small core — a deliberately vulnerable API (DVRA), an nginx front that logs and blocks, Sigma rules for undocumented ("shadow") API calls, an ML detector for in-spec BOLA, automatic blocking, an answer key for every synthetic actor, and a scorer that grades *your* rules and model — plus optional modules by job: **Wazuh** (SIEM rule authoring) and **Elasticsearch + Grafana** (live monitoring). Traffic is synthetic. This is a lab, not a security product. → [Help test it](#help-test-api-defense-lab)
 
 공격 연습장(crAPI · DVRA)은 많은데, **방어하는 쪽이 자기 룰 · 모델을 같은 조건에서 채점해 볼 곳**은 드물다. 이 레포가 그 자리다.
 
-- `docker compose up -d` 한 번으로 대상 앱 · 기록 · 탐지 · 자동 차단 · 대시보드가 전부 뜬다.
-- 정상 사용자와 공격을 보내면 **정답지(누가 공격자인지)** 가 자동으로 쌓인다.
-- 채점기가 정답지와 탐지 기록을 맞춰 **몇 개를 잡았나 · 몇 초 만에 막았나 · 정상을 몇 명 막았나** 를 표로 보여 준다.
-- 내 Wazuh 룰 · 내 ML 모델을 넣고 같은 채점을 받을 수 있다. 같은 탐지를 **Sigma** 로도 제공한다.
+- **코어**(가벼움, 이미지 약 1.8GB · 메모리 약 220MB)만으로 대상 앱 · 기록 · 룰 탐지 · ML 탐지 · 자동 차단 · 정답지 · 채점이 다 된다.
+- 하는 일에 맞춰 **모듈**을 켠다: Wazuh 룰을 연습하면 `wazuh`, 관제 화면이 필요하면 `dashboard`.
+- 정상 사용자와 공격을 보내면 **정답지(누가 공격자인지)** 가 자동으로 쌓이고, 채점기가 **몇 개를 잡았나 · 몇 초 만에 막았나 · 정상을 몇 명 막았나** 를 표로 보여 준다.
+- 내 Sigma 룰 · 내 Wazuh 룰 · 내 ML 모델을 넣고 같은 채점을 받을 수 있다.
 
 > ⚠️ 트래픽은 생성기가 만든 **합성**이다. 대상 앱 DVRA 는 **일부러 취약한 앱**이다 — 모든 포트는 `127.0.0.1` 에만 연다. 인터넷에 노출하지 말 것.
 
-## 구성
+## 코어와 모듈
+
+| 업무 | 켜는 것 | 명령 | 추가 이미지 · 메모리 |
+|---|---|---|---|
+| 탐지 룰 작성 (Sigma) · ML 모델 · 차단 정책 · 채점 | **코어** | `docker compose up -d --build` | — (이미지 약 1.8GB · 메모리 약 220MB) |
+| SIEM 룰 작성 (Wazuh) | 코어 + `wazuh` | `docker compose --profile wazuh up -d --build` | Wazuh 2.5GB · 약 350MB |
+| 관제 · 대시보드 (실시간 차단 화면) | 코어 + `dashboard` | `docker compose --profile dashboard up -d --build` | ES 2.6GB + Grafana 0.9GB · 약 1.7GB (ES 힙 1GB) |
+| 전부 (시연 · 비교) | 코어 + 둘 다 | `docker compose --profile wazuh --profile dashboard up -d --build` | 위 합 (이미지 약 7.8GB) |
+
+- `detector` 는 켜진 모듈을 스스로 찾는다(30초마다): **`wazuh` 가 있으면 Wazuh 경보로, 없으면 `rules/sigma/*.yml` 을 직접 적용해** 룰 판정을 한다. 두 판정은 같은 접속 로그에서 줄 단위로 일치하게 맞춰 두었다(아래 결과). `dashboard` 가 있으면 ES 로도 보낸다.
+- 모듈을 켜고 끈 뒤에도 정답지 · 채점 · 차단 정책은 그대로다 — 모듈은 **판정 엔진과 화면만** 바꾼다.
+- `traffic` · `scorer` · `trainer` 는 어느 조합에서나 `docker compose run --rm <이름>` 으로 쓴다.
+- 환경 변수 `COMPOSE_PROFILES=wazuh,dashboard` 를 `.env` 에 적어 두면 `--profile` 을 매번 안 써도 된다.
 
 ```
 traffic(정상 · 공격 + 정답지) ──▶ nginx :8089 ──▶ DVRA (대상 앱)
-                                   │ 접속 로그          ▲
-                                   ▼                    │ 403 (차단 목록)
-                    ┌──── Wazuh manager (룰, 실시간) ──┐ │
-                    │                                  ▼ │
-                    └──────────────▶ detector (ML + 차단 정책) ──▶ Elasticsearch ──▶ Grafana :3000
-                                         │
-                                         ▼ events.jsonl          scorer: 정답지 × events → 채점표 · reports/report.html
+                                   │ 접속 로그          ▲ 403 (차단 목록)
+                                   ▼                    │
+                   [코어] detector ── 룰 판정: Sigma(직접) 또는 [wazuh] Wazuh 경보
+                                    ── ML 판정(IP × 5분 창) ── 차단 정책 ──┘
+                                    ── events.jsonl ──▶ scorer: 정답지 × 판정 → 채점표 · reports/report.html
+                                    ── [dashboard] Elasticsearch ──▶ Grafana :3000
 ```
 
-| 서비스 | 하는 일 |
-|---|---|
-| `dvra-web` · `dvra-db` | 대상 앱 [Damn Vulnerable RESTaurant](https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game). 코드는 이 레포에 없다 — 고정 커밋 `d32d099` 을 GitHub 에서 직접 빌드. 원본 compose 의 `privileged` · `SYS_ADMIN` 은 주지 않는다 |
-| `nginx` | 접속 기록 + 차단 목록(`ips.map`)의 IP 는 403. 목록이 바뀌면 1초 안에 다시 읽는다 |
-| `wazuh` | Wazuh manager 4.14.6 이 접속 로그를 실시간으로 읽어 `rules/wazuh/*.xml` 로 판정 |
-| `detector` | 2초마다 로그 · 경보 → ES, ML 채점(IP × 5분 창), 차단 정책 → 차단 목록 |
-| `elasticsearch` · `grafana` | 실시간 대시보드 http://localhost:3000 (로그인 없음, 5초 새로고침) |
-| `traffic` · `scorer` · `trainer` | `docker compose run --rm <이름>` 으로 쓰는 도구 |
+| 서비스 | 묶음 | 하는 일 |
+|---|---|---|
+| `dvra-web` · `dvra-db` | 코어 | 대상 앱 [Damn Vulnerable RESTaurant](https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game). 코드는 이 레포에 없다 — 고정 커밋 `d32d099` 을 GitHub 에서 직접 빌드. 원본 compose 의 `privileged` · `SYS_ADMIN` 은 주지 않는다 |
+| `nginx` | 코어 | 접속 기록 + 차단 목록(`ips.map`)의 IP 는 403. 목록이 바뀌면 1초 안에 다시 읽는다 |
+| `detector` | 코어 | 2초마다: 룰 판정(Sigma 또는 Wazuh 경보) · ML 채점 · 차단 정책 → 차단 목록 · events.jsonl (· ES) |
+| `traffic` · `scorer` · `trainer` | 코어 도구 | 트래픽 + 정답지 · 채점 · 내 모델 학습 |
+| `wazuh` | 모듈 `wazuh` | Wazuh manager 4.14.6 이 접속 로그를 실시간으로 읽어 `rules/wazuh/*.xml` 로 판정 |
+| `elasticsearch` · `grafana` | 모듈 `dashboard` | 실시간 대시보드 http://localhost:3000 (로그인 없음, 5초 새로고침) |
 
 ## 준비물
 
-- Docker Desktop(Windows · macOS) 또는 Docker Engine + Compose v2
-- 메모리 여유 **6GB** 이상 (ES 1GB 힙 · Wazuh · 나머지)
-- 디스크 여유 **10GB** 이상 — 이미지가 약 7GB (Wazuh 2.5 · ES 2.6 · DVRA 0.8 · Grafana 0.9 · 도구 0.6)
+- Docker Desktop(Windows · macOS) 또는 Docker Engine + **Compose v2.20 이상** (모듈이 꺼졌을 때 기다리지 않는 `depends_on.required: false` 를 쓴다)
+- 디스크 · 메모리: 위 표. 전부 켜면 디스크 여유 **10GB** · 메모리 여유 **6GB** 이상
 - 처음 한 번은 인터넷 (이미지 내려받기 + DVRA 를 GitHub 에서 빌드)
 
-> **디스크 경고.** Wazuh manager 는 기본 설정이면 **취약점 탐지가 CVE 데이터를 내려받아 컨테이너가 몇 GB~16GB 로 커진다** (작성자 PC 에서 디스크가 가득 차 Docker 가 멈췄다). 이 연습장은 시작할 때 그 기능을 끈다(`wazuh/lab-init.sh`). 직접 Wazuh 설정을 바꿀 때 다시 켜지 않도록 주의.
+> **디스크 경고 (`wazuh` 모듈).** Wazuh manager 는 기본 설정이면 **취약점 탐지가 CVE 데이터를 내려받아 컨테이너가 몇 GB~16GB 로 커진다** (작성자 PC 에서 디스크가 가득 차 Docker 가 멈췄다). 이 연습장은 시작할 때 그 기능을 끈다(`wazuh/lab-init.sh`). 직접 Wazuh 설정을 바꿀 때 다시 켜지 않도록 주의.
 
 ## 빠른 시작
 
 ```bash
 git clone https://github.com/zeldaim/api-defense-lab.git
 cd api-defense-lab
-docker compose up -d --build          # 처음엔 5~10분 (이미지 빌드 · 내려받기)
-docker compose ps                     # detector 까지 Up, 나머지 (healthy) 면 준비 끝
+docker compose up -d --build          # 코어만. 모듈은 위 표의 --profile 을 붙인다
+docker compose ps                     # detector 가 Up, 나머지 (healthy) 면 준비 끝
 ```
 
 ```bash
@@ -56,10 +66,10 @@ docker compose run --rm traffic demo  # 정상 20명 + 60초 뒤 탐색 + 150초
 docker compose run --rm scorer        # 채점표 + reports/report.html
 ```
 
-- 대시보드: http://localhost:3000 (데모를 돌리는 동안 열어 두면 차단되는 순간이 보인다)
+- 탐지 · 차단 로그: `docker compose logs -f detector` (첫 줄에 `[모듈] 룰 판정 Sigma … · 대시보드 ES 없음` 처럼 켜진 모듈이 나온다)
+- 대시보드(`dashboard` 모듈): http://localhost:3000 — 데모를 돌리는 동안 열어 두면 차단되는 순간이 보인다
 - 대상 앱 직접: http://localhost:8089/docs
-- 탐지 · 차단 로그: `docker compose logs -f detector`
-- 전부 지우기: `docker compose down -v` (접속 로그 · 정답지 · 차단 목록까지 지운다)
+- 전부 지우기: `docker compose --profile "*" down -v` (모든 모듈 · 접속 로그 · 정답지 · 차단 목록까지)
 
 ## 트래픽 보내기
 
@@ -91,28 +101,28 @@ docker compose run --rm scorer --last 15          # 최근 15분에 시작한 �
 
 결과는 화면 표 + `reports/report.html`(시각 붙은 사본도) + `reports/score.json`. 탐지기는 정답지를 보지 않는다 — 정답지는 채점과 화면 표시에만 쓴다.
 
-## 기본 설정 결과 (`traffic demo` 한 번, 2026-11-19)
+## 기본 설정 결과 (`traffic demo` 한 번씩, 2026-11-19)
 
-새 폴더에 clone 해서 이 README 대로 `up -d --build` → `traffic demo` → `scorer` 를 돌린 결과다 (Windows 11 · Docker Desktop 29.9.2).
+새 폴더에 clone 해서 이 README 대로 `up -d --build` → `traffic demo` → `scorer` 를 돌린 결과다 (Windows 11 · Docker Desktop 29.9.2 · Compose v5.6.1). 메모리는 `docker stats` 로 잰 값.
 
-| 행위자 | 탐지 | 차단 결정까지 | 새어 나간 성공 | 차단 응답 403 |
-|---|---|---|---|---|
-| 탐색 `probe` (명세 밖 15곳) | 룰 L3 (`/debug` 200) · ML | **3.4초** | 2 (`/debug` · `/delivery/orders`) | 8 |
-| BOLA `bola` (남의 주문 1..150) | ML high (룰 경보 0 — 명세 안이라 룰 대상 아님) | **6.5초** | 16 (남의 주문 16건) | 134 |
-| 정상 20명 · 요청 1987 | ML high 창 42 · 룰 경보 0 | — | — | **오탐 차단 0** |
+| 조합 | 룰 판정 | probe 차단 결정까지 · 새어 나간 성공 | BOLA 차단 결정까지 · 새어 나간 주문 | 정상 20명 오탐 차단 | 메모리 |
+|---|---|---|---|---|---|
+| **코어만** | Sigma (detector 안) | 2.3초 · 2 | 6.9초 · 18 | **0** (ML high 창 34) | 약 220MB |
+| **코어 + wazuh + dashboard** | Wazuh | 3.2초 · 2 | 6.5초 · 17 | **0** (ML high 창 32) | 약 2.3GB |
 
-- **고친 오탐 (v0.1 첫 실행).** 정상 생성기는 마지막에 개발자가 문서 화면(`/docs` · `/openapi.json`)을 연다. 처음 실행에서는 둘 다 명세에 없어 Shadow 룰이 L3 로 보고 그 IP 를 막았다(정상 오탐 차단 1/20). FastAPI 가 내보내는 공개 문서 화면 4개(`GET /docs` · `/docs/oauth2-redirect` · `/redoc` · `/openapi.json`)를 **명세 예외**로 넣어 고쳤다 — Wazuh 룰 100503 과 `tools/gen_sigma.py` 의 `ALLOW` 에 같게 넣었다. 대가: 이 4개 경로를 누가 열어도 경보가 없다(공개 문서라 받아들인 것). 내 앱에서는 예외를 지우거나 바꿔서 채점해 볼 수 있다.
-- **ML high 창 42개는 모델의 한계다** (아래 "알려 둘 한계"). 차단 정책(창 요청 15건 이상)이 걸러서 ML 로 막힌 정상은 0이다.
-- 시간은 실행마다 다르다. 같은 PC 의 세 번 실행에서 탐색 차단 결정 1.3~6.6초 · BOLA 5.8~8.8초 · BOLA 로 새어 나간 주문 16~22건.
-- Sigma ↔ Wazuh 대조(같은 접속 로그 2156줄): 판정 15 = 15, 줄 단위로 일치.
-- 처음 `up -d --build` 는 이 PC 에서 51초 (기반 이미지는 이미 받아 둔 상태 · 빌드 캐시는 지움). 처음 쓰는 PC 는 이미지 약 7GB 를 받는 시간이 더 든다.
-- Wazuh 컨테이너는 실행 뒤 206MB (취약점 탐지를 끈 상태).
+- 두 조합 모두 probe 는 룰 L3(`/debug` 200)로, BOLA 는 ML high 로 막혔다 (BOLA 는 명세 안이라 룰 경보 0). 새어 나간 성공 2 = 숨은 API `/debug` · `/delivery/orders`.
+- **룰 판정 일치:** 같은 접속 로그(2156줄)를 Sigma · Wazuh 양쪽에 적용하면 판정 15 = 15, 줄 단위로 같다. 빈도 룰(F1 · F2)은 그 로그에서 안 걸려서, Sigma 엔진은 합성 묶음(30초에 L1 25회 → F1 1번, 60초에 L3 12회 → F2 1번, 38초에 L1 19회 → 없음)으로 따로 확인했다.
+- 코어만 줄의 숫자는 모듈 구조로 바꾸기 직전(같은 Sigma 엔진)의 데모 한 번이다. 바꾼 뒤에는 코어만으로 probe · BOLA 차단, `wazuh` 모듈을 켜면 detector 가 Wazuh 판정으로 바뀌는 것까지 확인했다.
+- **고친 오탐 (v0.1 첫 실행).** 정상 생성기는 마지막에 개발자가 문서 화면(`/docs` · `/openapi.json`)을 연다. 처음 실행에서는 둘 다 명세에 없어 Shadow 룰이 L3 로 보고 그 IP 를 막았다(정상 오탐 차단 1/20). FastAPI 가 내보내는 공개 문서 화면 4개(`GET /docs` · `/docs/oauth2-redirect` · `/redoc` · `/openapi.json`)를 **명세 예외**로 넣어 고쳤다 — Wazuh 룰 100503 과 `tools/gen_sigma.py` 의 `ALLOW` 에 같게 넣었다. 대가: 이 4개 경로를 누가 열어도 경보가 없다(공개 문서라 받아들인 것).
+- **ML high 창 32~34개는 모델의 한계다** (아래 "알려 둘 한계"). 차단 정책(창 요청 15건 이상)이 걸러서 ML 로 막힌 정상은 0이다.
+- 시간은 실행마다 다르다. 같은 PC 에서 다섯 번: probe 차단 결정 1.3~6.6초 · BOLA 5.8~8.8초 · BOLA 로 새어 나간 주문 16~22건.
+- 처음 `up -d --build` 는 이 PC 에서 코어 20초 · 전부 51초 (기반 이미지는 이미 받아 둔 상태 · 빌드 캐시는 지움). 처음 쓰는 PC 는 이미지를 받는 시간이 더 든다.
 
 ## 기본 탐지와 차단 정책
 
 | 탐지 | 무엇을 | 어떻게 |
 |---|---|---|
-| Shadow API 룰 (Wazuh, `rules/wazuh/0915-shadow_api_rules.xml`) | 명세(`spec/dvra_openapi.json`)에 없는 (메서드, 경로) 호출 | 응답 코드로 단계: L1 정찰 404·405 · L2 발견 401·403 · **L3 악용 2xx** · L3-E 5xx · F1 30초 L1 20회 · F2 60초 L3 10회 |
+| Shadow API 룰 — 코어: Sigma `rules/sigma/` · 모듈 `wazuh`: `rules/wazuh/0915-shadow_api_rules.xml` (같은 판정) | 명세(`spec/dvra_openapi.json`)에 없는 (메서드, 경로) 호출. 공개 문서 화면 4개는 예외 | 응답 코드로 단계: L1 정찰 404·405 · L2 발견 401·403 · **L3 악용 2xx** · L3-E 5xx · F1 30초 L1 20회 · F2 60초 L3 10회 |
 | ML (`model/dvra_v1`) | 명세 **안**의 비정상 행위 (BOLA 열거) — 룰이 못 잡는 것 | IsolationForest, IP × 5분 창 특징 13개 (연속 ID · 서로 다른 객체 수 · 간격 …). DVRA 정상 73분 · 창 365개로 학습 |
 
 | 판정 | 대응 |
@@ -131,13 +141,49 @@ docker compose run --rm scorer --last 15          # 최근 15분에 시작한 �
 | `LAB_BLOCK_MIN_REQ` | `15` | ML 로 차단하려면 그 창에 쌓여야 하는 요청 수 |
 | `LAB_ALLOW` | `10.1.0.1` | 차단하지 않을 IP (쉼표) |
 | `LAB_EVERY` | `2` | detector 주기 (초) |
+| `LAB_ENGINE` | `auto` | 룰 판정: `auto`(wazuh 모듈이 있으면 Wazuh, 없으면 Sigma) · `wazuh` · `sigma` |
+| `LAB_ES` | `auto` | ES 주소: `auto`(dashboard 모듈이 있으면) · URL · 빈 값(안 보냄) |
+| `COMPOSE_PROFILES` | (없음) | 켤 모듈 — 예: `wazuh,dashboard` |
 
-## 내 룰로 채점받기 (Wazuh)
+## 내 룰로 채점받기 (Sigma · 코어)
+
+1. `rules/sigma/` 에 내 Sigma 룰(`.yml`)을 넣는다 (`logsource: category: webserver`, 필드 `c-ip` · `cs-method` · `cs-uri-stem` · `cs-uri-query` · `sc-status` · `cs-user-agent`).
+2. 걸리면 자동 차단까지 하려면 최상위에 `lab_block: true` 를 적는다 (이 연습장 전용 필드 — Sigma 는 모르는 필드를 그대로 두므로 `sigma check` 도 통과한다).
+3. `docker compose restart detector` → 트래픽 → `docker compose run --rm scorer --last 15`
+
+```yaml
+title: 'Disk stats API — command injection attempt'
+id: 3a0f5a3e-2c1b-4f4e-9b7a-6a2d1c0e9f11
+status: experimental
+description: DVRA 디스크 통계 API(명세 안)의 parameters 값에 명령 주입 문자가 들어온 요청
+author: you
+date: 2026-11-19
+tags:
+  - attack.t1059
+logsource:
+  category: webserver
+detection:
+  selection:
+    cs-method: GET
+    cs-uri-stem: /admin/stats/disk
+    cs-uri-query|re: 'parameters=[^&]*(?:%3B|;|%7C|\||%60|`|%24|\$)'
+  condition: selection
+level: high
+lab_block: true          # 이 연습장 전용 — 걸리면 자동 차단 (Sigma 는 모르는 필드를 그대로 둔다)
+```
+
+위 예시는 확인했다: detector 의 Sigma 엔진에서 `?parameters=-h%3Bid` → 경보 레벨 12 · `lab_block` / `?parameters=-h` → 경보 없음, `sigma check` 오류 · 경고 0.
+코어의 Sigma 엔진(`detector/sigma_engine.py`)은 범용 엔진이 아니다 — 지원하는 것: 수정자 `re` · `contains` · `startswith` · `endswith` · `all`, 조건 `and` · `or` · `not` · 괄호 · `1 of` · `all of`, 상관 `event_count`(`gte` · `gt`). 그 밖은 `wazuh` 모듈이나 자기 SIEM 에서 쓴다.
+
+## 내 룰로 채점받기 (Wazuh · 모듈 `wazuh`)
+
+`docker compose --profile wazuh up -d` 로 켠 상태에서 한다 (켜져 있으면 detector 가 Sigma 대신 Wazuh 경보를 쓴다).
+
 
 1. `rules/wazuh/` 에 내 룰 XML 을 넣는다. 룰 id 는 **100000~199999** — detector 는 이 범위의 경보만 읽는다.
    접속 로그 룰은 **`<if_sid>100500</if_sid>`** 아래에 단다. 기본 룰 파일의 100500 이 웹 접속 로그(31100 계열)의 API 요청을 먼저 받기 때문에, 31100 에 바로 달면 Wazuh 가 내 룰까지 내려오지 않는다 (작성하면서 실제로 겪음). 기본 룰 파일을 빼면 31100 계열에 달면 된다.
 2. 이 룰로 자동 차단까지 하려면 룰에 `<group>lab_block,</group>` 을 단다 (또는 `LAB_BLOCK_GROUPS` 에 내 그룹 이름).
-3. `docker compose restart wazuh` → 트래픽 → `docker compose run --rm scorer --last 15`
+3. `docker compose --profile wazuh restart wazuh` → 트래픽 → `docker compose run --rm scorer --last 15`
 
 ```xml
 <!-- 예: DVRA 의 디스크 통계 API(명세 안)에 명령 주입 문자(; | ` $)가 들어오면 차단 -->
@@ -175,9 +221,9 @@ trainer 는 정답지에서 `normal` 인 IP 의 창만 학습한다. 오류 비�
 
 특징 계산은 `detector/features.py`(v2.1) · `features_v2.py` 에 있다. 창 길이는 5분(`pipeline.py --window`).
 
-## Sigma 룰 (Wazuh 를 안 쓰는 사람용)
+## Sigma 룰
 
-`rules/sigma/` 에 같은 Shadow API 판정을 Sigma 로 넣었다 (`logsource: category: webserver`, 필드 `cs-method` · `cs-uri-stem` · `sc-status` · `c-ip`).
+코어는 이 룰을 detector 가 직접 적용한다 (모듈 `wazuh` 가 없을 때). 자기 SIEM 으로 옮겨 쓸 수도 있다. `rules/sigma/` 에 Wazuh 룰과 같은 Shadow API 판정을 Sigma 로 넣었다 (`logsource: category: webserver`, 필드 `cs-method` · `cs-uri-stem` · `sc-status` · `c-ip`).
 
 | 파일 | 판정 |
 |---|---|
@@ -199,13 +245,14 @@ trainer 는 정답지에서 `normal` 인 IP 의 창만 학습한다. 오류 비�
 - **ML 은 짧은 창을 잘 틀린다.** 접속 직후 몇 초에 요청이 몰린 정상 창을 이상(high)으로 보는 일이 있다. 이 연습장은 대응 정책(창 요청 15건 이상일 때만 ML 차단)으로 막았을 뿐 모델이 해결한 것이 아니다 — 채점표의 "ML high 창" 이 그 수다.
 - 룰은 **명세 밖** 호출만 본다. 명세 안 BOLA 는 룰의 대상이 아니다 (그래서 ML 이 있다). 반대로 ML 은 짧은 탐색을 잘 못 본다.
 - 출발지 IP 는 헤더로 흉내 낸다 — 위조 가능. 실제 환경 재현이 아니다.
-- 한 PC(Windows 11 · Docker Desktop)에서만 확인했다. Linux · macOS 는 아직 안 돌려 봤다.
+- 한 PC(Windows 11 · Docker Desktop · Compose v5.6.1)에서만 확인했다. Linux · macOS 는 아직 안 돌려 봤다 — [테스트 요청](#help-test-api-defense-lab).
+- 코어의 Sigma 엔진은 이 연습장 룰에 필요한 만큼만 구현했다 (위 "내 룰로 채점받기 (Sigma)").
 
 ## 미리 막아 둔 함정
 
 | 함정 | 막은 곳 |
 |---|---|
-| Wazuh 취약점 탐지가 CVE 데이터로 컨테이너를 16GB 까지 키워 디스크가 가득 참 | `wazuh/lab-init.sh` 가 시작할 때 끈다 |
+| Wazuh 취약점 탐지가 CVE 데이터로 컨테이너를 16GB 까지 키워 디스크가 가득 참 | `wazuh/lab-init.sh` 가 시작할 때 끈다 (그리고 Wazuh 자체를 모듈로 — 필요할 때만) |
 | DVRA 토큰 30분 만료 → 정상 요청이 401 | 생성기가 401 이면 다시 로그인하고 한 번 더 보낸다 |
 | 헬스체크가 접속 로그에 섞여 ML 이 헬스체크 IP 를 차단 | 헬스체크는 nginx 를 거치지 않거나(`dvra-web`) 로그를 남기지 않는다(`/__lab/health`). 허용 목록 기본값도 둔다 |
 | 접속 직후 짧은 창 오탐으로 정상 차단 | ML 차단은 창 요청 15건 이상일 때만 |
@@ -218,10 +265,11 @@ trainer 는 정답지에서 `normal` 인 IP 의 창만 학습한다. 오류 비�
 ## 폴더
 
 ```
-docker-compose.yml   Dockerfile(도구 이미지)   .env(선택)
+docker-compose.yml(코어 + 모듈 profile wazuh · dashboard)   Dockerfile(도구 이미지)   .env(선택)
+.github/    ISSUE_TEMPLATE/test-report.yml (테스트 보고 양식)   CONTRIBUTING.md
 nginx/      nginx.conf · run.sh(차단 목록 다시 읽기)
 wazuh/      Dockerfile · lab-init.sh(취약점 탐지 끔 · 로그 · 룰) · localfile.xml
-detector/   pipeline.py(탐지 · 차단) · features.py(v2.1) · features_v2.py · train.py
+detector/   pipeline.py(탐지 · 차단 · 모듈 찾기) · sigma_engine.py(코어 룰 판정) · features.py(v2.1) · features_v2.py · train.py
 traffic/    lab_traffic.py(정상 · 공격 · 정답지)
 scorer/     score.py · report.css
 model/      dvra_v1/(동봉 모델)   mine/(내가 학습한 모델, git 제외)
@@ -238,3 +286,26 @@ reports/    채점 결과 (git 제외)
 - 대상 앱 DVRA: GPL-3.0, [theowni/Damn-Vulnerable-RESTaurant-API-Game](https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game) — 이 레포에 코드를 넣지 않고 빌드할 때 받아 온다. `spec/dvra_openapi.json` 은 그 앱이 내보내는 OpenAPI 명세다.
 - 쓰는 이미지: Wazuh manager(GPL-2.0), Elasticsearch(Elastic License 2.0 / AGPL), Grafana(AGPL-3.0), nginx, PostgreSQL, Python — 각 이미지의 라이선스를 따른다.
 - Shadow API 룰은 명세에서 자동 생성한 결과물만 넣었다. 생성기와 이 연습장의 배경(공급망 · Shadow API 탐지 · ML 검증 기록)은 [zeldaim/api-security-supply-chain](https://github.com/zeldaim/api-security-supply-chain).
+
+## Help test API Defense Lab
+
+I'm looking for security practitioners, developers, and open-source enthusiasts willing to **run this lab from the README alone** in their own environment and tell me whether the results reproduce. Reproducibility is the first thing to prove — a scoring lab is only useful if two people get comparable numbers.
+
+**What I'd like to validate**
+
+- Docker Compose deployment on **Windows, Linux, and macOS** (so far only Windows 11 + Docker Desktop has been tested)
+- Each module combination: core only · `wazuh` · `dashboard` · both
+- Shadow API detection — Sigma in the core, Wazuh in the `wazuh` module — and whether both give the same verdicts
+- ML-based BOLA anomaly detection and the automatic blocking behaviour
+- Detection and false-positive results **on the lab's synthetic traffic** (these are lab scores, not real-world accuracy)
+- Whether `scorer` numbers land in the same range as the results table above
+
+**How to report** — open a [test report issue](../../issues/new?template=test-report.yml). It asks for your OS, Docker / Compose versions, the modules you enabled, and the `reports/score.json` from your run, so results can be compared side by side. You don't need to write code: installation problems, differing numbers, new attack scenarios, and better rules or models are all useful.
+
+**Taking it further — your own API.** If you want to go beyond the lab, try adapting it to *your* API: generate rules from your OpenAPI spec (`tools/gen_sigma.py`), score them against your own **non-production / staging** access logs, and share what broke. That is the honest next step toward real-world use — this repository does not claim to be production-ready: the target app is deliberately vulnerable, client IPs come from a spoofable header, and all traffic is synthetic.
+
+All tests should stay inside this intentionally vulnerable, **local** lab environment (every port binds to `127.0.0.1`). Never expose it to the internet.
+
+The aim is for this to grow into a **community-validated** API defense testing lab — reproducible scores, shared scenarios, and rules and models anyone can check. Feedback and contributions are welcome.
+
+Repository: https://github.com/zeldaim/api-defense-lab

@@ -143,7 +143,7 @@
     {
       "id": 3,
       "type": "stat",
-      "title": "룰 경보 (실시간 Wazuh)",
+      "title": "룰 경보 (Sigma 또는 Wazuh)",
       "description": "",
       "gridPos": {
         "x": 8,
@@ -873,7 +873,7 @@
     {
       "id": 10,
       "type": "table",
-      "title": "룰 경보 (실시간 Wazuh)",
+      "title": "룰 경보 (Sigma 또는 Wazuh)",
       "description": "",
       "gridPos": {
         "x": 12,

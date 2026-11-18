@@ -10,7 +10,7 @@
 
 판정은 Wazuh 경보와 같은 모양(rule.id · level · groups, data.srcip …)으로 돌려준다 → 차단 정책 · 채점이 그대로 쓴다.
 기본 룰(shadow_api_*)은 Wazuh 룰과 같은 id · 레벨 · 그룹으로 낸다. 내 Sigma 룰은 id 110000 번대, 레벨은 Sigma level 로,
-tags 에 `lab.block` 이 있으면 그룹 lab_block 이 붙어 자동 차단된다.
+최상위에 `lab_block: true` 가 있으면 그룹 lab_block 이 붙어 자동 차단된다 (Sigma 는 모르는 필드를 그대로 둔다 — sigma check 통과).
 """
 import fnmatch
 import glob
@@ -126,7 +126,7 @@ class Engine:
                 else:
                     n += 1
                     rid, lvl, groups = str(110000 + n), LEVEL.get(d.get("level"), 5), ["sigma", f"sigma_{stem}"]
-                    if "lab.block" in (d.get("tags") or []):
+                    if d.get("lab_block") is True:
                         groups.append("lab_block")
                 meta = {"id": rid, "level": lvl, "groups": groups, "title": d.get("title", stem),
                         "sigma_id": str(d.get("id", "")), "name": d.get("name")}

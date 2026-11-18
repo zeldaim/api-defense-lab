@@ -1,0 +1,66 @@
+name: Test report
+description: Ran the lab from the README? Share your environment and results (works, breaks, or different numbers).
+title: "[test] <OS> · <modules> · <works / broken / different numbers>"
+labels: ["test-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing. Run everything locally only (all ports bind to 127.0.0.1). Traffic is synthetic.
+  - type: dropdown
+    id: result
+    attributes:
+      label: Result
+      options:
+        - Works — numbers in the same range as the README
+        - Works — but numbers differ noticeably
+        - Broken — could not finish (install / startup / run)
+    validations: {required: true}
+  - type: input
+    id: os
+    attributes:
+      label: OS and version
+      placeholder: Ubuntu 24.04 / macOS 15 (Apple Silicon) / Windows 11 + WSL2 ...
+    validations: {required: true}
+  - type: input
+    id: docker
+    attributes:
+      label: Docker and Compose versions
+      description: Output of `docker version --format '{{.Server.Version}}'` and `docker compose version`
+    validations: {required: true}
+  - type: checkboxes
+    id: modules
+    attributes:
+      label: Modules enabled
+      options:
+        - label: core only
+        - label: wazuh
+        - label: dashboard
+  - type: input
+    id: commit
+    attributes:
+      label: Commit tested
+      description: Output of `git rev-parse --short HEAD`
+    validations: {required: true}
+  - type: textarea
+    id: steps
+    attributes:
+      label: What you ran
+      description: Commands in order (e.g. `up -d --build`, `traffic demo`, `scorer`)
+      render: shell
+  - type: textarea
+    id: score
+    attributes:
+      label: Scorer output
+      description: Paste the `scorer` table, and attach `reports/score.json` if you can
+      render: text
+  - type: textarea
+    id: problems
+    attributes:
+      label: Problems or differences
+      description: Errors (`docker compose logs <service>`), steps that didn't match the README, anything surprising
+  - type: textarea
+    id: ideas
+    attributes:
+      label: Ideas (optional)
+      description: New attack scenarios, better rules or models, missing documentation

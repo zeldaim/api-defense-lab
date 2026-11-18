@@ -61,7 +61,7 @@ P, y = [], 0
 P += [
     stat("전체 요청", 0, y, ACC, "*", "text"),
     stat("차단된 요청 (403)", 4, y, ACC, "blocked:true", "red", desc="자동 차단 목록에 오른 IP 가 보낸 요청"),
-    stat("룰 경보 (실시간 Wazuh)", 8, y, ALR, "*", "orange"),
+    stat("룰 경보 (Sigma 또는 Wazuh)", 8, y, ALR, "*", "orange"),
     stat("ML high 창", 12, y, ML, "level:high", "red"),
     stat("자동 차단 IP", 16, y, RSP, "*", "purple", metric=[{"id": "1", "type": "cardinality", "field": "client_ip"}]),
     stat("정상 사용자 차단 (오탐)", 20, y, RSP, "label:normal", "yellow", desc="0 이어야 한다"),
@@ -91,7 +91,7 @@ P += [
                   "seq_id_run": "연속 ID", "id_span_log": "id_span_log", "label": "정답"},
           order=["timestamp", "client_ip", "level", "score", "n_req", "seq_id_run", "id_span_log", "label"],
           sort=("점수", False), colors={"level": {"high": "red", "medium": "orange"}, "label": {"bola": "red", "probe": "orange", "normal": "green"}}),
-    table("룰 경보 (실시간 Wazuh)", 12, y, 12, 8, [tgt(ALR, "*", metrics=raw(), buckets=[])],
+    table("룰 경보 (Sigma 또는 Wazuh)", 12, y, 12, 8, [tgt(ALR, "*", metrics=raw(), buckets=[])],
           rename={"timestamp": "시각", "rule.level": "레벨", "rule.description": "설명", "data.client_ip": "IP",
                   "data.path": "경로", "data.status": "상태", "label": "정답"},
           order=["timestamp", "rule.level", "rule.description", "data.client_ip", "data.path", "data.status", "label"],
