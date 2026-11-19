@@ -9,12 +9,17 @@
 - 정상 사용자와 공격을 보내면 **정답지(누가 공격자인지)** 가 자동으로 쌓이고, 채점기가 **몇 개를 잡았나 · 몇 초 만에 막았나 · 정상을 몇 명 막았나** 를 표로 보여 준다.
 - 내 Sigma 룰 · 내 Wazuh 룰 · 내 ML 모델을 넣고 같은 채점을 받을 수 있다.
 
+![데모 — 정상 20명 사이로 탐색 → 룰 차단, BOLA → ML 차단, 정상 오탐 0 (8배속)](docs/media/demo_attack_8x.gif)
+
+<sub>`docker compose --profile wazuh --profile dashboard up` → `traffic demo` 중 공격 구간 (8배속). 시작 직후 정상 사용자 창이 ML high 로 떠도 차단 정책이 걸러 차단 0, 탐색은 룰 L3 로 · BOLA 는 ML 로 막힌다. 전체 영상은 아래 "영상".</sub>
+
 > ⚠️ 트래픽은 생성기가 만든 **합성**이다. 대상 앱 DVRA 는 **일부러 취약한 앱**이다 — 모든 포트는 `127.0.0.1` 에만 연다. 인터넷에 노출하지 말 것.
 
 ## 영상
 
 | | |
 |---|---|
+| [![이 레포 데모](docs/media/demo_poster.jpg)](docs/media/demo_2026-11-19_4x.mp4) | **이 레포 데모 (2026-11-19, 4배속, 3분 3초).** 새 clone 에서 `--profile wazuh --profile dashboard up` → `traffic demo` 를 Grafana 화면으로 녹화 (`tools/record_demo.js`). 이 실행: 탐색 차단 결정 **4.2초**(새어 나간 성공 2) · BOLA **6.1초**(남의 주문 15건 노출 뒤 403) · 정상 20명 오탐 차단 **0** (ML high 창 39 — 차단 정책이 걸렀다). |
 | [![프로토타입 시연](docs/media/prototype_demo_poster.jpg)](docs/media/prototype_demo_2026-11-19_4x.mp4) | **2026-11-19 프로토타입 시연 (4배속, 2분 33초) — 이 레포의 바탕.** 정상 20명 사이로 명세 밖 탐색 → 실시간 Wazuh L3 → **2.9초** 만에 자동 차단, 명세 안 BOLA → ML high → **8.2초** 만에 자동 차단, 정상 사용자 차단 0. 이 레포를 만들기 **전** 구성(호스트 스크립트 · Wazuh 항상 켬)으로 찍었다 — 채점기 · 코어/모듈 구조 · `/docs` 오탐 수정은 영상에 없다. 화면은 같은 Grafana 대시보드다. |
 
 ## 코어와 모듈
@@ -105,7 +110,10 @@ docker compose run --rm scorer --last 15          # 최근 15분에 시작한 �
 | 공격자 (probe · bola) | 탐지됐나(룰 · ML) · 첫 요청부터 탐지까지 · **차단까지 몇 초** · 차단 전에 성공한 요청 수(새어 나간 것) · 차단 뒤 403 |
 | 정상 사용자 | **차단된 IP(오탐 차단)** · 룰 경보를 받은 IP · ML high 창 |
 
-결과는 화면 표 + `reports/report.html`(시각 붙은 사본도) + `reports/score.json`. 탐지기는 정답지를 보지 않는다 — 정답지는 채점과 화면 표시에만 쓴다.
+결과는 화면 표 + `reports/report.html`(시각 붙은 사본도) + `reports/score.json`.
+
+![채점 보고서](docs/media/score_report.png)
+ 탐지기는 정답지를 보지 않는다 — 정답지는 채점과 화면 표시에만 쓴다.
 
 ## 기본 설정 결과 (`traffic demo` 한 번씩, 2026-11-19)
 
@@ -320,7 +328,8 @@ model/      dvra_v1/(동봉 모델)   mine/(내가 학습한 모델, git 제외)
 rules/      wazuh/*.xml   sigma/*.yml
 spec/       dvra_openapi.json (DVRA 명세 — 룰과 특징의 기준)
 grafana/    provisioning/ · dashboards/lab.json   (tools/build_dashboard.py 로 생성)
-tools/      gen_sigma.py · check_sigma.sh · sigma_vs_wazuh.py · build_dashboard.py
+tools/      gen_sigma.py · check_sigma.sh · sigma_vs_wazuh.py · build_dashboard.py · record_demo.js(데모 녹화)
+docs/media/ 데모 영상 · GIF · 보고서 그림
 reports/    채점 결과 (git 제외)
 ```
 
