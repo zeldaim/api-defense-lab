@@ -80,6 +80,7 @@ python3 tests/detection/test_sigma.py          # pyyaml 필요
 | 망가뜨린 룰 시험이 그대로 통과 | `sed` 가 Wazuh 정규식의 `\-` 이스케이프를 못 맞춰 아무것도 안 지움 | 파이썬으로 정확한 문자열을 바꾸고, 바뀌었는지 확인한 뒤 시험 |
 | 워크플로 YAML 앵커(`&paths`) | GitHub 지원이 최근이라 도구 · 버전마다 다를 수 있다 | 경로 목록을 두 번 씀 |
 | actionlint: `SC2034 i appears unused` | 대기 반복 변수 | `_` 로 |
+| CI 첫 실행: Sigma 작업이 도구 설치에서 실패 (`ResolutionImpossible`) | `pysigma 1.5.1` 이 요구하는 pyyaml 과 고정한 `pyyaml==6.0.2`(도구 이미지 버전을 그대로 씀)가 충돌 — 로컬은 컨테이너 안에서 pip 가 알아서 6.0.3 을 골라 드러나지 않았다 | `pyyaml==6.0.3` 으로 고정 (pysigma 가 실제로 고르는 버전을 확인해서) |
 
 ## 결과
 

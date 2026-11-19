@@ -43,7 +43,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: 도구 설치 (버전 고정)
-        run: pip install sigma-cli==3.1.0 pysigma==1.5.1 pysigma-backend-elasticsearch==2.1.1 pyyaml==6.0.2
+        run: pip install sigma-cli==3.1.0 pysigma==1.5.1 pysigma-backend-elasticsearch==2.1.1 pyyaml==6.0.3
       - name: sigma check
         run: sigma check rules/sigma
       - name: Lucene 변환 (판정 룰 4개)
