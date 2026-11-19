@@ -1,0 +1,41 @@
+# PR 이미지 검사 — 도구 이미지가 실제로 빌드되고, 동봉 모델을 불러 채점하고, Sigma 시험이 이미지 안에서 도는가
+# 이유 (2026-11-19): Dependabot 의 Python 3.12 → 3.15 PR 이 다른 검사를 모두 통과했지만 실제로는 빌드가 깨졌다
+#   (모델 파일용으로 고정한 scikit-learn 1.5.2 가 3.15 에서 설치되지 않음). 빌드를 안 해 보는 검사로는 못 잡는다.
+name: image-check
+
+on:
+  pull_request:
+    paths:
+      - Dockerfile
+      - detector/**
+      - traffic/**
+      - scorer/**
+      - spec/**
+      - model/**
+      - .github/workflows/image-check.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read                 # 빌드만 하고 아무것도 올리지 않는다
+
+jobs:
+  build-and-smoke:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: 빌드 (올리지 않음)
+        run: docker build -t lab-tools .
+      - name: 모델 불러와 채점 한 번 (특징 13개 · 임계값)
+        run: |
+          docker run --rm -v "$PWD/model:/lab/model:ro" lab-tools python -c "
+          import json, joblib, numpy as np
+          m = joblib.load('/lab/model/dvra_v1/model.joblib')
+          meta = json.load(open('/lab/model/dvra_v1/model_meta.json'))
+          s = m.decision_function(np.array([meta['median']]))[0]
+          print('feature', len(meta['features']), 'score at median', round(float(s), 4), 'high<', meta['threshold_high'])
+          assert len(meta['features']) == 13 and s > meta['threshold_high'], 'median window should not be high'
+          "
+      - name: 이미지 안에서 Sigma 엔진 시험
+        run: docker run --rm -v "$PWD:/r:ro" -w /r lab-tools python tests/detection/test_sigma.py
