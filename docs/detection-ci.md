@@ -85,4 +85,4 @@ python3 tests/detection/test_sigma.py          # pyyaml 필요
 ## 결과
 
 - 로컬: Sigma 엔진 19/19 (사례 16 + 빈도 3) · Wazuh 16/16 · drift 없음 · `sigma check` 오류 0 · actionlint 0
-- GitHub Actions: 아래 첫 실행 기록
+- GitHub Actions: 첫 실행은 Sigma 작업이 도구 설치에서 실패(위 함정 표) → 고친 뒤 [두 작업 모두 통과](https://github.com/zeldaim/api-defense-lab/actions/runs/44453398381) — wazuh 53초(16/16) · sigma 16초(19/19 · `sigma check` 오류 0 · drift 없음)

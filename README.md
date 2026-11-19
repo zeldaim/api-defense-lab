@@ -1,5 +1,7 @@
 # api-defense-lab — API 방어 연습장
 
+[![detection-ci](https://github.com/zeldaim/api-defense-lab/actions/workflows/detection-ci.yml/badge.svg)](https://github.com/zeldaim/api-defense-lab/actions/workflows/detection-ci.yml) [![release-image](https://github.com/zeldaim/api-defense-lab/actions/workflows/release-image.yml/badge.svg)](https://github.com/zeldaim/api-defense-lab/actions/workflows/release-image.yml)
+
 > **A reproducible practice range for API *defenders*.** A small core — a deliberately vulnerable API (DVRA), an nginx front that logs and blocks, Sigma rules for undocumented ("shadow") API calls, an ML detector for in-spec BOLA, automatic blocking, an answer key for every synthetic actor, and a scorer that grades *your* rules and model — plus optional modules by job: **Wazuh** (SIEM rule authoring) and **Elasticsearch + Grafana** (live monitoring). Traffic is synthetic. This is a lab, not a security product. → [Help test it](#help-test-api-defense-lab)
 
 공격 연습장(crAPI · DVRA)은 많은데, **방어하는 쪽이 자기 룰 · 모델을 같은 조건에서 채점해 볼 곳**은 드물다. 이 레포가 그 자리다.
@@ -272,6 +274,10 @@ trainer 는 정답지에서 `normal` 인 IP 의 창만 학습한다. 오류 비�
 | `model_meta.json` | `features`(특징 이름 순서 — `detector/features_v2.py` 의 `FEATURES` 중에서) · `threshold_high` · `threshold_medium` · `n_windows` |
 
 특징 계산은 `detector/features.py`(v2.1) · `features_v2.py` 에 있다. 창 길이는 5분(`pipeline.py --window`).
+
+## 룰 자동 시험 (Detection-as-Code CI)
+
+`rules/` 를 고치면 GitHub Actions(`detection-ci.yml`)가 자동으로: `sigma check` · Lucene 변환 · 명세에서 다시 만든 룰과 같은지(drift) · **정답 사례 16개를 Sigma 엔진과 실제 Wazuh(`wazuh-logtest`) 양쪽에** 넣어 같은 정답인지 · 빈도 룰. 룰을 일부러 망가뜨리면 실패하는 것까지 확인했다. 구축 과정과 겪은 함정: [`docs/detection-ci.md`](docs/detection-ci.md). 내 룰을 고쳤다면 `tests/detection/cases.json` 에 사례를 더하면 같은 시험을 받는다.
 
 ## Sigma 룰
 
