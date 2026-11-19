@@ -291,6 +291,30 @@ trainer 는 정답지에서 `normal` 인 IP 의 창만 학습한다. 오류 비�
   ```
 - 한계: 상관 룰(F1 · F2)은 `sigma check` 는 통과하지만, 판정 룰이 정규식을 써서 Lucene · Splunk 백엔드가 상관 쿼리로 변환하지 못했다 (pySigma 1.5.1). 상관을 지원하는 백엔드에서 쓰거나 SIEM 의 빈도 기능으로 옮겨야 한다.
 
+## 이미지 서명 · 출처 확인 (공급망)
+
+도구 이미지(detector · traffic · scorer · trainer)는 GitHub Actions(`.github/workflows/release-image.yml`)가 빌드해 **`ghcr.io/zeldaim/api-defense-lab/tools`** 에 올리고, 세 가지를 붙인다:
+
+| 붙이는 것 | 도구 | 확인하는 것 |
+|---|---|---|
+| 서명 | cosign **keyless** — 키 파일 없이 이 워크플로의 신원(GitHub OIDC)으로. 기록은 Sigstore 공개 로그(Rekor) | 이 레포의 이 워크플로가 `main` 에서 만든 이미지인가 |
+| SBOM 증명 | Syft → CycloneDX → `cosign attest` | 이미지 안에 무엇이 들었나 (서명된 목록) |
+| SLSA 출처 증명 | `actions/attest-build-provenance` (`slsa.dev/provenance/v1`) | 어느 레포 · 워크플로 · 커밋으로 빌드했나 |
+
+```bash
+ID=https://github.com/zeldaim/api-defense-lab/.github/workflows/release-image.yml@refs/heads/main
+ISS=https://token.actions.githubusercontent.com
+cosign verify             ghcr.io/zeldaim/api-defense-lab/tools:latest --certificate-identity $ID --certificate-oidc-issuer $ISS
+cosign verify-attestation ghcr.io/zeldaim/api-defense-lab/tools:latest --type cyclonedx --certificate-identity $ID --certificate-oidc-issuer $ISS
+gh attestation verify     oci://ghcr.io/zeldaim/api-defense-lab/tools:latest --owner zeldaim
+```
+
+- 2026-11-19 첫 실행(1분 22초)에서 위 세 검증이 CI 밖(로그인 없이)에서도 통과했고, **다른 신원**(`someone-else/...`)을 기대하면 `no matching CertificateIdentity` 로 실패하는 것까지 확인했다.
+- 워크플로 원칙: 기본 권한 없음(`permissions: {}`) → 작업에 필요한 4개만 · 액션은 태그가 아니라 **커밋 SHA 로 고정** (태그는 옮길 수 있다) · `persist-credentials: false`.
+- 막는 것: 레지스트리에서 이미지를 바꿔치기 · 다른 곳에서 만든 이미지를 같은 이름으로 올리기 (서명 · 신원이 안 맞는다).
+  못 막는 것: 이 레포의 코드나 워크플로 자체가 오염된 경우 (그러면 오염된 이미지가 정상적으로 서명된다) — 그래서 리뷰 · 브랜치 보호가 따로 필요하다.
+- `docker compose up --build` 는 지금도 이미지를 **로컬에서 빌드**한다. 서명된 이미지는 받아서 검증하고 쓰고 싶은 사람용이다.
+
 ## 알려 둘 한계
 
 - **트래픽은 합성이다.** 정상 사용자는 기계 패턴이라 사람보다 규칙적이다. 점수는 "이 연습장에서의" 점수다.
