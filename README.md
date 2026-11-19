@@ -397,6 +397,8 @@ I'm looking for security practitioners, developers, and open-source enthusiasts 
 
 All tests should stay inside this intentionally vulnerable, **local** lab environment (every port binds to `127.0.0.1`). Never expose it to the internet.
 
+**Next: a detector benchmark (design only, not built yet).** The plan is to let anyone plug in their own rules or ML model and compare them on the same data and the same scoring — a plain detector I/O format (access log in, `verdicts.jsonl` out), seeded traffic so there is no fixed test set to memorise, and a versioned scorer. Draft (Korean): [`docs/benchmark-design.md`](docs/benchmark-design.md). Comments are welcome in the issues before any code is written.
+
 The aim is for this to grow into a **community-validated** API defense testing lab — reproducible scores, shared scenarios, and rules and models anyone can check. Feedback and contributions are welcome.
 
 Repository: https://github.com/zeldaim/api-defense-lab
