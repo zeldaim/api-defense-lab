@@ -2,6 +2,7 @@
 #   코어(항상): DVRA · nginx 차단 · detector(Sigma 룰 + ML + 자동 차단) · traffic · scorer · trainer
 #   모듈 wazuh     : Wazuh manager 가 룰 판정 (Wazuh 룰 작성 연습)            — 이미지 +2.5GB
 #   모듈 dashboard : Elasticsearch + Grafana 실시간 대시보드 (관제 연습)       — 이미지 +3.5GB
+#   모듈 inventory : 트래픽 기록 → 관측 명세(mitmproxy2swagger) → 공식 명세와 대조 · 룰 생성 (docs/inventory.md)
 #
 #   docker compose up -d --build                                       코어만
 #   docker compose --profile wazuh --profile dashboard up -d --build   전부
@@ -123,6 +124,25 @@ services:
       - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on: {elasticsearch: {condition: service_healthy}}
 
+  # ── [모듈 inventory] 명세 없이 시작하기: 트래픽에서 실제 쓰이는 API 를 찾아 공식 명세와 대조 (docs/inventory.md)
+  #    traffic 을 이 프록시로 보내면(LAB_TARGET) 기록하고 nginx 로 그대로 넘긴다 — 차단 · 접속 로그 · 정답지는 그대로
+  inventory-proxy:
+    profiles: [inventory]
+    build: {context: ., dockerfile: inventory/Dockerfile}
+    image: api-defense-lab/inventory:0.1
+    command: ["mitmdump", "--mode", "reverse:http://nginx:80", "--listen-port", "8080", "--set", "save_stream_file=+/inv/flows.mitm", "--quiet"]
+    volumes:
+      - inventory:/inv
+    depends_on: {nginx: {condition: service_healthy}}
+  inventory:
+    profiles: [inventory]
+    image: api-defense-lab/inventory:0.1
+    entrypoint: ["python", "inventory/discover.py"]
+    command: []
+    volumes:
+      - inventory:/inv
+      - ./reports:/reports
+
   # ── 도구 (docker compose run --rm <이름> 으로 실행)
   traffic:
     <<: *tools
@@ -150,3 +170,4 @@ services:
 volumes:
   labdata:
   wazuh-alerts:
+  inventory:

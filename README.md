@@ -41,6 +41,7 @@
 | SIEM 룰 작성 (Wazuh) | 코어 + `wazuh` | `docker compose --profile wazuh up -d --build` | Wazuh 2.5GB · 약 350MB |
 | 관제 · 대시보드 (실시간 차단 화면) | 코어 + `dashboard` | `docker compose --profile dashboard up -d --build` | ES 2.6GB + Grafana 0.9GB · 약 1.7GB (ES 힙 1GB) |
 | 전부 (시연 · 비교) | 코어 + 둘 다 | `docker compose --profile wazuh --profile dashboard up -d --build` | 위 합 (이미지 약 7.8GB) |
+| **명세 없이 시작** — 트래픽에서 API 인벤토리 → 공식 명세와 대조 → 룰 생성 | 코어 + `inventory` | `docker compose --profile inventory up -d --build` → [docs/inventory.md](docs/inventory.md) | mitmproxy + mitmproxy2swagger · 프록시를 거친 트래픽만 기록 |
 
 - `detector` 는 켜진 모듈을 스스로 찾는다(30초마다): **`wazuh` 가 있으면 Wazuh 경보로, 없으면 `rules/sigma/*.yml` 을 직접 적용해** 룰 판정을 한다. 두 판정은 같은 접속 로그에서 줄 단위로 일치하게 맞춰 두었다(아래 결과). `dashboard` 가 있으면 ES 로도 보낸다.
 - 모듈을 켜고 끈 뒤에도 정답지 · 채점 · 차단 정책은 그대로다 — 모듈은 **판정 엔진과 화면만** 바꾼다.
@@ -65,6 +66,7 @@ traffic(정상 · 공격 + 정답지) ──▶ nginx :8089 ──▶ DVRA (대�
 | `traffic` · `scorer` · `trainer` | 코어 도구 | 트래픽 + 정답지 · 채점 · 내 모델 학습 |
 | `wazuh` | 모듈 `wazuh` | Wazuh manager 4.14.9 가 접속 로그를 실시간으로 읽어 `rules/wazuh/*.xml` 로 판정 |
 | `elasticsearch` · `grafana` | 모듈 `dashboard` | 실시간 대시보드 http://localhost:3000 (로그인 없음, 5초 새로고침) |
+| `inventory-proxy` · `inventory` | 모듈 `inventory` | 프록시가 트래픽을 기록 → mitmproxy2swagger 로 관측 명세 → 공식 명세와 대조(Shadow · 관측 안 됨) → `--sigma` 로 룰. 숨은 API 3/3 · 오탐 Shadow 0 (허용 목록 IP 탐색 기준), 관측 명세 룰은 정답 사례 18/19 — [docs/inventory.md](docs/inventory.md) |
 
 ## 준비물
 

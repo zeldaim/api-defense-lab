@@ -7,7 +7,7 @@ updates:
     groups:
       actions: {patterns: ["*"]}
   - package-ecosystem: docker
-    directories: ["/", "/wazuh"]
+    directories: ["/", "/wazuh", "/inventory"]
     schedule: {interval: weekly}
     ignore:
       # 모델 파일(scikit-learn 1.5.2 로 저장)이 Python 버전에 묶여 있다 — 3.15 로 올리면 빌드가 깨짐 (2026-11-19 PR #1).

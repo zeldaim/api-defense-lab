@@ -12,6 +12,9 @@ on:
       - scorer/**
       - spec/**
       - model/**
+      - inventory/**
+      - tests/inventory/**
+      - tools/gen_sigma.py
       - .github/workflows/image-check.yml
   workflow_dispatch:
 
@@ -39,3 +42,14 @@ jobs:
           "
       - name: 이미지 안에서 Sigma 엔진 시험
         run: docker run --rm -v "$PWD:/r:ro" -w /r lab-tools python tests/detection/test_sigma.py
+
+  inventory:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: inventory 모듈 이미지 빌드 (올리지 않음)
+        run: docker build -f inventory/Dockerfile -t lab-inventory .
+      - name: 기록 고정본으로 발견 · 대조 · Sigma 생성 시험 (숨은 API 3/3 · 오탐 Shadow 0)
+        run: docker run --rm -v "$PWD:/r:ro" -w /r lab-inventory python tests/inventory/test_inventory.py
