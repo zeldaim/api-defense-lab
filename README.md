@@ -64,7 +64,7 @@ traffic(정상 · 공격 + 정답지) ──▶ nginx :8089 ──▶ DVRA (대�
 | `nginx` | 코어 | 접속 기록 + 차단 목록(`ips.map`)의 IP 는 403. 목록이 바뀌면 1초 안에 다시 읽는다 |
 | `detector` | 코어 | 2초마다: 룰 판정(Sigma 또는 Wazuh 경보) · ML 채점 · 차단 정책 → 차단 목록 · events.jsonl (· ES) |
 | `traffic` · `scorer` · `trainer` | 코어 도구 | 트래픽 + 정답지 · 채점 · 내 모델 학습 |
-| `wazuh` | 모듈 `wazuh` | Wazuh manager 4.14.9 가 접속 로그를 실시간으로 읽어 `rules/wazuh/*.xml` 로 판정 |
+| `wazuh` | 모듈 `wazuh` | Wazuh manager 4.14.10 이 접속 로그를 실시간으로 읽어 `rules/wazuh/*.xml` 로 판정 |
 | `elasticsearch` · `grafana` | 모듈 `dashboard` | 실시간 대시보드 http://localhost:3000 (로그인 없음, 5초 새로고침) |
 | `inventory-proxy` · `inventory` | 모듈 `inventory` | 프록시가 트래픽을 기록 → mitmproxy2swagger 로 관측 명세 → 공식 명세와 대조(Shadow · 관측 안 됨) → `--sigma` 로 룰. 숨은 API 3/3 · 오탐 Shadow 0 (허용 목록 IP 탐색 기준), 관측 명세 룰은 정답 사례 18/19 — [docs/inventory.md](docs/inventory.md) |
 

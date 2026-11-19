@@ -63,7 +63,7 @@ services:
   wazuh:
     profiles: [wazuh]
     build: ./wazuh
-    image: api-defense-lab/wazuh:4.14.9
+    image: api-defense-lab/wazuh:4.14.10
     volumes:
       - labdata:/data:ro
       - ./rules/wazuh:/lab/rules:ro
