@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+"""Sigma 룰을 detector 의 Sigma 엔진으로 — cases.json 의 정답 단계와 같은지, 빈도 룰(F1 · F2)이 맞게 걸리는지.
+  python tests/detection/test_sigma.py        (pyyaml 필요, 저장소 루트에서)
+"""
+import json
+import os
+import re
+import sys
+from collections import Counter
+from datetime import datetime
+
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(ROOT, "detector"))
+import sigma_engine  # noqa: E402
+
+LEVEL = {"100510": "L1", "100511": "L2", "100512": "L3", "100513": "L3E"}
+LINE = re.compile(r'^(\S+) \S+ \S+ \[([^\]]+)\] "(\S+) (\S+)[^"]*" (\d{3}) \S+ "[^"]*" "([^"]*)"')
+
+
+def event(line):
+    ip, ts, meth, url, st, ua = LINE.match(line).groups()
+    path, _, q = url.partition("?")
+    t = datetime.strptime(ts, "%d/%b/%Y:%H:%M:%S %z").timestamp()
+    return {"c-ip": ip, "cs-method": meth, "cs-uri-stem": path, "cs-uri-query": q, "sc-status": st, "cs-user-agent": ua}, t
+
+
+def main():
+    fails = 0
+    cases = json.load(open(os.path.join(os.path.dirname(__file__), "cases.json"), encoding="utf-8"))
+    for c in cases:
+        eng = sigma_engine.Engine(os.environ.get("SIGMA_RULES", os.path.join(ROOT, "rules", "sigma")), quiet=True)     # 사례마다 새로 (빈도 상태 섞이지 않게)
+        ev, t = event(c["line"])
+        got = sorted(LEVEL[a["rule"]["id"]] for a in eng.evaluate(ev, t) if a["rule"]["id"] in LEVEL) or ["none"]
+        ok = got == [c["expect"]]
+        fails += not ok
+        print(f"{'PASS' if ok else 'FAIL'}  {c['name']}  (기대 {c['expect']} · Sigma {','.join(got)})")
+
+    # 빈도: 30초에 L1 25회 → F1 1번(60초 동안 다시 안 냄) · 60초에 L3 12회 → F2 1번 · 38초에 L1 19회 → F1 없음
+    eng = sigma_engine.Engine(os.environ.get("SIGMA_RULES", os.path.join(ROOT, "rules", "sigma")), quiet=True)
+    cnt = Counter()
+    mk = lambda ip, p, st: {"c-ip": ip, "cs-method": "GET", "cs-uri-stem": p, "cs-uri-query": "", "sc-status": st, "cs-user-agent": "t"}
+    for i in range(25):
+        cnt.update(a["rule"]["id"] for a in eng.evaluate(mk("1.1.1.1", f"/nope{i}", "404"), 1000 + i * 0.4))
+    for i in range(12):
+        cnt.update(a["rule"]["id"] for a in eng.evaluate(mk("2.2.2.2", "/debug", "200"), 2000 + i * 3))
+    for i in range(19):
+        cnt.update("slow-" + a["rule"]["id"] for a in eng.evaluate(mk("3.3.3.3", f"/x{i}", "404"), 3000 + i * 2))
+    for name, ok in (("F1 자동화 정찰 — 30초에 L1 25회 → 1번", cnt["100520"] == 1),
+                     ("F2 대량 유출 — 60초에 L3 12회 → 1번", cnt["100521"] == 1),
+                     ("F1 아님 — 38초에 L1 19회 (30초 창에 20 미만)", cnt["slow-100520"] == 0)):
+        fails += not ok
+        print(f"{'PASS' if ok else 'FAIL'}  {name}")
+    print(f"\n{'모두 통과' if not fails else f'실패 {fails}건'} — 사례 {len(cases)} + 빈도 3")
+    sys.exit(1 if fails else 0)
+
+
+if __name__ == "__main__":
+    main()

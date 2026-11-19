@@ -1,0 +1,86 @@
+# Detection-as-Code — 탐지 룰을 바꿀 때마다 자동으로 시험한다
+#
+#   sigma : sigma check · Lucene 변환 · 명세에서 다시 만든 룰과 같은가(drift) · Sigma 엔진으로 정답 사례 + 빈도 룰
+#   wazuh : 이 저장소의 Wazuh 이미지를 띄워 wazuh-logtest 로 같은 정답 사례
+#
+# 정답 사례: tests/detection/cases.json — 두 엔진이 같은 정답을 내야 한다 (Sigma 와 Wazuh 룰이 어긋나면 여기서 걸린다).
+# 시험이 실제로 회귀를 잡는지 확인함 (2026-11-19): 문서 경로 예외를 지운 룰로 돌리면 Sigma 1건 · Wazuh 2건 실패.
+name: detection-ci
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - rules/**
+      - spec/**
+      - wazuh/**
+      - tools/gen_sigma.py
+      - detector/sigma_engine.py
+      - tests/detection/**
+      - .github/workflows/detection-ci.yml
+  pull_request:
+    paths:
+      - rules/**
+      - spec/**
+      - wazuh/**
+      - tools/gen_sigma.py
+      - detector/sigma_engine.py
+      - tests/detection/**
+      - .github/workflows/detection-ci.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read                 # 읽기만 — 이 워크플로는 아무것도 쓰거나 올리지 않는다
+
+jobs:
+  sigma:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: 도구 설치 (버전 고정)
+        run: pip install sigma-cli==3.1.0 pysigma==1.5.1 pysigma-backend-elasticsearch==2.1.1 pyyaml==6.0.2
+      - name: sigma check
+        run: sigma check rules/sigma
+      - name: Lucene 변환 (판정 룰 4개)
+        run: |
+          for f in rules/sigma/shadow_api_l*.yml; do
+            echo "::group::$f"; sigma convert -t lucene --without-pipeline "$f"; echo "::endgroup::"
+          done
+      - name: drift — 명세에서 다시 만든 룰과 같은가
+        run: |
+          out=$(mktemp -d)
+          python tools/gen_sigma.py spec/dvra_openapi.json --out "$out" > /dev/null
+          if ! diff -r -I '^date:' rules/sigma "$out"; then
+            echo "::error::rules/sigma 가 명세 · 생성기와 다르다 — 룰을 손으로 고쳤다면 tools/gen_sigma.py 를 고치고 다시 생성"
+            exit 1
+          fi
+      - name: Sigma 엔진 — 정답 사례 + 빈도 룰
+        run: python tests/detection/test_sigma.py
+
+  wazuh:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Wazuh 이미지 빌드 · 실행 (rules/wazuh 적용, 취약점 탐지 끔)
+        run: |
+          docker build -q -t lab-wazuh ./wazuh
+          docker run -d --name wz -v "$PWD/rules/wazuh:/lab/rules:ro" lab-wazuh
+      - name: logtest 준비 대기
+        run: |
+          for _ in $(seq 1 60); do
+            docker exec wz test -S /var/ossec/queue/sockets/logtest && { sleep 5; exit 0; }
+            sleep 5
+          done
+          docker logs wz | tail -40; echo "::error::Wazuh 가 5분 안에 뜨지 않았다 (룰 문법 오류면 analysisd 가 시작하지 못한다)"; exit 1
+      - name: wazuh-logtest — 정답 사례
+        run: python3 tests/detection/test_wazuh.py wz
+      - name: 실패하면 Wazuh 로그
+        if: failure()
+        run: docker exec wz tail -50 /var/ossec/logs/ossec.log || true

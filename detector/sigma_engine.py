@@ -114,7 +114,7 @@ def _seconds(span):
 
 
 class Engine:
-    def __init__(self, folder):
+    def __init__(self, folder, quiet=False):
         self.rules, self.corrs, n = [], [], 0
         for p in sorted(glob.glob(os.path.join(folder, "*.yml")) + glob.glob(os.path.join(folder, "*.yaml"))):
             stem = os.path.splitext(os.path.basename(p))[0]
@@ -142,7 +142,8 @@ class Engine:
                     cond = det.pop("condition")
                     cond = cond[0] if isinstance(cond, list) else cond
                     self.rules.append({**meta, "sel": det, "cond": _condition(cond, list(det))})
-        print(f"[sigma] 판정 룰 {len(self.rules)} · 상관 룰 {len(self.corrs)} ({folder})", flush=True)
+        if not quiet:
+            print(f"[sigma] 판정 룰 {len(self.rules)} · 상관 룰 {len(self.corrs)} ({folder})", flush=True)
 
     def _alert(self, r, ev, t, text):
         return {"rule": {"id": r["id"], "level": r["level"], "groups": r["groups"], "description": text},
