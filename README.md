@@ -4,7 +4,7 @@
 
 > **A reproducible practice range for API *defenders*.** A small core — a deliberately vulnerable API (DVRA), an nginx front that logs and blocks, Sigma rules for undocumented ("shadow") API calls, an ML detector for in-spec BOLA, automatic blocking, an answer key for every synthetic actor, and a scorer that grades *your* rules and model — plus optional modules by job: **Wazuh** (SIEM rule authoring) and **Elasticsearch + Grafana** (live monitoring). Traffic is synthetic. This is a lab, not a security product. → [Help test it](#help-test-api-defense-lab)
 
-공격 연습장(crAPI · DVRA)은 많은데, **방어하는 쪽이 자기 룰 · 모델을 같은 조건에서 채점해 볼 곳**은 드물다. 이 레포가 그 자리다.
+공격 연습장(crAPI · DVRA)은 많은데, **방어하는 쪽이 자기 룰 · 모델을 같은 조건에서 채점해 볼 곳**은 드물다. 그래서 이 레포를 만들었다.
 
 - **코어**(가벼움, 이미지 약 1.8GB · 메모리 약 220MB)만으로 대상 앱 · 기록 · 룰 탐지 · ML 탐지 · 자동 차단 · 정답지 · 채점이 다 된다.
 - 하는 일에 맞춰 **모듈**을 켠다: Wazuh 룰을 연습하면 `wazuh`, 관제 화면이 필요하면 `dashboard`.
