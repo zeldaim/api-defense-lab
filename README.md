@@ -1,6 +1,6 @@
 # api-defense-lab — API 방어 연습장
 
-[![detection-ci](https://github.com/zeldaim/api-defense-lab/actions/workflows/detection-ci.yml/badge.svg)](https://github.com/zeldaim/api-defense-lab/actions/workflows/detection-ci.yml) [![release-image](https://github.com/zeldaim/api-defense-lab/actions/workflows/release-image.yml/badge.svg)](https://github.com/zeldaim/api-defense-lab/actions/workflows/release-image.yml)
+[![detection-ci](https://github.com/zeldaim/api-defense-lab/actions/workflows/detection-ci.yml/badge.svg)](https://github.com/zeldaim/api-defense-lab/actions/workflows/detection-ci.yml) [![release-image](https://github.com/zeldaim/api-defense-lab/actions/workflows/release-image.yml/badge.svg)](https://github.com/zeldaim/api-defense-lab/actions/workflows/release-image.yml) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/zeldaim/api-defense-lab/badge)](https://scorecard.dev/viewer/?uri=github.com/zeldaim/api-defense-lab)
 
 > **A reproducible practice range for API *defenders*.** A small core — a deliberately vulnerable API (DVRA), an nginx front that logs and blocks, Sigma rules for undocumented ("shadow") API calls, an ML detector for in-spec BOLA, automatic blocking, an answer key for every synthetic actor, and a scorer that grades *your* rules and model — plus optional modules by job: **Wazuh** (SIEM rule authoring) and **Elasticsearch + Grafana** (live monitoring). Traffic is synthetic. This is a lab, not a security product. → [Help test it](#help-test-api-defense-lab)
 
@@ -279,6 +279,11 @@ trainer 는 정답지에서 `normal` 인 IP 의 창만 학습한다. 오류 비�
 
 `rules/` 를 고치면 GitHub Actions(`detection-ci.yml`)가 자동으로: `sigma check` · Lucene 변환 · 명세에서 다시 만든 룰과 같은지(drift) · **정답 사례 16개를 Sigma 엔진과 실제 Wazuh(`wazuh-logtest`) 양쪽에** 넣어 같은 정답인지 · 빈도 룰. 룰을 일부러 망가뜨리면 실패하는 것까지 확인했다. 구축 과정과 겪은 함정: [`docs/detection-ci.md`](docs/detection-ci.md). 내 룰을 고쳤다면 `tests/detection/cases.json` 에 사례를 더하면 같은 시험을 받는다.
 
+## 보안 워크플로
+
+이 저장소 자체도 공급망 원칙대로 관리한다 — CodeQL(코드 · 워크플로 정적 분석) · gitleaks(비밀값, 이력 전체) · zizmor(워크플로 보안 결함) · OpenSSF Scorecard · PR 이미지 빌드 검사 · Dependabot(고정한 액션 · 기반 이미지 갱신). 모든 워크플로는 최소 권한 · 액션 커밋 SHA 고정 · 기반 이미지 digest 고정.
+붙이면서 실제로 잡힌 것(Dependabot 의 Python 3.15 PR 이 초록불이었지만 빌드는 깨짐 → 이미지 검사 추가로 빨간불 확인 등)과 Scorecard 점수를 어디까지 올리고 어디는 일부러 안 올리는지: [`docs/security-workflows.md`](docs/security-workflows.md). 취약점 신고: [`SECURITY.md`](SECURITY.md).
+
 ## Sigma 룰
 
 코어는 이 룰을 detector 가 직접 적용한다 (모듈 `wazuh` 가 없을 때). 자기 SIEM 으로 옮겨 쓸 수도 있다. `rules/sigma/` 에 Wazuh 룰과 같은 Shadow API 판정을 Sigma 로 넣었다 (`logsource: category: webserver`, 필드 `cs-method` · `cs-uri-stem` · `sc-status` · `c-ip`).
@@ -348,7 +353,7 @@ gh attestation verify     oci://ghcr.io/zeldaim/api-defense-lab/tools:latest --o
 ## 폴더
 
 ```
-docker-compose.yml(코어 + 모듈 profile wazuh · dashboard)   Dockerfile(도구 이미지)   .env(선택)
+docker-compose.yml(코어 + 모듈 profile wazuh · dashboard)   Dockerfile(도구 이미지)   .env(선택)   SECURITY.md
 .github/    ISSUE_TEMPLATE/test-report.yml (테스트 보고 양식)   CONTRIBUTING.md
 nginx/      nginx.conf · run.sh(차단 목록 다시 읽기)
 wazuh/      Dockerfile · lab-init.sh(취약점 탐지 끔 · 로그 · 룰) · localfile.xml
@@ -361,6 +366,8 @@ spec/       dvra_openapi.json (DVRA 명세 — 룰과 특징의 기준)
 grafana/    provisioning/ · dashboards/lab.json   (tools/build_dashboard.py 로 생성)
 tools/      gen_sigma.py · check_sigma.sh · sigma_vs_wazuh.py · build_dashboard.py · record_demo.js(데모 녹화)
 docs/media/ 데모 영상 · GIF · 보고서 그림
+docs/       detection-ci.md · security-workflows.md (구축 과정)
+tests/      detection/ 정답 사례 · Sigma · Wazuh 시험
 reports/    채점 결과 (git 제외)
 ```
 
