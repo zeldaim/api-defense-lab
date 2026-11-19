@@ -1,0 +1,25 @@
+# gitleaks — 비밀값(키 · 토큰 · 비밀번호) 유출 검사, 커밋 이력 전체. 걸리면 실패 (값은 가려서 출력).
+name: gitleaks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0               # 이력 전체 — 지운 파일 속 비밀값도 찾는다
+          persist-credentials: false
+      - name: gitleaks (이미지 digest 고정)
+        run: >-
+          docker run --rm -v "$PWD:/repo:ro"
+          zricethezav/gitleaks@sha256:c00b6bd0aeb3071cbcb79009cb16a60dd9e0a7c60e2be9ab65d25e6bc8abbb7f
+          git /repo --redact --no-banner --exit-code 1

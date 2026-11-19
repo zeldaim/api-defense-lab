@@ -1,0 +1,40 @@
+# zizmor — GitHub Actions 워크플로 자체의 보안 결함 (템플릿 인젝션 · 과한 권한 · 고정 안 된 액션 · 위장 커밋 · 자격 증명 노출 …)
+# 결과는 Code scanning 에 올리고, 중간(medium) 이상이 있으면 실패한다.
+name: zizmor
+
+on:
+  push:
+    branches: [main]
+    paths: [".github/**"]
+  pull_request:
+    paths: [".github/**"]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  zizmor:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - run: pip install zizmor==1.32.0
+      - name: 검사 → SARIF
+        env:
+          GH_TOKEN: ${{ github.token }}   # 온라인 검사(고정한 SHA 가 정말 그 저장소의 커밋인지 · 알려진 취약 액션)
+        run: zizmor --format sarif .github/workflows > zizmor.sarif || true
+      - uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: zizmor.sarif
+          category: zizmor
+      - name: 중간 이상이면 실패
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: zizmor --min-severity medium .github/workflows

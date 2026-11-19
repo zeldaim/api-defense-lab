@@ -1,0 +1,35 @@
+# OpenSSF Scorecard — 저장소의 보안 습관을 점수로 (브랜치 보호 · 코드 리뷰 · 액션 고정 · 토큰 권한 · 서명된 릴리스 …)
+# 결과: 저장소 Security 탭(Code scanning) + 공개 점수 https://scorecard.dev/viewer/?uri=github.com/zeldaim/api-defense-lab
+name: scorecard
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 3 * * 1"         # 매주 월요일
+  branch_protection_rule:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  analysis:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+      security-events: write     # 결과(SARIF)를 Code scanning 에 올리기
+      id-token: write            # 공개 점수 게시 (Scorecard API 가 이 워크플로를 확인)
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ossf/scorecard-action@fa7117db83c52d787ae5a89f350999701505d78e # v2.5.0
+        with:
+          results_file: scorecard.sarif
+          results_format: sarif
+          publish_results: true
+      - uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: scorecard.sarif
+          category: scorecard

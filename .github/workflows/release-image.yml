@@ -100,10 +100,11 @@ jobs:
         env:
           REF: ${{ env.IMAGE }}@${{ steps.build.outputs.digest }}
           ID: https://github.com/${{ github.repository }}/.github/workflows/release-image.yml@${{ github.ref }}
+          DIGEST: ${{ steps.build.outputs.digest }}
         run: |
           cosign verify "$REF" --certificate-identity "$ID" \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com > /dev/null
           cosign verify-attestation "$REF" --type cyclonedx --certificate-identity "$ID" \
             --certificate-oidc-issuer https://token.actions.githubusercontent.com > /dev/null
-          echo "digest: ${{ steps.build.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "digest: $DIGEST" >> "$GITHUB_STEP_SUMMARY"   # 값은 환경변수로 — run 안에 템플릿을 바로 펼치지 않는다 (zizmor template-injection)
           echo "서명 · SBOM 증명 검증 통과 ($ID)" >> "$GITHUB_STEP_SUMMARY"

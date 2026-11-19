@@ -1,0 +1,11 @@
+# Dependabot — 커밋 SHA 로 고정한 액션 · 기반 이미지가 낡지 않게 매주 업데이트 PR (고정 + 갱신이 한 쌍)
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: {interval: weekly}
+    groups:
+      actions: {patterns: ["*"]}
+  - package-ecosystem: docker
+    directories: ["/", "/wazuh"]
+    schedule: {interval: weekly}
