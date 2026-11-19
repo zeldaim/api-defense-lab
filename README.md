@@ -314,6 +314,7 @@ gh attestation verify     oci://ghcr.io/zeldaim/api-defense-lab/tools:latest --o
 - 막는 것: 레지스트리에서 이미지를 바꿔치기 · 다른 곳에서 만든 이미지를 같은 이름으로 올리기 (서명 · 신원이 안 맞는다).
   못 막는 것: 이 레포의 코드나 워크플로 자체가 오염된 경우 (그러면 오염된 이미지가 정상적으로 서명된다) — 그래서 리뷰 · 브랜치 보호가 따로 필요하다.
 - `docker compose up --build` 는 지금도 이미지를 **로컬에서 빌드**한다. 서명된 이미지는 받아서 검증하고 쓰고 싶은 사람용이다.
+- **배포 직전 차단 시연:** 쿠버네티스(Kyverno 1.20)에서 이 서명 · SBOM 증명이 있는 이미지만 실행되고, 서명 없는 이미지와 **남의 신원으로 서명된** 이미지는 거부되는 것을 확인했다 — [api-security-supply-chain `verify/image_signing_2026-11-19`](https://github.com/zeldaim/api-security-supply-chain/tree/main/verify/image_signing_2026-11-19).
 
 ## 알려 둘 한계
 
