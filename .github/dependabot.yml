@@ -9,3 +9,8 @@ updates:
   - package-ecosystem: docker
     directories: ["/", "/wazuh"]
     schedule: {interval: weekly}
+    ignore:
+      # 모델 파일(scikit-learn 1.5.2 로 저장)이 Python 버전에 묶여 있다 — 3.15 로 올리면 빌드가 깨짐 (2026-11-19 PR #1).
+      # 패치(3.12.x)만 받고, minor/major 는 모델을 다시 학습할 때 함께 올린다.
+      - dependency-name: python
+        update-types: ["version-update:semver-minor", "version-update:semver-major"]
