@@ -3,6 +3,15 @@
 [![detection-ci](https://github.com/zeldaim/api-defense-lab/actions/workflows/detection-ci.yml/badge.svg)](https://github.com/zeldaim/api-defense-lab/actions/workflows/detection-ci.yml) [![release-image](https://github.com/zeldaim/api-defense-lab/actions/workflows/release-image.yml/badge.svg)](https://github.com/zeldaim/api-defense-lab/actions/workflows/release-image.yml) [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/zeldaim/api-defense-lab/badge)](https://scorecard.dev/viewer/?uri=github.com/zeldaim/api-defense-lab)
 
 > **A reproducible practice range for API *defenders*.** A small core — a deliberately vulnerable API (DVRA), an nginx front that logs and blocks, Sigma rules for undocumented ("shadow") API calls, an ML detector for in-spec BOLA, automatic blocking, an answer key for every synthetic actor, and a scorer that grades *your* rules and model — plus optional modules by job: **Wazuh** (SIEM rule authoring) and **Elasticsearch + Grafana** (live monitoring). Traffic is synthetic. This is a lab, not a security product. → [Help test it](#help-test-api-defense-lab)
+>
+> **Quick start** (Docker + Compose v2.20+, ~1.8 GB images, ~220 MB RAM for the core):
+> ```bash
+> git clone https://github.com/zeldaim/api-defense-lab.git && cd api-defense-lab
+> docker compose up -d --build           # core; add --profile wazuh / --profile dashboard for modules
+> docker compose run --rm traffic demo   # 20 normal users + a shadow-API probe + a BOLA enumeration (~10 min)
+> docker compose run --rm scorer         # score table + reports/report.html
+> ```
+> **What the default setup scored** (one `traffic demo` run each, Windows 11 + Docker Desktop, 2026-11-19): probe blocked in **2.3 s** (core, Sigma) / **3.2 s** (Wazuh module) · in-spec BOLA blocked by the ML detector in **6.9 s / 6.5 s** after 17–18 leaked orders · **0 of 20** normal users blocked. Timings vary run to run (BOLA 5.8–8.8 s over five runs). The rest of this README is in Korean; commands and tables read the same.
 
 공격 연습장(crAPI · DVRA)은 많은데, **방어하는 쪽이 자기 룰 · 모델을 같은 조건에서 채점해 볼 곳**은 드물다. 그래서 이 레포를 만들었다.
 
