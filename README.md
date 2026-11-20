@@ -34,7 +34,7 @@
 
 ![데모 — 정상 20명 사이로 탐색 → 룰 차단, BOLA → ML 차단, 정상 오탐 0 (8배속)](docs/media/demo_attack_8x.gif)
 
-<sub>Wazuh + 대시보드 모듈 풀 구성에서 `traffic demo` 실행 중 공격 구간 (8배속). Shadow API 탐색은 Sigma 룰(L3)로, BOLA는 ML 탐지기로 자동 차단. 정상 사용자 20명은 차단 없음. 전체 영상은 아래 "영상".</sub>
+<sub>Wazuh + 대시보드 모듈 풀 구성에서 `traffic demo` 실행 중 공격 구간 (8배속). Shadow API 탐색은 Sigma 룰(L3)로, BOLA는 ML 탐지기로 자동 차단. 정상 사용자 20명은 차단 없음. 전체 영상은 아래 "영상". (`docker compose --profile wazuh --profile dashboard up` → `traffic demo` 중 공격 구간. 시작 직후 정상 사용자 창이 ML high 로 떠도 차단 정책이 걸러 차단 0, 탐색은 룰 L3 로 · BOLA 는 ML 로 막힌다.)</sub>
 
 > ⚠️ 트래픽은 생성기가 만든 **합성**이다. 대상 앱 DVRA 는 **일부러 취약한 앱**이다 — 모든 포트는 `127.0.0.1` 에만 연다. 인터넷에 노출하지 말 것.
 
@@ -42,8 +42,8 @@
 
 | | |
 |---|---|
-| [![이 레포 데모](docs/media/demo_poster.jpg)](docs/media/demo_2026-11-19_4x.mp4) | **이 레포 데모 (2026-11-19, 4배속, 3분 3초).** Wazuh + Grafana 대시보드 풀 구성에서 새 clone 직후 바로 실행한 화면. Shadow API 탐색 차단: **4.2초** (차단 전 2회 성공) · BOLA 차단: **6.1초** (차단 전 남의 주문 15건 노출) · 정상 사용자 20명 오탐: **0건** |
-| [![프로토타입 시연](docs/media/prototype_demo_poster.jpg)](docs/media/prototype_demo_2026-11-19_4x.mp4) | **프로토타입 시연 (2026-11-19, 4배속, 2분 33초) — 이 레포의 바탕.** Shadow API 탐색 차단: **2.9초** · BOLA 차단: **8.2초** · 정상 사용자 차단: **0건**. 현재 레포와 구성이 다름 (채점기·모듈 구조 없음, Wazuh 항상 켬). |
+| [![이 레포 데모](docs/media/demo_poster.jpg)](docs/media/demo_2026-11-19_4x.mp4) | **이 레포 데모 (2026-11-19, 4배속, 3분 3초).** Wazuh + Grafana 대시보드 풀 구성에서 새 clone 직후 바로 실행한 화면. Shadow API 탐색 차단: **4.2초** (차단 전 2회 성공) · BOLA 차단: **6.1초** (차단 전 남의 주문 15건 노출) · 정상 사용자 20명 오탐: **0건** (새 clone 에서 `--profile wazuh --profile dashboard up` → `traffic demo` 를 Grafana 화면으로 녹화. ML high 창 39 — 차단 정책이 걸렀다.) |
+| [![프로토타입 시연](docs/media/prototype_demo_poster.jpg)](docs/media/prototype_demo_2026-11-19_4x.mp4) | **프로토타입 시연 (2026-11-19, 4배속, 2분 33초) — 이 레포의 바탕.** Shadow API 탐색 차단: **2.9초** · BOLA 차단: **8.2초** · 정상 사용자 차단: **0건**. 현재 레포와 구성이 다름 (채점기·모듈 구조 없음, Wazuh 항상 켬). (정상 20명 사이로 명세 밖 탐색 → 실시간 Wazuh L3 → 자동 차단, 명세 안 BOLA → ML high → 자동 차단. 호스트 스크립트 · Wazuh 항상 켬 구성으로 찍었다 — 채점기 · 코어/모듈 구조 · `/docs` 오탐 수정은 영상에 없다.) |
 
 ## 코어와 모듈
 
