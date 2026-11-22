@@ -1,0 +1,5817 @@
+{
+  "summary": {
+    "dvra_v1 (동봉 · 지금 쓰는 것)": {
+      "fast_bola": {
+        "n": 3,
+        "blocked": 3,
+        "detect_med_s": 1.0,
+        "leaked": 9,
+        "leaked_max": 136
+      },
+      "slow_bola": {
+        "n": 2,
+        "blocked": 2,
+        "detect_med_s": 5.0,
+        "leaked": 6,
+        "leaked_max": 101
+      },
+      "probe_ml_blocked": "3/3",
+      "normal_fp_blocked": "100/100",
+      "normal_high_windows": "17/300",
+      "threshold_high": -0.01605,
+      "fit_s": 0.0
+    },
+    "IsolationForest": {
+      "fast_bola": {
+        "n": 3,
+        "blocked": 3,
+        "detect_med_s": 1.0,
+        "leaked": 9,
+        "leaked_max": 136
+      },
+      "slow_bola": {
+        "n": 2,
+        "blocked": 2,
+        "detect_med_s": 5.0,
+        "leaked": 6,
+        "leaked_max": 101
+      },
+      "probe_ml_blocked": "3/3",
+      "normal_fp_blocked": "100/100",
+      "normal_high_windows": "14/300",
+      "threshold_high": -0.04836,
+      "fit_s": 0.17
+    },
+    "RobustZ (통계)": {
+      "fast_bola": {
+        "n": 3,
+        "blocked": 3,
+        "detect_med_s": 1.0,
+        "leaked": 9,
+        "leaked_max": 136
+      },
+      "slow_bola": {
+        "n": 2,
+        "blocked": 2,
+        "detect_med_s": 5.0,
+        "leaked": 6,
+        "leaked_max": 101
+      },
+      "probe_ml_blocked": "0/3",
+      "normal_fp_blocked": "100/100",
+      "normal_high_windows": "5/300",
+      "threshold_high": -38.10198,
+      "fit_s": 0.0
+    },
+    "LOF": {
+      "fast_bola": {
+        "n": 3,
+        "blocked": 3,
+        "detect_med_s": 1.0,
+        "leaked": 9,
+        "leaked_max": 136
+      },
+      "slow_bola": {
+        "n": 2,
+        "blocked": 2,
+        "detect_med_s": 5.0,
+        "leaked": 6,
+        "leaked_max": 101
+      },
+      "probe_ml_blocked": "3/3",
+      "normal_fp_blocked": "10/100",
+      "normal_high_windows": "5/300",
+      "threshold_high": -2.17342,
+      "fit_s": 0.0
+    },
+    "OneClassSVM": {
+      "fast_bola": {
+        "n": 3,
+        "blocked": 3,
+        "detect_med_s": 1.0,
+        "leaked": 9,
+        "leaked_max": 136
+      },
+      "slow_bola": {
+        "n": 2,
+        "blocked": 2,
+        "detect_med_s": 5.0,
+        "leaked": 6,
+        "leaked_max": 101
+      },
+      "probe_ml_blocked": "3/3",
+      "normal_fp_blocked": "100/100",
+      "normal_high_windows": "300/300",
+      "threshold_high": -0.00038,
+      "fit_s": 0.0
+    },
+    "EllipticEnvelope": {
+      "fast_bola": {
+        "n": 3,
+        "blocked": 3,
+        "detect_med_s": 1.0,
+        "leaked": 9,
+        "leaked_max": 136
+      },
+      "slow_bola": {
+        "n": 2,
+        "blocked": 2,
+        "detect_med_s": 5.0,
+        "leaked": 6,
+        "leaked_max": 101
+      },
+      "probe_ml_blocked": "0/3",
+      "normal_fp_blocked": "100/100",
+      "normal_high_windows": "9/300",
+      "threshold_high": -80753.40032,
+      "fit_s": 0.02
+    },
+    "AutoEncoder": {
+      "fast_bola": {
+        "n": 3,
+        "blocked": 3,
+        "detect_med_s": 1.0,
+        "leaked": 9,
+        "leaked_max": 136
+      },
+      "slow_bola": {
+        "n": 2,
+        "blocked": 2,
+        "detect_med_s": 5.0,
+        "leaked": 6,
+        "leaked_max": 101
+      },
+      "probe_ml_blocked": "3/3",
+      "normal_fp_blocked": "100/100",
+      "normal_high_windows": "72/300",
+      "threshold_high": -1.88516,
+      "fit_s": 0.26
+    }
+  },
+  "detail": {
+    "dvra_v1 (동봉 · 지금 쓰는 것)": {
+      "threshold_high": -0.01605,
+      "fit_s": 0.0,
+      "eval_s": 0.32,
+      "runs": {
+        "fast1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 4,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 4,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 4,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 56.0,
+              "leaked": 8,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 59.0,
+              "leaked": 8,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.231",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.135",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 46
+            }
+          ],
+          "_normal_high_windows": 4,
+          "_normal_windows": 60
+        },
+        "fast2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 332.0,
+              "leaked": 9,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 333.0,
+              "leaked": 8,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 4,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 4,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 4,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 318.0,
+              "leaked": 6,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 319.0,
+              "leaked": 6,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 7,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 322.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 7,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 324.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 325.0,
+              "leaked": 6,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.183",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.18",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 13,
+          "_normal_windows": 60
+        },
+        "fast3": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 4,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 106
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 255.0,
+              "leaked": 42,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 235.0,
+              "leaked": 34,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 4,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 256.0,
+              "leaked": 44,
+              "total_ok": 108
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 84
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 258.0,
+              "leaked": 41,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 243.0,
+              "leaked": 42,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 550.0,
+              "leaked": 79,
+              "total_ok": 90
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.165",
+              "blocked": true,
+              "detect_s": 2.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.137",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "slow1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 90
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 174.0,
+              "leaked": 24,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 175.0,
+              "leaked": 26,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 4,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 4,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 181.0,
+              "leaked": 27,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 4,
+              "total_ok": 97
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.220",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 36
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "slow2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 87
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 421.0,
+              "leaked": 64,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 4,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 4,
+              "total_ok": 100
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 4,
+              "total_ok": 94
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.89",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 65
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        }
+      }
+    },
+    "IsolationForest": {
+      "threshold_high": -0.04836,
+      "fit_s": 0.17,
+      "eval_s": 0.32,
+      "runs": {
+        "fast1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 4,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 5,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 4,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 4,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 56.0,
+              "leaked": 8,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 4,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 57.0,
+              "leaked": 8,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 4,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 59.0,
+              "leaked": 8,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 4,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 4,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 4,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.231",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.135",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 46
+            }
+          ],
+          "_normal_high_windows": 2,
+          "_normal_windows": 60
+        },
+        "fast2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 332.0,
+              "leaked": 9,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 333.0,
+              "leaked": 8,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 337.0,
+              "leaked": 9,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 4,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 4,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 339.0,
+              "leaked": 9,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 318.0,
+              "leaked": 6,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 319.0,
+              "leaked": 6,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 7,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 322.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 7,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 324.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 325.0,
+              "leaked": 6,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.183",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.18",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 12,
+          "_normal_windows": 60
+        },
+        "fast3": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 4,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 4,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 106
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 255.0,
+              "leaked": 42,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 235.0,
+              "leaked": 34,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 4,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 256.0,
+              "leaked": 44,
+              "total_ok": 108
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 84
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 258.0,
+              "leaked": 41,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 4,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 243.0,
+              "leaked": 42,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 550.0,
+              "leaked": 79,
+              "total_ok": 90
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.165",
+              "blocked": true,
+              "detect_s": 6.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.137",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "slow1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 90
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 4,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 174.0,
+              "leaked": 24,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 175.0,
+              "leaked": 26,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 176.0,
+              "leaked": 29,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 4,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 4,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 4,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 4,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 4,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 181.0,
+              "leaked": 27,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 4,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 5,
+              "total_ok": 97
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.220",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 36
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "slow2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 5,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 87
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 421.0,
+              "leaked": 64,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 4,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 4,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 118.0,
+              "leaked": 18,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 4,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 6,
+              "total_ok": 100
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 4,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 4,
+              "total_ok": 94
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.89",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 65
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        }
+      }
+    },
+    "RobustZ (통계)": {
+      "threshold_high": -38.10198,
+      "fit_s": 0.0,
+      "eval_s": 0.05,
+      "runs": {
+        "fast1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 70.0,
+              "leaked": 12,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 72.0,
+              "leaked": 14,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 53.0,
+              "leaked": 14,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 55.0,
+              "leaked": 10,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 55.0,
+              "leaked": 9,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 56.0,
+              "leaked": 8,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.231",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.135",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 46
+            }
+          ],
+          "_normal_high_windows": 2,
+          "_normal_windows": 60
+        },
+        "fast2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 332.0,
+              "leaked": 9,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 333.0,
+              "leaked": 8,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 337.0,
+              "leaked": 10,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 338.0,
+              "leaked": 10,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 339.0,
+              "leaked": 9,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 318.0,
+              "leaked": 6,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 319.0,
+              "leaked": 6,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 322.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 324.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 325.0,
+              "leaked": 6,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.183",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.18",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 3,
+          "_normal_windows": 60
+        },
+        "fast3": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 252.0,
+              "leaked": 38,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 106
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 255.0,
+              "leaked": 42,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 235.0,
+              "leaked": 34,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 256.0,
+              "leaked": 39,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 256.0,
+              "leaked": 44,
+              "total_ok": 108
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 84
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 258.0,
+              "leaked": 40,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 243.0,
+              "leaked": 39,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 243.0,
+              "leaked": 42,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 244.0,
+              "leaked": 36,
+              "total_ok": 90
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.165",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.137",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "slow1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 90
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 174.0,
+              "leaked": 24,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 175.0,
+              "leaked": 25,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 177.0,
+              "leaked": 24,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 178.0,
+              "leaked": 28,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 181.0,
+              "leaked": 27,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 183.0,
+              "leaked": 28,
+              "total_ok": 97
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.220",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 36
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "slow2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 130.0,
+              "leaked": 19,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 87
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 115.0,
+              "leaked": 20,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 116.0,
+              "leaked": 21,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 120.0,
+              "leaked": 20,
+              "total_ok": 100
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 3,
+              "total_ok": 94
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.89",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 65
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        }
+      }
+    },
+    "LOF": {
+      "threshold_high": -2.17342,
+      "fit_s": 0.0,
+      "eval_s": 0.13,
+      "runs": {
+        "fast1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 101,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 97,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 89,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 94,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 96,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 91,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 91,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 521.0,
+              "leaked": 89,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 97,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 103,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 91,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 93,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 383.0,
+              "leaked": 58,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 99,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 103,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 93,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 103,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 39.0,
+              "leaked": 9,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.231",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.135",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 46
+            }
+          ],
+          "_normal_high_windows": 1,
+          "_normal_windows": 60
+        },
+        "fast2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 103,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 97,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 103,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 583.0,
+              "leaked": 46,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 99,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 86,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 97,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 96,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 89,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 93,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 91,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 98,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 91,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 98,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.183",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.18",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "fast3": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 101,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 110.0,
+              "leaked": 19,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 106,
+              "total_ok": 106
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 101,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 99,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 31.0,
+              "leaked": 4,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 101,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 52.0,
+              "leaked": 7,
+              "total_ok": 108
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 84,
+              "total_ok": 84
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 97,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 98,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 102,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 91,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 99,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 91,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 527.0,
+              "leaked": 88,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 91,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 105,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 90,
+              "total_ok": 90
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.165",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.137",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 2,
+          "_normal_windows": 60
+        },
+        "slow1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 90,
+              "total_ok": 90
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 94,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 101,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 102,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 94,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 102,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 92,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 88,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 96,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 94,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 99,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 92,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 103,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 94,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 101,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 105,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 102,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 96,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 104,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 97,
+              "total_ok": 97
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.220",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 36
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "slow2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 97,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 91,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 97,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 97,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 88,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 96,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 87,
+              "total_ok": 87
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 86,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 34.0,
+              "leaked": 5,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 104,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 99,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 99,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 92,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 98,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 101,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 95,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 100,
+              "total_ok": 100
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 102,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 203.0,
+              "leaked": 33,
+              "total_ok": 94
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.89",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 65
+            }
+          ],
+          "_normal_high_windows": 2,
+          "_normal_windows": 60
+        }
+      }
+    },
+    "OneClassSVM": {
+      "threshold_high": -0.00038,
+      "fit_s": 0.0,
+      "eval_s": 0.07,
+      "runs": {
+        "fast1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.231",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.135",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 46
+            }
+          ],
+          "_normal_high_windows": 60,
+          "_normal_windows": 60
+        },
+        "fast2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 318.0,
+              "leaked": 6,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 319.0,
+              "leaked": 6,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 322.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 324.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 325.0,
+              "leaked": 6,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.183",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.18",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 60,
+          "_normal_windows": 60
+        },
+        "fast3": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 106
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 108
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 84
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 3,
+              "total_ok": 90
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.165",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.137",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 60,
+          "_normal_windows": 60
+        },
+        "slow1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 90
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 3,
+              "total_ok": 97
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.220",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 36
+            }
+          ],
+          "_normal_high_windows": 60,
+          "_normal_windows": 60
+        },
+        "slow2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 87
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 100
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 3,
+              "total_ok": 94
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.89",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 65
+            }
+          ],
+          "_normal_high_windows": 60,
+          "_normal_windows": 60
+        }
+      }
+    },
+    "EllipticEnvelope": {
+      "threshold_high": -80753.40032,
+      "fit_s": 0.02,
+      "eval_s": 0.07,
+      "runs": {
+        "fast1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 4,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 4,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 55.0,
+              "leaked": 10,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 56.0,
+              "leaked": 8,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.231",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.135",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 46
+            }
+          ],
+          "_normal_high_windows": 3,
+          "_normal_windows": 60
+        },
+        "fast2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 332.0,
+              "leaked": 9,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 333.0,
+              "leaked": 8,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 4,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 4,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 4,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 318.0,
+              "leaked": 6,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 319.0,
+              "leaked": 6,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 322.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 324.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 325.0,
+              "leaked": 6,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.183",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.18",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 6,
+          "_normal_windows": 60
+        },
+        "fast3": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 4,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 106
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 255.0,
+              "leaked": 42,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 235.0,
+              "leaked": 34,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 4,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 256.0,
+              "leaked": 44,
+              "total_ok": 108
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 84
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 258.0,
+              "leaked": 40,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 243.0,
+              "leaked": 39,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 243.0,
+              "leaked": 42,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 244.0,
+              "leaked": 36,
+              "total_ok": 90
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.165",
+              "blocked": false,
+              "detect_s": null,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.137",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "slow1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 90
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 174.0,
+              "leaked": 24,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 175.0,
+              "leaked": 25,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 4,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 178.0,
+              "leaked": 28,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 181.0,
+              "leaked": 27,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 183.0,
+              "leaked": 28,
+              "total_ok": 97
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.220",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 36
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        },
+        "slow2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 4,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 87
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 115.0,
+              "leaked": 20,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 116.0,
+              "leaked": 21,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 120.0,
+              "leaked": 20,
+              "total_ok": 100
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 3,
+              "total_ok": 94
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.89",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 65
+            }
+          ],
+          "_normal_high_windows": 0,
+          "_normal_windows": 60
+        }
+      }
+    },
+    "AutoEncoder": {
+      "threshold_high": -1.88516,
+      "fit_s": 0.26,
+      "eval_s": 0.06,
+      "runs": {
+        "fast1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.231",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.135",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 46
+            }
+          ],
+          "_normal_high_windows": 8,
+          "_normal_windows": 60
+        },
+        "fast2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 318.0,
+              "leaked": 6,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 319.0,
+              "leaked": 6,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 320.0,
+              "leaked": 6,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 89
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 321.0,
+              "leaked": 6,
+              "total_ok": 93
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 322.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 323.0,
+              "leaked": 6,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 324.0,
+              "leaked": 6,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 325.0,
+              "leaked": 6,
+              "total_ok": 95
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.183",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.18",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 10,
+          "_normal_windows": 60
+        },
+        "fast3": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 106
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 108
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 84
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 3,
+              "total_ok": 90
+            }
+          ],
+          "probe": [
+            {
+              "ip": "10.66.0.165",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 2,
+              "total_ok": 2
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.137",
+              "blocked": true,
+              "detect_s": 1.0,
+              "leaked": 3,
+              "total_ok": 45
+            }
+          ],
+          "_normal_high_windows": 12,
+          "_normal_windows": 60
+        },
+        "slow1": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 90
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 13.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 103
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 105
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 3,
+              "total_ok": 97
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.220",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 36
+            }
+          ],
+          "_normal_high_windows": 22,
+          "_normal_windows": 60
+        },
+        "slow2": {
+          "normal": [
+            {
+              "ip": "10.10.0.1",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.2",
+              "blocked": true,
+              "detect_s": 7.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.3",
+              "blocked": true,
+              "detect_s": 8.0,
+              "leaked": 3,
+              "total_ok": 91
+            },
+            {
+              "ip": "10.10.0.4",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.5",
+              "blocked": true,
+              "detect_s": 9.0,
+              "leaked": 3,
+              "total_ok": 97
+            },
+            {
+              "ip": "10.10.0.6",
+              "blocked": true,
+              "detect_s": 10.0,
+              "leaked": 3,
+              "total_ok": 88
+            },
+            {
+              "ip": "10.10.0.7",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 96
+            },
+            {
+              "ip": "10.10.0.8",
+              "blocked": true,
+              "detect_s": 11.0,
+              "leaked": 3,
+              "total_ok": 87
+            },
+            {
+              "ip": "10.10.0.9",
+              "blocked": true,
+              "detect_s": 12.0,
+              "leaked": 3,
+              "total_ok": 86
+            },
+            {
+              "ip": "10.10.0.10",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 94
+            },
+            {
+              "ip": "10.10.0.11",
+              "blocked": true,
+              "detect_s": 14.0,
+              "leaked": 3,
+              "total_ok": 104
+            },
+            {
+              "ip": "10.10.0.12",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.13",
+              "blocked": true,
+              "detect_s": 15.0,
+              "leaked": 3,
+              "total_ok": 99
+            },
+            {
+              "ip": "10.10.0.14",
+              "blocked": true,
+              "detect_s": 16.0,
+              "leaked": 3,
+              "total_ok": 92
+            },
+            {
+              "ip": "10.10.0.15",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 98
+            },
+            {
+              "ip": "10.10.0.16",
+              "blocked": true,
+              "detect_s": 17.0,
+              "leaked": 3,
+              "total_ok": 101
+            },
+            {
+              "ip": "10.10.0.17",
+              "blocked": true,
+              "detect_s": 18.0,
+              "leaked": 3,
+              "total_ok": 95
+            },
+            {
+              "ip": "10.10.0.18",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 100
+            },
+            {
+              "ip": "10.10.0.19",
+              "blocked": true,
+              "detect_s": 19.0,
+              "leaked": 3,
+              "total_ok": 102
+            },
+            {
+              "ip": "10.10.0.20",
+              "blocked": true,
+              "detect_s": 20.0,
+              "leaked": 3,
+              "total_ok": 94
+            }
+          ],
+          "bola": [
+            {
+              "ip": "10.77.0.89",
+              "blocked": true,
+              "detect_s": 5.0,
+              "leaked": 3,
+              "total_ok": 65
+            }
+          ],
+          "_normal_high_windows": 20,
+          "_normal_windows": 60
+        }
+      }
+    }
+  },
+  "train_windows": 394
+}

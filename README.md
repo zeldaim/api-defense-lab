@@ -319,6 +319,8 @@ trainer 는 정답지에서 `normal` 인 IP 의 창만 학습한다. 오류 비�
 
 특징 계산은 `detector/features.py`(v2.1) · `features_v2.py` 에 있다. 창 길이는 5분(`pipeline.py --window`).
 
+**모델 비교 (2026-11-22):** 같은 학습 데이터 · 같은 평가 트래픽 · 같은 임계값 규칙으로 7개(dvra_v1 · IsolationForest · 통계 RobustZ · LOF · One-Class SVM · Elliptic Envelope · 오토인코더) — [docs/ml-comparison.md](docs/ml-comparison.md). 이 연습장의 BOLA 는 **모든 모델이 똑같이 잡고 차단 시각은 정책(창 요청 15건)이 정한다**. 차이는 정상 쪽에서만: 통계 기준선이 IsolationForest 와 탐지가 같고 소음은 더 적었으며, One-Class SVM · 오토인코더는 정상 100명을 모두 막았다. 후보 모델은 `detector/models_extra.py`, 비교 도구는 `tools/ml_compare.py` (`--save-models` 로 바로 끼울 수 있는 꼴로 저장).
+
 ## 룰 자동 시험 (Detection-as-Code CI)
 
 `rules/` 를 고치면 GitHub Actions(`detection-ci.yml`)가 자동으로: `sigma check` · Lucene 변환 · 명세에서 다시 만든 룰과 같은지(drift) · **정답 사례 16개를 Sigma 엔진과 실제 Wazuh(`wazuh-logtest`) 양쪽에** 넣어 같은 정답인지 · 빈도 룰. 룰을 일부러 망가뜨리면 실패하는 것까지 확인했다. 구축 과정과 겪은 함정: [`docs/detection-ci.md`](docs/detection-ci.md). 내 룰을 고쳤다면 `tests/detection/cases.json` 에 사례를 더하면 같은 시험을 받는다.
@@ -374,7 +376,9 @@ gh attestation verify     oci://ghcr.io/zeldaim/api-defense-lab/tools:latest --o
 ## 알려 둘 한계
 
 - **트래픽은 합성이다.** 정상 사용자는 기계 패턴이라 사람보다 규칙적이다. 점수는 "이 연습장에서의" 점수다.
-- **ML 은 짧은 창을 잘 틀린다.** 접속 직후 몇 초에 요청이 몰린 정상 창을 이상(high)으로 보는 일이 있다. 이 연습장은 대응 정책(창 요청 15건 이상일 때만 ML 차단)으로 막았을 뿐 모델이 해결한 것이 아니다 — 채점표의 "ML high 창" 이 그 수다.
+- **ML 은 짧은 창을 잘 틀린다.** 접속 직후 몇 초에 요청이 몰린 정상 창을 이상(high)으로 보는 일이 있다. 이 연습장은 대응 정책(창 요청 15건 이상일 때만 ML 차단)으로 막았을 뿐 모델이 해결한 것이 아니다 — 채점표의 "ML high 창" 이 그 수다. 기준을 5건으로 내리면 유출은 줄지만 정상 100명이 모두 막힌다 ([모델 비교](docs/ml-comparison.md)).
+- **동봉 모델 dvra_v1 은 지금 코드로 똑같이 다시 만들 수 없다** — 기록된 학습 범위로 창을 뽑으면 365개가 아니라 394개, 특징 분포도 다르다 (특징 코드가 바뀌기 전 학습으로 보임). 비교에서는 동봉 모델을 그대로 한 줄로 두고, 다른 모델은 같은 394개로 학습했다.
+- BOLA 가 연속 ID · 한 IP 라 쉬운 편이다 — 모델 차이를 보려면 ID 섞기 · IP 나누기 같은 어려운 공격이 더 필요하다.
 - 룰은 **명세 밖** 호출만 본다. 명세 안 BOLA 는 룰의 대상이 아니다 (그래서 ML 이 있다). 반대로 ML 은 짧은 탐색을 잘 못 본다.
 - 출발지 IP 는 헤더로 흉내 낸다 — 위조 가능. 실제 환경 재현이 아니다. 레이트 리밋(`LAB_RATE`)도 같은 키라 같은 약점이 있다.
 - 한 PC(Windows 11 · Docker Desktop · Compose v5.6.1)에서만 확인했다. Linux · macOS 는 아직 안 돌려 봤다 — [테스트 요청](#help-test-api-defense-lab).
