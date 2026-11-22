@@ -1,0 +1,29 @@
+ Container rlx-dvra-db-1 Running 
+ Container rlx-nginx-1 Running 
+ Container rlx-dvra-web-1 Running 
+ Container rlx-dvra-db-1 Waiting 
+ Container rlx-dvra-db-1 Healthy 
+ Container rlx-dvra-web-1 Waiting 
+ Container rlx-dvra-web-1 Healthy 
+ Container rlx-nginx-1 Waiting 
+ Container rlx-nginx-1 Healthy 
+ Container rlx-traffic-run-732b18c74ff0 Creating 
+ Container rlx-traffic-run-732b18c74ff0 Created 
+[실행 20261122T042931Z-c20e] 대상 http://nginx · 정답지 /data/run/labels.jsonl
+[BOLA] 출발지 10.77.0.203 — 남의 주문 1..150 (간격 2.5초)
+  주문 10 -> 200
+  주문 20 -> 200
+  주문 30 -> 200
+  주문 40 -> 200
+  주문 50 -> 404
+  주문 60 -> 404
+  주문 70 -> 404
+  주문 80 -> 404
+  주문 90 -> 404
+  주문 100 -> 404
+  주문 110 -> 404
+  주문 120 -> 404
+  주문 130 -> 404
+  주문 140 -> 404
+  주문 150 -> 404
+[BOLA] 끝: 열거 150건 · 성공(2xx) 40 · 첫 403 = None

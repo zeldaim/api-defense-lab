@@ -1,0 +1,5 @@
+nginx-1  | [nginx] 레이트 리밋 켬: 30r/m · burst 10 (출발지마다, 넘치면 429)
+nginx-1  | 2026/11/22 04:17:23 [notice] 263#263: signal process started
+nginx-1  | [nginx] 차단 목록 다시 읽음: 1 IP
+nginx-1  | 2026/11/22 04:19:04 [notice] 592#592: signal process started
+nginx-1  | [nginx] 차단 목록 다시 읽음: 2 IP

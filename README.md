@@ -200,6 +200,10 @@ docker compose run --rm scorer --last 15          # 최근 15분에 시작한 �
 | `LAB_ENGINE` | `auto` | 룰 판정: `auto`(wazuh 모듈이 있으면 Wazuh, 없으면 Sigma) · `wazuh` · `sigma` |
 | `LAB_ES` | `auto` | ES 주소: `auto`(dashboard 모듈이 있으면) · URL · 빈 값(안 보냄) |
 | `COMPOSE_PROFILES` | (없음) | 켤 모듈 — 예: `wazuh,dashboard` |
+| `LAB_RATE` | (없음 = 꺼짐) | nginx 출발지별 레이트 리밋 — 예: `30r/m`. 넘치면 429 |
+| `LAB_BURST` | `10` | 레이트 리밋 burst (한꺼번에 허용하는 요청 수) |
+
+**레이트 리밋 (선택, 2026-11-22).** `LAB_RATE` 는 `export` 하거나 `.env` 에 적는다 — `up` 명령 앞에만 붙이면 다음 `docker compose run traffic ...` 이 nginx 를 env 없이 다시 만들어 조용히 꺼진다. 탐지·차단과 비교한 결과는 [docs/rate-limit.md](docs/rate-limit.md): 빠른 BOLA 는 레이트 리밋만으로도 유출이 비슷하게 줄지만(16 vs 18, 막은 게 아니라 늦춘 것), **2.5초 간격 느린 BOLA 는 429 0건 · 40건 전부 유출** — 탐지·차단을 같이 켜면 ML 이 32초에 막아 14건. 정상 20명은 어느 조건에서도 429 0.
 
 ## 로그 · 기록 형식
 
@@ -372,7 +376,7 @@ gh attestation verify     oci://ghcr.io/zeldaim/api-defense-lab/tools:latest --o
 - **트래픽은 합성이다.** 정상 사용자는 기계 패턴이라 사람보다 규칙적이다. 점수는 "이 연습장에서의" 점수다.
 - **ML 은 짧은 창을 잘 틀린다.** 접속 직후 몇 초에 요청이 몰린 정상 창을 이상(high)으로 보는 일이 있다. 이 연습장은 대응 정책(창 요청 15건 이상일 때만 ML 차단)으로 막았을 뿐 모델이 해결한 것이 아니다 — 채점표의 "ML high 창" 이 그 수다.
 - 룰은 **명세 밖** 호출만 본다. 명세 안 BOLA 는 룰의 대상이 아니다 (그래서 ML 이 있다). 반대로 ML 은 짧은 탐색을 잘 못 본다.
-- 출발지 IP 는 헤더로 흉내 낸다 — 위조 가능. 실제 환경 재현이 아니다.
+- 출발지 IP 는 헤더로 흉내 낸다 — 위조 가능. 실제 환경 재현이 아니다. 레이트 리밋(`LAB_RATE`)도 같은 키라 같은 약점이 있다.
 - 한 PC(Windows 11 · Docker Desktop · Compose v5.6.1)에서만 확인했다. Linux · macOS 는 아직 안 돌려 봤다 — [테스트 요청](#help-test-api-defense-lab).
 - 코어의 Sigma 엔진은 이 연습장 룰에 필요한 만큼만 구현했다 (위 "내 룰로 채점받기 (Sigma)").
 
@@ -384,6 +388,7 @@ gh attestation verify     oci://ghcr.io/zeldaim/api-defense-lab/tools:latest --o
 | DVRA 토큰 30분 만료 → 정상 요청이 401 | 생성기가 401 이면 다시 로그인하고 한 번 더 보낸다 |
 | 헬스체크가 접속 로그에 섞여 ML 이 헬스체크 IP 를 차단 | 헬스체크는 nginx 를 거치지 않거나(`dvra-web`) 로그를 남기지 않는다(`/__lab/health`). 허용 목록 기본값도 둔다 |
 | 접속 직후 짧은 창 오탐으로 정상 차단 | ML 차단은 창 요청 15건 이상일 때만 |
+| `LAB_RATE=... docker compose up` 뒤 `compose run traffic` 이 nginx 를 env 없이 다시 만들어 레이트 리밋이 꺼짐 | `LAB_RATE` 는 `export` 하거나 `.env` 에 ([docs/rate-limit.md](docs/rate-limit.md)) |
 | 이전 실행이 남아 공격이 섞임 | 트래픽은 compose 서비스로만, `down` 으로 정리 |
 | ES 가 디스크 90% 넘으면 쓰기를 막아 대시보드가 조용히 멈춤 | 연습장 ES 는 디스크 임계값 검사를 끈다 |
 | detector 가 재시작하면 같은 로그를 두 번 셈 | 읽은 위치를 `pipeline_state.json` 에 저장 |

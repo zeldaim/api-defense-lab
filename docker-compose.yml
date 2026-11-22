@@ -49,6 +49,9 @@ services:
     image: nginx:1.27-alpine
     command: ["sh", "/lab/run.sh"]
     ports: ["127.0.0.1:8089:80"]
+    environment:                             # 레이트 리밋 (선택, 기본 꺼짐) — docs/rate-limit.md
+      LAB_RATE: ${LAB_RATE:-}
+      LAB_BURST: ${LAB_BURST:-10}
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/run.sh:/lab/run.sh:ro

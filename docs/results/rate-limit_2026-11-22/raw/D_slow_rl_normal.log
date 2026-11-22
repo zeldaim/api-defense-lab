@@ -1,0 +1,16 @@
+ Container rlx-dvra-db-1 Running 
+ Container rlx-nginx-1 Running 
+ Container rlx-dvra-web-1 Running 
+ Container rlx-dvra-db-1 Waiting 
+ Container rlx-dvra-db-1 Healthy 
+ Container rlx-dvra-web-1 Waiting 
+ Container rlx-dvra-web-1 Healthy 
+ Container rlx-nginx-1 Waiting 
+ Container rlx-nginx-1 Healthy 
+ Container rlx-traffic-run-9d85caba1c45 Creating 
+ Container rlx-traffic-run-9d85caba1c45 Created 
+[실행 20261122T042831Z-434b] 대상 http://nginx · 정답지 /data/run/labels.jsonl
+[정상] 10/30회
+[정상] 20/30회
+[정상] 30/30회
+[정상] 끝: 사용자 20 · 30회 · 620초

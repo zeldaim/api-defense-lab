@@ -102,6 +102,7 @@ def score_actor(x, ev, acc, now):
         "block_effective_s": round(max(reqs[eff][0] - first, 0), 1) if eff < len(reqs) else None,
         "ok_before_block": sum(1 for r in reqs[:eff] if 200 <= r[3] < 300 and (r[1], r[2]) not in AUTH),
         "forbidden_after_block": sum(1 for r in reqs if r[4]),
+        "rate_limited": sum(1 for r in reqs if r[3] == 429),                 # 레이트 리밋(LAB_RATE)이 거절한 요청
         "alerts": len(alerts), "alert_levels": dict(Counter(f"L{v['rule']['level']}" for v in alerts)),
         "ml_high": len(mls), "_reqs": reqs,
     }
@@ -126,8 +127,11 @@ def summarize(rows):
             s["fp_blocked_ips"] = s["blocked"]
             s["fp_alerted_ips"] = sum(1 for r in rs if r["alerts"])
             s["ml_high_windows"] = sum(r["ml_high"] for r in rs)
+            s["rate_limited_ips"] = sum(1 for r in rs if r["rate_limited"])   # 레이트 리밋 오탐 (429 를 받은 정상 IP)
+            s["rate_limited"] = sum(r["rate_limited"] for r in rs)
         else:
             s["ok_before_block"] = sum(r["ok_before_block"] for r in rs)
+            s["rate_limited"] = sum(r["rate_limited"] for r in rs)
         out[role] = s
     return out
 
@@ -154,14 +158,14 @@ def block_cell(r):
 def render_text(rows, summ):
     out = ["", "■ 공격 (정답: probe · bola)"]
     atk = [r for r in rows if r["role"] != "normal"]
-    out.append(table(["역할", "IP", "요청", "탐지", "탐지까지", "차단", "차단 결정까지", "새어 나간 성공", "차단 응답 403"],
+    out.append(table(["역할", "IP", "요청", "탐지", "탐지까지", "차단", "차단 결정까지", "새어 나간 성공", "차단 응답 403", "레이트 리밋 429"],
                      [[r["role"], r["ip"], r["requests"], "+".join(r["detected_by"]) or "✗", dash(r["detect_s"], "초"),
-                       block_cell(r), dash(r["block_s"], "초"), r["ok_before_block"], r["forbidden_after_block"]]
+                       block_cell(r), dash(r["block_s"], "초"), r["ok_before_block"], r["forbidden_after_block"], r["rate_limited"]]
                       for r in atk]) if atk else "(공격 기록 없음 — docker compose run --rm traffic attack probe)")
     n = summ.get("normal")
     out += ["", "■ 정상 사용자 (오탐)"]
     out.append(f"IP {n['actors']}개 · 요청 {n['requests']} · 오탐 차단 IP {n['fp_blocked_ips']} · 룰 경보 받은 IP {n['fp_alerted_ips']}"
-               f" · ML high 창 {n['ml_high_windows']}" if n else "(정상 기록 없음 — docker compose run --rm traffic normal)")
+               f" · ML high 창 {n['ml_high_windows']} · 429 받은 IP {n['rate_limited_ips']} ({n['rate_limited']}건)" if n else "(정상 기록 없음 — docker compose run --rm traffic normal)")
     srows = [[role, s["actors"], f"{s['detected']}/{s['actors']}", f"{s['blocked']}/{s['actors']}",
               dash(s["median_detect_s"], "초"), dash(s["median_block_s"], "초"), s["ok_before_block"]]
              for role, s in summ.items() if role != "normal"]
@@ -224,7 +228,7 @@ def render_html(rows, summ, ev, args):
             cards.append(f"<div class='card'><h3>정상 사용자 — 오탐 {badge(s['fp_blocked_ips'] == 0, '✓ 차단 0', '✗ 차단 있음')}</h3>"
                          "<div class='row'>" + stat(s["actors"], "IP") + stat(s["requests"], "요청")
                          + stat(s["fp_blocked_ips"], "오탐 차단 IP") + stat(s["fp_alerted_ips"], "룰 경보 받은 IP")
-                         + stat(s["ml_high_windows"], "ML high 창") + "</div></div>")
+                         + stat(s["ml_high_windows"], "ML high 창") + stat(s["rate_limited_ips"], "429 받은 IP") + "</div></div>")
         else:
             ok = s["blocked"] == s["actors"]
             no_msg = f"✗ 차단 {s['blocked']}/{s['actors']}"
@@ -232,7 +236,7 @@ def render_html(rows, summ, ev, args):
                          "<div class='row'>" + stat(f"{s['detected']}/{s['actors']}", "탐지")
                          + stat(dash(s["median_detect_s"], "초"), "탐지까지 (중앙값)")
                          + stat(dash(s["median_block_s"], "초"), "차단 결정까지 (중앙값)")
-                         + stat(s["ok_before_block"], "새어 나간 성공(2xx)") + "</div></div>")
+                         + stat(s["ok_before_block"], "새어 나간 성공(2xx)") + stat(s["rate_limited"], "레이트 리밋 429") + "</div></div>")
     atk = [r for r in rows if r["role"] != "normal"]
     atab = "".join(
         f"<tr><td>{e(r['role'])}</td><td><code>{e(r['ip'])}</code></td><td>{hms(r['start'])}</td><td>{r['requests']}</td>"

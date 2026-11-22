@@ -4,7 +4,7 @@
 
   normal [--users 20 --rounds 45 --pause 1.0]   정상: 가입 · 로그인 · 메뉴 · 주문 · 내 주문 · 내 정보 (IP 10.10.0.x)
   attack probe [--ip 10.66.0.N]                 명세 밖 탐색 15곳 — 숨은 API 3개 포함 (IP 기본 10.66.0.x 무작위)
-  attack bola  [--n 150] [--ip 10.77.0.N]       명세 안 BOLA — 남의 주문 1..n 열거 (IP 기본 10.77.0.x 무작위)
+  attack bola  [--n 150] [--ip 10.77.0.N] [--delay 0.4]   명세 안 BOLA — 남의 주문 1..n 열거 (IP 기본 10.77.0.x 무작위, --delay 를 늘리면 느린 열거)
   demo                                          정상 20명 · 30회 + 60초 뒤 탐색 + 150초 뒤 BOLA (약 10분)
 
 정답지 한 줄 = {"run", "ip", "role", "scenario", "start", "end"} (end 가 null 이면 아직 진행 중).
@@ -151,11 +151,11 @@ def probe(ip=None, scenario="probe"):
     print(f"[탐색] 끝 ({time.time() - t0:.1f}초)", flush=True)
 
 
-def bola(n=150, ip=None, scenario="bola"):
+def bola(n=150, ip=None, scenario="bola", delay=0.4):
     ip = pick_ip("10.77.0", ip)
     t0 = time.time()
     label(ip, "bola", scenario, t0)
-    print(f"[BOLA] 출발지 {ip} — 남의 주문 1..{n}", flush=True)
+    print(f"[BOLA] 출발지 {ip} — 남의 주문 1..{n} (간격 {delay}초)", flush=True)
     u = User(ip, f"attacker_{ip.split('.')[-1]}")
     first403, ok = None, 0
     for oid in range(1, n + 1):
@@ -166,7 +166,7 @@ def bola(n=150, ip=None, scenario="bola"):
             print(f"  *** 차단됨: 주문 {oid} 부터 403 ({time.time() - t0:.1f}초) ***", flush=True)
         if oid % 10 == 0:
             print(f"  주문 {oid} -> {st}", flush=True)
-        time.sleep(0.4)
+        time.sleep(delay)
     label(ip, "bola", scenario, t0, time.time())
     print(f"[BOLA] 끝: 열거 {n}건 · 성공(2xx) {ok} · 첫 403 = {first403}", flush=True)
 
@@ -194,13 +194,14 @@ def main():
     at.add_argument("kind", choices=["probe", "bola"])
     at.add_argument("--ip")
     at.add_argument("--n", type=int, default=150)
+    at.add_argument("--delay", type=float, default=0.4, help="bola 요청 간격(초) — 늘리면 레이트 리밋 아래로 느리게")
     sp.add_parser("demo")
     a = ap.parse_args()
     print(f"[실행 {RUN}] 대상 {BASE} · 정답지 {LABELS}", flush=True)
     if a.cmd == "normal":
         normal(a.users, a.rounds, a.pause)
     elif a.cmd == "attack":
-        probe(a.ip) if a.kind == "probe" else bola(a.n, a.ip)
+        probe(a.ip) if a.kind == "probe" else bola(a.n, a.ip, delay=a.delay)
     else:
         demo()
 

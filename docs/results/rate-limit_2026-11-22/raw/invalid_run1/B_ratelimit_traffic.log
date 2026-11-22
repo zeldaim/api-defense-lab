@@ -1,0 +1,55 @@
+ Container rlx-dvra-db-1 Running 
+ Container rlx-dvra-web-1 Running 
+ Container rlx-nginx-1 Recreate 
+ Container rlx-nginx-1 Recreated 
+ Container rlx-dvra-db-1 Waiting 
+ Container rlx-dvra-db-1 Healthy 
+ Container rlx-dvra-web-1 Waiting 
+ Container rlx-dvra-web-1 Healthy 
+ Container rlx-nginx-1 Starting 
+ Container rlx-nginx-1 Started 
+ Container rlx-nginx-1 Waiting 
+ Container rlx-nginx-1 Healthy 
+ Container rlx-traffic-run-63c84fef09dd Creating 
+ Container rlx-traffic-run-63c84fef09dd Created 
+[실행 20261122T020912Z-47f5] 대상 http://nginx · 정답지 /data/run/labels.jsonl
+[데모] 정상 20명 시작 → 60초 뒤 탐색 → 150초 뒤 BOLA (약 10분)
+[탐색] 출발지 10.66.0.153 — 명세 밖 15곳
+  GET /debug -> 200
+  GET /delivery/orders -> 200
+  GET /admin/reset-chef-password -> 403
+  GET /admin -> 404
+  GET /api/v1/users -> 404
+  GET /swagger.json -> 404
+  GET /actuator/health -> 404
+  GET /orders/export -> 422
+  GET /menu/abc -> 405
+  GET /users -> 404
+  POST /menu -> 405
+  DELETE /orders/1 -> 405
+  GET /backup.zip -> 404
+  GET /admin/stats/memory -> 404
+  GET /internal/metrics -> 404
+[탐색] 끝 (8.0초)
+[BOLA] 출발지 10.77.0.28 — 남의 주문 1..150 (간격 0.4초)
+  주문 10 -> 200
+  주문 20 -> 200
+  주문 30 -> 200
+  주문 40 -> 200
+  주문 50 -> 404
+  주문 60 -> 404
+  주문 70 -> 404
+  주문 80 -> 404
+  주문 90 -> 404
+  주문 100 -> 404
+  주문 110 -> 404
+  주문 120 -> 404
+  주문 130 -> 404
+[정상] 10/30회
+  주문 140 -> 404
+  주문 150 -> 404
+[BOLA] 끝: 열거 150건 · 성공(2xx) 49 · 첫 403 = None
+[정상] 20/30회
+[정상] 30/30회
+[정상] 끝: 사용자 20 · 30회 · 826초
+[데모] 끝 — 채점: docker compose run --rm scorer

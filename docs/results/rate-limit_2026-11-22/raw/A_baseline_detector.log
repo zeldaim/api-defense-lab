@@ -1,0 +1,6 @@
+detector-1  | [명세] /lab/spec/dvra_openapi.json · 작업 21
+detector-1  | [sigma] 판정 룰 4 · 상관 룰 2 (/lab/rules/sigma)
+detector-1  | [모듈] 룰 판정 Sigma (detector 안) · 대시보드 ES 없음
+detector-1  | [시작] 모델 /lab/model/dvra_v1 (학습 창 365) · high<-0.01605 · medium<0.07147 · 차단: ML high(요청 15+) / 룰 그룹 ['lab_block', 'shadow_api_exploit', 'shadow_api_mass_exfil', 'shadow_api_recon_burst'] · 허용 ['10.1.0.1']
+detector-1  | [차단] 10.66.0.204 ← 룰: shadow_api_exploit (레벨 12) (/debug)
+detector-1  | [차단] 10.77.0.87 ← ML: BOLA 의심 (high) (점수 -0.092 · 요청 19 · 연속 ID 17)
