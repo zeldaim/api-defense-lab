@@ -24,6 +24,22 @@
 > docker compose run --rm traffic demo   # 20 normal users + shadow-API probe + BOLA enumeration (~10 min)
 > docker compose run --rm scorer         # score table + reports/report.html
 > ```
+>
+> **Start here.** This repo is the runnable entry point of a larger API-security body of work — see the [project map](#프로젝트-지도--이-레포의-위치) below.
+
+## 프로젝트 지도 — 이 레포의 위치
+
+**한 줄로:** 명세가 없어도 API 를 찾아내고(발견) → 승인된 API 목록을 표준 형식으로 만들고(표준화) → 그 목록 밖 호출은 룰로, 목록 안 이상 행위는 ML 로 잡아 막고(탐지 · 차단) → 정답지로 몇 개를 몇 초 만에 막았는지 잰다(평가).
+이 레포는 그 흐름을 **`docker compose up` 한 번으로 직접 돌려 보는 곳**이다. 설계 · 근거 · 다른 앱 검증은 아래 저장소에 있다.
+
+| 단계 | 저장소 | 들어 있는 것 | 이 레포와의 관계 |
+|---|---|---|---|
+| 발견 | [shadow-api-lab](https://github.com/zeldaim/shadow-api-lab) | 명세 · 능동 스캔 · 트래픽 미러링(Zeek)을 합쳐 Shadow · Zombie API 판정 (OWASP API9) | 같은 생각을 이 레포는 `inventory` 모듈(mitmproxy)로 — [docs/inventory.md](docs/inventory.md) |
+| 표준화 · 자동화 | [api-security-supply-chain](https://github.com/zeldaim/api-security-supply-chain) | CycloneDX API-BOM · SBOM · VEX, 명세에서 Wazuh 룰 생성, Ansible 자동 대응, crAPI 에서 다시 검증, 이미지 서명 차단 시연 | 이 레포의 Shadow API 룰 생성기와 배경. 그쪽은 **설계 · 검증 기록**, 이쪽은 **돌아가는 연습장** |
+| 탐지 (ML) | [ml_detection](https://github.com/zeldaim/ml_detection) | 룰이 놓친 이상 행위(BOLA · 느린 공격)를 비지도 ML 로 — 실제 랩 로그 평가와 스스로 정정한 오탐 수치 | 이 레포의 BOLA 탐지 모델(IP × 5분 창 특징)의 출발점 |
+| 외부 기여 | [anchore/grype-db #1187](https://github.com/anchore/grype-db/pull/1187) | 취약점 DB 빌드에서 잘못된 provider 이름이 조용히 무시되던 버그 수정 (리뷰 대기) | 공급망 도구 쪽 기여 |
+
+**처음 보는 사람은:** ① 아래 [빠른 시작](#빠른-시작)으로 한 번 돌려 보고 → ② [채점](#채점) 표를 보고 → ③ [알려 둘 한계](#알려-둘-한계)를 읽는다. 내 룰 · 모델을 넣어 보려면 [내 모델로 채점받기](#내-모델로-채점받기-ml)와 그 위 두 절.
 
 공격 연습장(crAPI · DVRA)은 많은데, **방어하는 쪽이 자기 룰 · 모델을 같은 조건에서 채점해 볼 곳**은 드물다. 그래서 이 레포를 만들었다.
 
