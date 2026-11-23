@@ -1,0 +1,35 @@
+title: '인증 실패(401) 단건 — 에이전트 순회 상관용'
+name: agent_401
+id: 5b0f6a52-6f0e-4c2a-9a4e-1d2b7e9a0a02
+status: experimental
+description: 401 응답 한 건. 단독으로는 의미가 약하다 (토큰 만료 등) — 아래 상관 룰의 재료.
+author: YHC
+date: 2026-11-24
+logsource:
+  category: webserver
+detection:
+  selection:
+    sc-status: '401'
+  condition: selection
+level: informational
+---
+title: 'AI 에이전트 순회 — 60초 안에 401 이 8회 이상인데 계속 요청'
+id: 5b0f6a52-6f0e-4c2a-9a4e-1d2b7e9a0a03
+status: experimental
+description: |
+  정상 사용자는 401 을 받으면 다시 로그인한다 (생성기도 같음). ARTEX runtime_harvest.js 는 forward 기본 true 로
+  401 응답을 브라우저에서 성공으로 고쳐 쓰고 다음 화면으로 넘어간다 → 짧은 시간에 401 이 쌓인다. UA 와 무관한 행위 룰.
+  한계: 경로마다 7.5초보다 느리면(60초에 8회 미만) 못 잡는다 — traffic agent --variant slow 로 확인.
+author: YHC
+date: 2026-11-24
+correlation:
+  type: event_count
+  rules:
+    - agent_401
+  group-by:
+    - c-ip
+  timespan: 60s
+  condition:
+    gte: 8
+level: high
+lab_block: true

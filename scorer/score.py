@@ -156,7 +156,7 @@ def block_cell(r):
 
 
 def render_text(rows, summ):
-    out = ["", "■ 공격 (정답: probe · bola)"]
+    out = ["", "■ 공격 (정답: probe · bola · agent)"]
     atk = [r for r in rows if r["role"] != "normal"]
     out.append(table(["역할", "IP", "요청", "탐지", "탐지까지", "차단", "차단 결정까지", "새어 나간 성공", "차단 응답 403", "레이트 리밋 429"],
                      [[r["role"], r["ip"], r["requests"], "+".join(r["detected_by"]) or "✗", dash(r["detect_s"], "초"),
@@ -221,7 +221,7 @@ def stat(v, label):
 
 def render_html(rows, summ, ev, args):
     css = open(os.path.join(HERE, "report.css"), encoding="utf-8").read()
-    names = {"probe": "명세 밖 탐색 (probe)", "bola": "명세 안 BOLA (bola)"}
+    names = {"probe": "명세 밖 탐색 (probe)", "bola": "명세 안 BOLA (bola)", "agent": "AI 에이전트 흉내 (agent)"}
     cards = []
     for role, s in summ.items():
         if role == "normal":

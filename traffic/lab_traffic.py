@@ -5,6 +5,7 @@
   normal [--users 20 --rounds 45 --pause 1.0]   정상: 가입 · 로그인 · 메뉴 · 주문 · 내 주문 · 내 정보 (IP 10.10.0.x)
   attack probe [--ip 10.66.0.N]                 명세 밖 탐색 15곳 — 숨은 API 3개 포함 (IP 기본 10.66.0.x 무작위)
   attack bola  [--n 150] [--ip 10.77.0.N] [--delay 0.4]   명세 안 BOLA — 남의 주문 1..n 열거 (IP 기본 10.77.0.x 무작위, --delay 를 늘리면 느린 열거)
+  attack agent [--variant default|ua-changed|slow]   AI 에이전트 흉내 — 위조 토큰으로 보호 경로 순회 (IP 기본 10.88.0.x)
   demo                                          정상 20명 · 30회 + 60초 뒤 탐색 + 150초 뒤 BOLA (약 10분)
 
 정답지 한 줄 = {"run", "ip", "role", "scenario", "start", "end"} (end 가 null 이면 아직 진행 중).
@@ -171,6 +172,51 @@ def bola(n=150, ip=None, scenario="bola", delay=0.4):
     print(f"[BOLA] 끝: 열거 {n}건 · 성공(2xx) {ok} · 첫 403 = {first403}", flush=True)
 
 
+AGENT_UA = {   # artex-fingerprint 정적 분석의 기본 UA (enrich.go:233 · harvest_static.py:23 · 헤드리스 브라우저 추론)
+    "enrich": "artex-enrich/1.0", "harvest": "Mozilla/5.0 (spa-api-recon)",
+    "walk": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/130.0.0.0 Safari/537.36"}
+AGENT_WALK = ["/profile", "/orders", "/orders/1", "/orders/status/1", "/discount-coupons", "/referral-code",
+              "/admin/stats/disk"]
+
+
+def agent(variant="default", ip=None, rounds=3, scenario=None):
+    """AI 공격 에이전트 흉내 (ARTEX 소스에서 뽑은 행위 — 코드는 쓰지 않는다).
+    ① 자산 보강 GET /  ② 문서 · 명세 동시 수집  ③ 위조 토큰으로 보호 경로 순회: 401 이 와도 멈추지 않는다 (runtime_harvest.js forward)
+    variant: default(도구 UA) · ua-changed(정상 생성기와 같은 UA) · slow(UA 변경 + 경로마다 6~12초)"""
+    ip = pick_ip("10.88.0", ip)
+    scenario = scenario or f"agent-{variant}"
+    t0 = time.time()
+    label(ip, "agent", scenario, t0)
+    plain = variant != "default"
+    ua = (lambda k: "Mozilla/5.0 (api-defense-lab)") if plain else (lambda k: AGENT_UA[k])
+
+    def send(path, kind, token=None):
+        h = {"X-Client-IP": ip, "User-Agent": ua(kind)}
+        if token:
+            h["Authorization"] = f"Bearer {token}"
+        try:
+            with urllib.request.urlopen(urllib.request.Request(BASE + path, headers=h), timeout=15) as r:
+                return r.status
+        except urllib.error.HTTPError as e:
+            return e.code
+        except (urllib.error.URLError, TimeoutError, ConnectionError):
+            return 0
+
+    print(f"[에이전트] 출발지 {ip} · 변형 {variant}", flush=True)
+    send("/", "enrich")
+    ths = [threading.Thread(target=send, args=(p, "harvest")) for p in ("/docs", "/openapi.json", "/redoc", "/")]
+    [t.start() for t in ths]
+    [t.join() for t in ths]
+    forged = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZG1pbiJ9."            # 형식만 그럴듯한 위조 토큰
+    for r in range(rounds):
+        for p in AGENT_WALK:
+            st = send(p, "walk", forged)
+            print(f"  GET {p} -> {st}", flush=True)
+            time.sleep(random.uniform(6, 12) if variant == "slow" else 0.9 + random.uniform(0, 0.4))
+    label(ip, "agent", scenario, t0, time.time())
+    print(f"[에이전트] 끝 ({time.time() - t0:.1f}초)", flush=True)
+
+
 def demo():
     print("[데모] 정상 20명 시작 → 60초 뒤 탐색 → 150초 뒤 BOLA (약 10분)", flush=True)
     th = threading.Thread(target=normal, kwargs={"users": 20, "rounds": 30, "pause": 1.0, "scenario": "demo"})
@@ -191,7 +237,9 @@ def main():
     n.add_argument("--rounds", type=int, default=45)
     n.add_argument("--pause", type=float, default=1.0)
     at = sp.add_parser("attack")
-    at.add_argument("kind", choices=["probe", "bola"])
+    at.add_argument("kind", choices=["probe", "bola", "agent"])
+    at.add_argument("--variant", choices=["default", "ua-changed", "slow"], default="default",
+                    help="agent 변형 — 도구 UA / UA 변경 / UA 변경 + 느리게")
     at.add_argument("--ip")
     at.add_argument("--n", type=int, default=150)
     at.add_argument("--delay", type=float, default=0.4, help="bola 요청 간격(초) — 늘리면 레이트 리밋 아래로 느리게")
@@ -201,7 +249,12 @@ def main():
     if a.cmd == "normal":
         normal(a.users, a.rounds, a.pause)
     elif a.cmd == "attack":
-        probe(a.ip) if a.kind == "probe" else bola(a.n, a.ip, delay=a.delay)
+        if a.kind == "probe":
+            probe(a.ip)
+        elif a.kind == "agent":
+            agent(a.variant, a.ip)
+        else:
+            bola(a.n, a.ip, delay=a.delay)
     else:
         demo()
 

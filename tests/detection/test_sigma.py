@@ -50,7 +50,28 @@ def main():
                      ("F1 아님 — 38초에 L1 19회 (30초 창에 20 미만)", cnt["slow-100520"] == 0)):
         fails += not ok
         print(f"{'PASS' if ok else 'FAIL'}  {name}")
-    print(f"\n{'모두 통과' if not fails else f'실패 {fails}건'} — 사례 {len(cases)} + 빈도 3")
+    # AI 에이전트 (artex-fingerprint): UA 룰 · 401 순회 상관 룰 — 그룹 이름으로 센다 (id 는 파일 순서로 정해짐)
+    eng = sigma_engine.Engine(os.environ.get("SIGMA_RULES", os.path.join(ROOT, "rules", "sigma")), quiet=True)
+    g = Counter()
+    ua = lambda ip, u: {**mk(ip, "/", "200"), "cs-user-agent": u}
+    walk = lambda ip, st: {**mk(ip, "/profile", st), "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"}
+    seen = lambda tag, al: g.update(f"{tag}:{x}" for a in al for x in a["rule"]["groups"] if x.startswith("sigma_agent") and a["rule"]["level"] >= 12)
+    seen("ua", eng.evaluate(ua("4.4.4.4", "artex-enrich/1.0"), 4000))
+    seen("normal-ua", eng.evaluate(ua("4.4.4.5", "Mozilla/5.0 (api-defense-lab)"), 4001))
+    for i in range(21):
+        seen("fast", eng.evaluate(walk("5.5.5.5", "401"), 5000 + i * 1.1))          # 경로마다 1.1초 (기본 · ua-changed)
+    for i in range(21):
+        seen("slow", eng.evaluate(walk("6.6.6.6", "401"), 6000 + i * 9))            # 경로마다 9초 (slow)
+    seen("relogin", eng.evaluate(walk("7.7.7.7", "401"), 7000))                    # 정상: 토큰 만료 401 한 번
+    corr = "sigma_agent_auth_fail_walk"
+    for name, ok in (("에이전트 UA → UA 룰", g["ua:sigma_agent_tool_ua"] == 1),
+                     ("정상 UA → UA 룰 없음", g["normal-ua:sigma_agent_tool_ua"] == 0),
+                     ("401 순회 1.1초 간격 21회 → 상관 룰 (60초 무시 → 1번)", g[f"fast:{corr}"] == 1),
+                     ("401 순회 9초 간격 → 상관 룰 없음 (알려진 한계)", g[f"slow:{corr}"] == 0),
+                     ("정상 401 한 번 → 상관 룰 없음", g[f"relogin:{corr}"] == 0)):
+        fails += not ok
+        print(f"{'PASS' if ok else 'FAIL'}  {name}")
+    print(f"\n{'모두 통과' if not fails else f'실패 {fails}건'} — 사례 {len(cases)} + 빈도 3 + 에이전트 5")
     sys.exit(1 if fails else 0)
 
 

@@ -1,0 +1,24 @@
+title: 'AI 공격 에이전트 도구 UA (ARTEX 기본값)'
+id: 5b0f6a52-6f0e-4c2a-9a4e-1d2b7e9a0a01
+status: experimental
+description: |
+  ARTEX 소스의 기본 User-Agent (enrich.go:233 artex-enrich/1.0 · harvest_static.py:23 · spider_mpa.py:23 spa-api-recon)
+  와 팀 랩에서 관측된 norma/ (에이전트 프레임워크). UA 는 설정 하나로 바뀐다 — 행위 룰(agent_auth_fail_walk)과 함께 쓴다.
+author: YHC
+date: 2026-11-24
+tags:
+  - attack.reconnaissance
+  - attack.t1595
+logsource:
+  category: webserver
+detection:
+  selection:
+    cs-user-agent|contains:
+      - 'artex-enrich/'
+      - 'spa-api-recon'
+      - 'norma/'
+  condition: selection
+falsepositives:
+  - 승인된 내부 침투 테스트
+level: high
+lab_block: true
