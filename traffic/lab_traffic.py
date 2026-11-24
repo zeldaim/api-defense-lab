@@ -207,7 +207,7 @@ def agent(variant="default", ip=None, rounds=3, scenario=None):
     ths = [threading.Thread(target=send, args=(p, "harvest")) for p in ("/docs", "/openapi.json", "/redoc", "/")]
     [t.start() for t in ths]
     [t.join() for t in ths]
-    forged = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZG1pbiJ9."            # 형식만 그럴듯한 위조 토큰
+    forged = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZG1pbiJ9."            # 형식만 그럴듯한 위조 토큰 (alg:none, 서명 없음 — 비밀 아님)  # gitleaks:allow
     for r in range(rounds):
         for p in AGENT_WALK:
             st = send(p, "walk", forged)
