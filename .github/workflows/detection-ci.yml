@@ -55,10 +55,16 @@ jobs:
         run: |
           out=$(mktemp -d)
           python tools/gen_sigma.py spec/dvra_openapi.json --out "$out" > /dev/null
-          if ! diff -r -I '^date:' -x 'agent_*' rules/sigma "$out"; then
-            echo "::error::rules/sigma 의 명세 파생 룰(shadow_api_*)이 생성기와 다르다 — 손으로 고쳤다면 tools/gen_sigma.py 를 고치고 다시 생성 (agent_* 는 손으로 쓴 행위 룰이라 비교에서 뺀다)"
-            exit 1
-          fi
+          fail=0
+          for f in "$out"/*.yml; do
+            n=$(basename "$f")
+            if ! diff -I '^date:' "$f" "rules/sigma/$n"; then
+              echo "::error::rules/sigma/$n 이 명세 · 생성기와 다르다 — 손으로 고쳤다면 tools/gen_sigma.py 를 고치고 다시 생성"
+              fail=1
+            fi
+          done
+          # 생성기가 모르는 손으로 쓴 행위 룰(agent_* · honey_* 등)은 이 비교에서 빠진다 — 파일 이름이 생성기 출력과 같을 때만 비교한다
+          exit $fail
       - name: Sigma 엔진 — 정답 사례 + 빈도 룰
         run: python tests/detection/test_sigma.py
 

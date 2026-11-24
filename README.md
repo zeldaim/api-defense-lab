@@ -180,6 +180,7 @@ docker compose run --rm scorer --last 15          # 최근 15분에 시작한 �
 |---|---|---|
 | Shadow API 룰 — 코어: Sigma `rules/sigma/` · 모듈 `wazuh`: `rules/wazuh/0915-shadow_api_rules.xml` (같은 판정) | 명세(`spec/dvra_openapi.json`)에 없는 (메서드, 경로) 호출. 공개 문서 화면 4개는 예외 | 응답 코드로 단계: L1 정찰 404·405 · L2 발견 401·403 · **L3 악용 2xx** · L3-E 5xx · F1 30초 L1 20회 · F2 60초 L3 10회 |
 | ML (`model/dvra_v1`) | 명세 **안**의 비정상 행위 (BOLA 열거) — 룰이 못 잡는 것 | IsolationForest, IP × 5분 창 특징 13개 (연속 ID · 서로 다른 객체 수 · 간격 …). DVRA 정상 73분 · 창 365개로 학습 |
+| Honey API (`rules/sigma/honey_api_touch.yml`) | 화면 번들(`/static/app.bundle.js`)에만 적힌 가짜 내부 경로(`/internal/…`) 호출 — 사람·정상 클라이언트는 절대 안 부른다 | 경로 접촉 **한 번**으로 즉시 판정 (UA·속도·요청 수 무관). 느리게(예: 9초 간격) 도는 자동 수집기처럼 401 순회 빈도 룰을 피하는 공격도 여기서 잡힌다 — [docs/honey-api.md](docs/honey-api.md) |
 
 | 판정 | 대응 |
 |---|---|

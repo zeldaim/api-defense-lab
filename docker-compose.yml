@@ -55,6 +55,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/run.sh:/lab/run.sh:ro
+      - ./nginx/honey/app.bundle.js:/lab/static/app.bundle.js:ro
       - labdata:/data
     depends_on: {dvra-web: {condition: service_healthy}}
     healthcheck:

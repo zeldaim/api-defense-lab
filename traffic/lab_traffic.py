@@ -5,7 +5,8 @@
   normal [--users 20 --rounds 45 --pause 1.0]   정상: 가입 · 로그인 · 메뉴 · 주문 · 내 주문 · 내 정보 (IP 10.10.0.x)
   attack probe [--ip 10.66.0.N]                 명세 밖 탐색 15곳 — 숨은 API 3개 포함 (IP 기본 10.66.0.x 무작위)
   attack bola  [--n 150] [--ip 10.77.0.N] [--delay 0.4]   명세 안 BOLA — 남의 주문 1..n 열거 (IP 기본 10.77.0.x 무작위, --delay 를 늘리면 느린 열거)
-  attack agent [--variant default|ua-changed|slow]   AI 에이전트 흉내 — 위조 토큰으로 보호 경로 순회 (IP 기본 10.88.0.x)
+  attack agent [--variant default|ua-changed|slow] [--honey]   AI 에이전트 흉내 — 위조 토큰으로 보호 경로 순회 (IP 기본 10.88.0.x). --honey: 번들의 미끼 경로까지 호출
+  normal --bundle                               정상 사용자도 화면 번들을 받는다 (허니 오탐 시험)
   demo                                          정상 20명 · 30회 + 60초 뒤 탐색 + 150초 뒤 BOLA (약 10분)
 
 정답지 한 줄 = {"run", "ip", "role", "scenario", "start", "end"} (end 가 null 이면 아직 진행 중).
@@ -15,6 +16,7 @@ import argparse
 import json
 import os
 import random
+import re
 import threading
 import time
 import urllib.error
@@ -94,7 +96,7 @@ class User:
             pass
 
 
-def normal(users=20, rounds=45, pause=1.0, scenario="normal"):
+def normal(users=20, rounds=45, pause=1.0, scenario="normal", bundle=False):
     t0 = time.time()
     ips = [f"10.10.0.{i + 1}" for i in range(users)]
     for ip in ips:
@@ -103,6 +105,8 @@ def normal(users=20, rounds=45, pause=1.0, scenario="normal"):
     for i, ip in enumerate(ips):
         u = User(ip, f"guest{i + 1:02d}")
         u.order()
+        if bundle:                                   # 브라우저처럼 화면 번들을 받는다 — 번들에 적힌 미끼 경로는 부르지 않는다 (허니 오탐 시험)
+            _req("GET", "/static/app.bundle.js", ip)
         accts.append(u)
     for r in range(rounds):
         for u in accts:
@@ -130,7 +134,7 @@ PROBES = [  # 숨은 API 3개(앱 소스에서 include_in_schema=False) + 흔한
     ("GET", "/debug"), ("GET", "/delivery/orders"), ("GET", "/admin/reset-chef-password"),
     ("GET", "/admin"), ("GET", "/api/v1/users"), ("GET", "/swagger.json"), ("GET", "/actuator/health"),
     ("GET", "/orders/export"), ("GET", "/menu/abc"), ("GET", "/users"), ("POST", "/menu"), ("DELETE", "/orders/1"),
-    ("GET", "/backup.zip"), ("GET", "/admin/stats/memory"), ("GET", "/internal/metrics"),
+    ("GET", "/backup.zip"), ("GET", "/admin/stats/memory"), ("GET", "/metrics"),
 ]
 
 
@@ -179,12 +183,12 @@ AGENT_WALK = ["/profile", "/orders", "/orders/1", "/orders/status/1", "/discount
               "/admin/stats/disk"]
 
 
-def agent(variant="default", ip=None, rounds=3, scenario=None):
+def agent(variant="default", ip=None, rounds=3, scenario=None, honey=False):
     """AI 공격 에이전트 흉내 (ARTEX 소스에서 뽑은 행위 — 코드는 쓰지 않는다).
     ① 자산 보강 GET /  ② 문서 · 명세 동시 수집  ③ 위조 토큰으로 보호 경로 순회: 401 이 와도 멈추지 않는다 (runtime_harvest.js forward)
     variant: default(도구 UA) · ua-changed(정상 생성기와 같은 UA) · slow(UA 변경 + 경로마다 6~12초)"""
     ip = pick_ip("10.88.0", ip)
-    scenario = scenario or f"agent-{variant}"
+    scenario = scenario or (f"agent-{variant}" + ("+honey" if honey else ""))
     t0 = time.time()
     label(ip, "agent", scenario, t0)
     plain = variant != "default"
@@ -202,11 +206,24 @@ def agent(variant="default", ip=None, rounds=3, scenario=None):
         except (urllib.error.URLError, TimeoutError, ConnectionError):
             return 0
 
+    def fetch(path, kind):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(BASE + path, headers={"X-Client-IP": ip, "User-Agent": ua(kind)}), timeout=15) as r:
+                return r.read().decode(errors="replace")
+        except (urllib.error.URLError, TimeoutError, ConnectionError):
+            return ""
+
     print(f"[에이전트] 출발지 {ip} · 변형 {variant}", flush=True)
     send("/", "enrich")
     ths = [threading.Thread(target=send, args=(p, "harvest")) for p in ("/docs", "/openapi.json", "/redoc", "/")]
     [t.start() for t in ths]
     [t.join() for t in ths]
+    if honey:                                        # 정적 수집(harvest_static 행위): 번들에서 "/…" 경로를 뽑아 전부 호출한다
+        body = fetch("/static/app.bundle.js", "harvest")
+        for p in sorted(set(re.findall(r'"(/[A-Za-z0-9_./-]+)"', body))):
+            st = send(p, "walk")
+            print(f"  [번들에서 찾은 경로] GET {p} -> {st}", flush=True)
+            time.sleep(random.uniform(6, 12) if variant == "slow" else 0.3)
     forged = "eyJhbGciOiJub25lIn0.eyJzdWIiOiJhZG1pbiJ9."            # 형식만 그럴듯한 위조 토큰 (alg:none, 서명 없음 — 비밀 아님)  # gitleaks:allow
     for r in range(rounds):
         for p in AGENT_WALK:
@@ -236,10 +253,12 @@ def main():
     n.add_argument("--users", type=int, default=20)
     n.add_argument("--rounds", type=int, default=45)
     n.add_argument("--pause", type=float, default=1.0)
+    n.add_argument("--bundle", action="store_true", help="정상 사용자도 화면 번들을 받는다 (허니 API 오탐 시험)")
     at = sp.add_parser("attack")
     at.add_argument("kind", choices=["probe", "bola", "agent"])
     at.add_argument("--variant", choices=["default", "ua-changed", "slow"], default="default",
                     help="agent 변형 — 도구 UA / UA 변경 / UA 변경 + 느리게")
+    at.add_argument("--honey", action="store_true", help="agent 가 번들에서 API 경로를 뽑아 미끼 경로까지 호출 (허니 API 시험)")
     at.add_argument("--ip")
     at.add_argument("--n", type=int, default=150)
     at.add_argument("--delay", type=float, default=0.4, help="bola 요청 간격(초) — 늘리면 레이트 리밋 아래로 느리게")
@@ -247,12 +266,12 @@ def main():
     a = ap.parse_args()
     print(f"[실행 {RUN}] 대상 {BASE} · 정답지 {LABELS}", flush=True)
     if a.cmd == "normal":
-        normal(a.users, a.rounds, a.pause)
+        normal(a.users, a.rounds, a.pause, bundle=a.bundle)
     elif a.cmd == "attack":
         if a.kind == "probe":
             probe(a.ip)
         elif a.kind == "agent":
-            agent(a.variant, a.ip)
+            agent(a.variant, a.ip, honey=a.honey)
         else:
             bola(a.n, a.ip, delay=a.delay)
     else:

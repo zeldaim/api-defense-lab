@@ -6,7 +6,7 @@
   {"name": "명세에 없는 메서드 405 → L1",          "line": "10.66.0.9 - - [19/Nov/2026:03:00:00 +0000] \"POST /menu HTTP/1.1\" 405 31 \"-\" \"t\"", "expect": "L1"},
   {"name": "숨은 관리 API 403 → L2",              "line": "10.66.0.9 - - [19/Nov/2026:03:00:00 +0000] \"GET /admin/reset-chef-password HTTP/1.1\" 403 70 \"-\" \"t\"", "expect": "L2"},
   {"name": "명세 밖 DELETE 403 → L2",             "line": "10.66.0.9 - - [19/Nov/2026:03:00:00 +0000] \"DELETE /orders/1 HTTP/1.1\" 403 31 \"-\" \"t\"", "expect": "L2"},
-  {"name": "명세 밖 호출 서버 오류 → L3-E",        "line": "10.66.0.9 - - [19/Nov/2026:03:00:00 +0000] \"GET /internal/metrics HTTP/1.1\" 500 10 \"-\" \"t\"", "expect": "L3E"},
+  {"name": "명세 밖 호출 서버 오류 → L3-E",        "line": "10.66.0.9 - - [19/Nov/2026:03:00:00 +0000] \"GET /metrics HTTP/1.1\" 500 10 \"-\" \"t\"", "expect": "L3E"},
   {"name": "명세 안 GET /menu → 경보 없음",         "line": "10.10.0.1 - - [19/Nov/2026:03:00:00 +0000] \"GET /menu HTTP/1.1\" 200 500 \"-\" \"t\"", "expect": "none"},
   {"name": "명세 안 GET /orders/12 → 경보 없음",    "line": "10.10.0.1 - - [19/Nov/2026:03:00:00 +0000] \"GET /orders/12 HTTP/1.1\" 200 500 \"-\" \"t\"", "expect": "none"},
   {"name": "명세 안 남의 주문(BOLA) → 룰은 경보 없음 (ML 몫)", "line": "10.77.0.1 - - [19/Nov/2026:03:00:00 +0000] \"GET /orders/status/99 HTTP/1.1\" 200 40 \"-\" \"t\"", "expect": "none"},

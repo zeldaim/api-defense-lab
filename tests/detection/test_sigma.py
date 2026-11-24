@@ -71,7 +71,14 @@ def main():
                      ("정상 401 한 번 → 상관 룰 없음", g[f"relogin:{corr}"] == 0)):
         fails += not ok
         print(f"{'PASS' if ok else 'FAIL'}  {name}")
-    print(f"\n{'모두 통과' if not fails else f'실패 {fails}건'} — 사례 {len(cases)} + 빈도 3 + 에이전트 5")
+    # Honey API: 번들에만 적힌 미끼 경로(/internal/) — 느린 에이전트도 첫 접촉에서 즉시 잡힌다 (401 순회 상관 룰의 사각을 메움)
+    eng = sigma_engine.Engine(os.environ.get("SIGMA_RULES", os.path.join(ROOT, "rules", "sigma")), quiet=True)
+    honey_hit = lambda ip, path: any(x == "lab_block" for a in eng.evaluate({**mk(ip, path, "401"), "cs-user-agent": "t"}, 9000) for x in a["rule"]["groups"])
+    for name, ok in (("미끼 경로 한 번 → 즉시 lab_block (느린 에이전트도 잡힘)", honey_hit("8.8.8.8", "/internal/debug/config")),
+                     ("정상 보호 경로(/profile) 401 한 번 → lab_block 아님", not honey_hit("8.8.8.9", "/profile"))):
+        fails += not ok
+        print(f"{'PASS' if ok else 'FAIL'}  {name}")
+    print(f"\n{'모두 통과' if not fails else f'실패 {fails}건'} — 사례 {len(cases)} + 빈도 3 + 에이전트 5 + 허니 2")
     sys.exit(1 if fails else 0)
 
 

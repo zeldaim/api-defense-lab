@@ -1,0 +1,22 @@
+title: 'Honey API 접촉 — 번들에만 적힌 가짜 내부 경로 호출'
+id: 5b0f6a52-6f0e-4c2a-9a4e-1d2b7e9a0a04
+status: experimental
+description: |
+  /internal/ 아래 경로는 정적 번들(/static/app.bundle.js)에만 적힌 미끼다 — 실제 클라이언트 코드는 부르지 않는다.
+  이 경로를 부른 출발지는 번들에서 API 경로를 뽑아 호출하는 자동 수집기다. UA · 속도 · 요청 수와 무관하게 첫 접촉에서 판정한다
+  (느리게 도는 에이전트는 401 순회 룰과 빈도 룰이 못 잡는다). 오탐: 이 경로를 일부러 부르는 내부 점검.
+author: YHC
+date: 2026-11-25
+tags:
+  - attack.reconnaissance
+  - attack.t1595
+logsource:
+  category: webserver
+detection:
+  selection:
+    cs-uri-stem|startswith: '/internal/'
+  condition: selection
+falsepositives:
+  - 이 경로를 알고 일부러 부르는 내부 점검 도구
+level: critical
+lab_block: true

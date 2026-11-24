@@ -28,7 +28,7 @@
 | 명세 형식 위반 | `GET /orders/abc 200` (명세는 정수 ID) | L3 |
 | 없는 경로 · 없는 메서드 | `GET /admin 404`, `POST /menu 405` | L1 |
 | 숨은 API 존재 확인 | `GET /admin/reset-chef-password 403` | L2 |
-| 서버 오류 | `GET /internal/metrics 500` | L3E |
+| 서버 오류 | `GET /metrics 500` | L3E |
 | 명세 안 정상 | `GET /menu`, `GET /orders/12`, `PATCH /profile` | none |
 | 명세 안 BOLA | `GET /orders/status/99` — 룰이 아니라 ML 의 몫 | none |
 | 예외 | `/docs`, `/openapi.json` (공개 문서 화면) | none |
