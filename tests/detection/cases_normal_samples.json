@@ -1,0 +1,7 @@
+[
+  {"c-ip": "10.10.0.3", "cs-method": "GET", "cs-uri-stem": "/menu", "cs-uri-query": "", "sc-status": "200", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "10.10.0.3", "cs-method": "GET", "cs-uri-stem": "/profile", "cs-uri-query": "", "sc-status": "200", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "10.10.0.4", "cs-method": "GET", "cs-uri-stem": "/orders", "cs-uri-query": "", "sc-status": "200", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "10.10.0.4", "cs-method": "GET", "cs-uri-stem": "/orders/3", "cs-uri-query": "", "sc-status": "200", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "10.10.0.5", "cs-method": "GET", "cs-uri-stem": "/profile", "cs-uri-query": "", "sc-status": "401", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"}
+]

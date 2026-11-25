@@ -1,0 +1,9 @@
+[
+  {"c-ip": "6.6.6.6", "cs-method": "GET", "cs-uri-stem": "/profile", "cs-uri-query": "", "sc-status": "401", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "6.6.6.6", "cs-method": "GET", "cs-uri-stem": "/orders", "cs-uri-query": "", "sc-status": "401", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "6.6.6.6", "cs-method": "GET", "cs-uri-stem": "/orders/1", "cs-uri-query": "", "sc-status": "401", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "6.6.6.6", "cs-method": "GET", "cs-uri-stem": "/orders/status/1", "cs-uri-query": "", "sc-status": "401", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "6.6.6.6", "cs-method": "GET", "cs-uri-stem": "/discount-coupons", "cs-uri-query": "", "sc-status": "401", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "6.6.6.6", "cs-method": "GET", "cs-uri-stem": "/referral-code", "cs-uri-query": "", "sc-status": "401", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"},
+  {"c-ip": "6.6.6.6", "cs-method": "GET", "cs-uri-stem": "/admin/stats/disk", "cs-uri-query": "", "sc-status": "401", "cs-user-agent": "Mozilla/5.0 (api-defense-lab)"}
+]
