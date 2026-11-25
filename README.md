@@ -329,17 +329,20 @@ trainer 는 정답지에서 `normal` 인 IP 의 창만 학습한다. 오류 비�
 
 `rules/` 를 고치면 GitHub Actions(`detection-ci.yml`)가 자동으로: `sigma check` · Lucene 변환 · 명세에서 다시 만든 룰과 같은지(drift) · **정답 사례 16개를 Sigma 엔진과 실제 Wazuh(`wazuh-logtest`) 양쪽에** 넣어 같은 정답인지 · 빈도 룰. 룰을 일부러 망가뜨리면 실패하는 것까지 확인했다. 구축 과정과 겪은 함정: [`docs/detection-ci.md`](docs/detection-ci.md). 내 룰을 고쳤다면 `tests/detection/cases.json` 에 사례를 더하면 같은 시험을 받는다.
 
-## AI 룰 초안 제안 (`tools/ai_rule_propose.py`)
+## AI 룰 초안 제안 — 자율 반복 에이전트 (`tools/ai_rule_propose.py`)
 
-AI가 탐지를 직접 하거나 차단 여부를 판단하지 않는다 — **차단은 여전히 위 결정론적 룰 엔진만 한다.** AI가 하는 건 "빠져나간 로그를 보고 룰 초안 하나를 제안하는 것"뿐이고, 그 초안은 제출되기 전에 반드시 **자동 검증**을 통과해야 한다: (1) 실제로 빠져나간 사례를 잡는가 (2) 정상 사례(`tests/detection/cases_normal_samples.json`)를 새로 오탐하지 않는가. 통과한 초안도 `rules/sigma/`에 바로 안 들어가고 `rules/sigma_drafts/`에 쌓여, 사람이 보고 옮겨야 진짜 룰이 된다.
+AI가 탐지를 직접 하거나 차단 여부를 판단하지 않는다 — **차단은 여전히 위 결정론적 룰 엔진만 한다.** AI가 하는 건 "빠져나간 로그를 보고 룰 초안을 제안하는 것"뿐이고, 그 초안은 제출되기 전에 반드시 **자동 검증**을 통과해야 한다: (1) 실제로 빠져나간 사례를 잡는가 (2) 정상 사례(`tests/detection/cases_normal_samples.json`)를 새로 오탐하지 않는가.
+
+**한 번 묻고 끝이 아니라 반복한다**(`propose_loop`) — 초안이 검증에 실패하면 **그 실패 이유(어떤 정상 사례를 오탐했는지 등)를 AI에게 다시 보여주고, 같은 실수를 피해 재시도**시킨다(`--max-attempts`, 기본 3번). 통과하거나 AI가 스스로 포기(`can_propose=false`)하거나 횟수를 다 쓰면 멈춘다. 통과한 초안도 `rules/sigma/`에 바로 안 들어가고 `rules/sigma_drafts/`에 쌓여, 사람이 보고 옮겨야 진짜 룰이 된다.
 
 ```
 python tools/ai_rule_propose.py --evading <빠져나간_로그.json> --normal tests/detection/cases_normal_samples.json
 ```
 
 - 단건 탐지(한 요청 안에서 보이는 특징)만 제안할 수 있다 — 빈도·상관 규칙(여러 요청을 세는 것)은 이 스키마 밖이다.
-- **시험 완료, 솔직한 한계 하나 확인(2026-11-25)**: `tests/detection/cases_evading.json`(느린 agent 변형이 401 순회 빈도 룰을 피해 가는 실제 사례)을 하네스에 넣어 보면, 개별 요청 하나하나가 정상적인 "토큰 만료 401"과 구분이 안 돼서 **단건 탐지로는 원래 못 푼다** — AI가 `can_propose=false`라고 솔직히 답해야 맞는 경우다. 검증 하네스 자체는 사람이 쓴 예시 초안 3개(식별되는 UA → 통과, 너무 넓은 조건 → 오탐으로 버림, 이 실제 시나리오 → 같은 이유로 버림)로 정확히 동작함을 확인했다 (`tests/detection/test_ai_rule_propose.py`).
-- **실제 AI 호출(Claude)은 API 키가 없어 아직 확인 못 했다** — `ANTHROPIC_API_KEY` 없이는 `--no-ai`로 하네스만 시험할 수 있다.
+- **시험 완료, 솔직한 한계 하나 확인(2026-11-25)**: `tests/detection/cases_evading.json`(느린 agent 변형이 401 순회 빈도 룰을 피해 가는 실제 사례)을 하네스에 넣어 보면, 개별 요청 하나하나가 정상적인 "토큰 만료 401"과 구분이 안 돼서 **단건 탐지로는 원래 못 푼다** — 아무리 재시도해도 AI가 `can_propose=false`라고 솔직히 답해야 맞는 경우다.
+- 검증 하네스와 재시도 루프 둘 다 사람이 쓴 예시로 정확히 동작함을 확인했다 (`tests/detection/test_ai_rule_propose.py`, 4개 통과): 식별되는 UA → 통과, 너무 넓은 조건 → 오탐으로 버림, 실제 회피 시나리오 → 같은 이유로 버림, **그리고 가짜 제안기로 "1차 실패 → 이유를 받음 → 2차에 고쳐서 통과"가 정확히 재현됨**(1차 시도가 실패 이유를 실제로 2차 호출에 넘기는지까지 검증).
+- **실제 AI 호출(Claude)은 API 키가 없어 아직 확인 못 했다** — `ANTHROPIC_API_KEY` 없이는 `--no-ai`로 하네스만 시험할 수 있다. 재시도 루프 자체는 AI 호출 없이 가짜 제안기로 검증했다(위).
 
 ## 보안 워크플로
 
