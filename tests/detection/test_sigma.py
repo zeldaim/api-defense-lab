@@ -58,6 +58,7 @@ def main():
     seen = lambda tag, al: g.update(f"{tag}:{x}" for a in al for x in a["rule"]["groups"] if x.startswith("sigma_agent") and a["rule"]["level"] >= 12)
     seen("ua", eng.evaluate(ua("4.4.4.4", "artex-enrich/1.0"), 4000))
     seen("normal-ua", eng.evaluate(ua("4.4.4.5", "Mozilla/5.0 (api-defense-lab)"), 4001))
+    seen("framework-ua", eng.evaluate(ua("4.4.4.6", "norma/0.4"), 4002))          # 다섯 번째 갈래 — 팀 랩 로그에서만 관측, ARTEX 소스엔 없음
     for i in range(21):
         seen("fast", eng.evaluate(walk("5.5.5.5", "401"), 5000 + i * 1.1))          # 경로마다 1.1초 (기본 · ua-changed)
     for i in range(21):
@@ -66,6 +67,7 @@ def main():
     corr = "sigma_agent_auth_fail_walk"
     for name, ok in (("에이전트 UA → UA 룰", g["ua:sigma_agent_tool_ua"] == 1),
                      ("정상 UA → UA 룰 없음", g["normal-ua:sigma_agent_tool_ua"] == 0),
+                     ("다섯 번째 갈래(norma/0.4) → UA 룰", g["framework-ua:sigma_agent_tool_ua"] == 1),
                      ("401 순회 1.1초 간격 21회 → 상관 룰 (60초 무시 → 1번)", g[f"fast:{corr}"] == 1),
                      ("401 순회 9초 간격 → 상관 룰 없음 (알려진 한계)", g[f"slow:{corr}"] == 0),
                      ("정상 401 한 번 → 상관 룰 없음", g[f"relogin:{corr}"] == 0)):

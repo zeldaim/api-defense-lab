@@ -5,7 +5,7 @@
   normal [--users 20 --rounds 45 --pause 1.0]   정상: 가입 · 로그인 · 메뉴 · 주문 · 내 주문 · 내 정보 (IP 10.10.0.x)
   attack probe [--ip 10.66.0.N]                 명세 밖 탐색 15곳 — 숨은 API 3개 포함 (IP 기본 10.66.0.x 무작위)
   attack bola  [--n 150] [--ip 10.77.0.N] [--delay 0.4]   명세 안 BOLA — 남의 주문 1..n 열거 (IP 기본 10.77.0.x 무작위, --delay 를 늘리면 느린 열거)
-  attack agent [--variant default|ua-changed|slow] [--honey]   AI 에이전트 흉내 — 위조 토큰으로 보호 경로 순회 (IP 기본 10.88.0.x). --honey: 번들의 미끼 경로까지 호출
+  attack agent [--variant default|ua-changed|slow|framework] [--honey]   AI 에이전트 흉내 — 위조 토큰으로 보호 경로 순회 (IP 기본 10.88.0.x). --honey: 번들의 미끼 경로까지 호출
   normal --bundle                               정상 사용자도 화면 번들을 받는다 (허니 오탐 시험)
   demo                                          정상 20명 · 30회 + 60초 뒤 탐색 + 150초 뒤 BOLA (약 10분)
 
@@ -186,13 +186,18 @@ AGENT_WALK = ["/profile", "/orders", "/orders/1", "/orders/status/1", "/discount
 def agent(variant="default", ip=None, rounds=3, scenario=None, honey=False):
     """AI 공격 에이전트 흉내 (ARTEX 소스에서 뽑은 행위 — 코드는 쓰지 않는다).
     ① 자산 보강 GET /  ② 문서 · 명세 동시 수집  ③ 위조 토큰으로 보호 경로 순회: 401 이 와도 멈추지 않는다 (runtime_harvest.js forward)
-    variant: default(도구 UA) · ua-changed(정상 생성기와 같은 UA) · slow(UA 변경 + 경로마다 6~12초)"""
+    variant: default(도구 UA) · ua-changed(정상 생성기와 같은 UA) · slow(UA 변경 + 경로마다 6~12초)
+             · framework(다섯 번째 갈래 — ARTEX 소스엔 없고 팀 랩 로그에서만 관측된 norma/0.4, 에이전트 프레임워크 자체의 HTTP 도구 UA로 추정)"""
     ip = pick_ip("10.88.0", ip)
     scenario = scenario or (f"agent-{variant}" + ("+honey" if honey else ""))
     t0 = time.time()
     label(ip, "agent", scenario, t0)
-    plain = variant != "default"
-    ua = (lambda k: "Mozilla/5.0 (api-defense-lab)") if plain else (lambda k: AGENT_UA[k])
+    if variant == "framework":
+        ua = lambda k: "norma/0.4"
+    elif variant == "default":
+        ua = lambda k: AGENT_UA[k]
+    else:
+        ua = lambda k: "Mozilla/5.0 (api-defense-lab)"
 
     def send(path, kind, token=None):
         h = {"X-Client-IP": ip, "User-Agent": ua(kind)}
@@ -256,8 +261,8 @@ def main():
     n.add_argument("--bundle", action="store_true", help="정상 사용자도 화면 번들을 받는다 (허니 API 오탐 시험)")
     at = sp.add_parser("attack")
     at.add_argument("kind", choices=["probe", "bola", "agent"])
-    at.add_argument("--variant", choices=["default", "ua-changed", "slow"], default="default",
-                    help="agent 변형 — 도구 UA / UA 변경 / UA 변경 + 느리게")
+    at.add_argument("--variant", choices=["default", "ua-changed", "slow", "framework"], default="default",
+                    help="agent 변형 — 도구 UA / UA 변경 / UA 변경 + 느리게 / 다섯 번째 갈래(norma UA)")
     at.add_argument("--honey", action="store_true", help="agent 가 번들에서 API 경로를 뽑아 미끼 경로까지 호출 (허니 API 시험)")
     at.add_argument("--ip")
     at.add_argument("--n", type=int, default=150)

@@ -9,6 +9,8 @@
 > **Optional modules:** `wazuh` (SIEM rule authoring) · `dashboard` (Elasticsearch + Grafana)  
 > **Traffic is synthetic. This is a lab, not a security product.**
 >
+> **For authorized use only.** DVRA is a deliberately vulnerable app; every port binds to `127.0.0.1` only (never expose this to the internet). Run it only in your own environment, against your own machine, for learning and testing your own detection — never against a target you don't own or control.
+>
 > **Default setup results** (Windows 11 + Docker Desktop, 2026-11-19):
 >
 > | Scenario | Detection | Blocked in |

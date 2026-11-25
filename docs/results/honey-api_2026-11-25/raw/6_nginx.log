@@ -1,0 +1,4 @@
+nginx-1  | 2026/11/24 18:41:17 [notice] 195#195: signal process started
+nginx-1  | [nginx] 차단 목록 다시 읽음: 1 IP
+nginx-1  | 2026/11/24 18:41:41 [notice] 276#276: signal process started
+nginx-1  | [nginx] 차단 목록 다시 읽음: 2 IP

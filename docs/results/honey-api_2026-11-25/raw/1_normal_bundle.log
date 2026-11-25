@@ -1,0 +1,13 @@
+ Container api-defense-lab-dvra-web-1 Running 
+ Container api-defense-lab-dvra-db-1 Running 
+ Container api-defense-lab-nginx-1 Running 
+ Container api-defense-lab-dvra-db-1 Waiting 
+ Container api-defense-lab-dvra-db-1 Healthy 
+ Container api-defense-lab-dvra-web-1 Waiting 
+ Container api-defense-lab-dvra-web-1 Healthy 
+ Container api-defense-lab-nginx-1 Waiting 
+ Container api-defense-lab-nginx-1 Healthy 
+ Container api-defense-lab-traffic-run-d43344435f85 Creating 
+ Container api-defense-lab-traffic-run-d43344435f85 Created 
+[실행 20261124T184027Z-c160] 대상 http://nginx · 정답지 /data/run/labels.jsonl
+[정상] 끝: 사용자 15 · 8회 · 44초

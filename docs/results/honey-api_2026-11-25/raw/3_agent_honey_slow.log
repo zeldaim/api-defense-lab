@@ -1,0 +1,42 @@
+ Container api-defense-lab-dvra-db-1 Running 
+ Container api-defense-lab-dvra-web-1 Running 
+ Container api-defense-lab-nginx-1 Running 
+ Container api-defense-lab-dvra-db-1 Waiting 
+ Container api-defense-lab-dvra-db-1 Healthy 
+ Container api-defense-lab-dvra-web-1 Waiting 
+ Container api-defense-lab-dvra-web-1 Healthy 
+ Container api-defense-lab-nginx-1 Waiting 
+ Container api-defense-lab-nginx-1 Healthy 
+ Container api-defense-lab-traffic-run-0b2d22bce1ac Creating 
+ Container api-defense-lab-traffic-run-0b2d22bce1ac Created 
+[실행 20261124T184140Z-faea] 대상 http://nginx · 정답지 /data/run/labels.jsonl
+[에이전트] 출발지 10.88.0.211 · 변형 slow
+  [번들에서 찾은 경로] GET /internal/admin/users -> 401
+  [번들에서 찾은 경로] GET /internal/debug/config -> 403
+  [번들에서 찾은 경로] GET /internal/v2/orders/export -> 403
+  [번들에서 찾은 경로] GET /menu -> 403
+  [번들에서 찾은 경로] GET /orders -> 403
+  [번들에서 찾은 경로] GET /profile -> 403
+  [번들에서 찾은 경로] GET /token -> 403
+  GET /profile -> 403
+  GET /orders -> 403
+  GET /orders/1 -> 403
+  GET /orders/status/1 -> 403
+  GET /discount-coupons -> 403
+  GET /referral-code -> 403
+  GET /admin/stats/disk -> 403
+  GET /profile -> 403
+  GET /orders -> 403
+  GET /orders/1 -> 403
+  GET /orders/status/1 -> 403
+  GET /discount-coupons -> 403
+  GET /referral-code -> 403
+  GET /admin/stats/disk -> 403
+  GET /profile -> 403
+  GET /orders -> 403
+  GET /orders/1 -> 403
+  GET /orders/status/1 -> 403
+  GET /discount-coupons -> 403
+  GET /referral-code -> 403
+  GET /admin/stats/disk -> 403
+[에이전트] 끝 (229.9초)

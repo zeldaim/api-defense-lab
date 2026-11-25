@@ -1,0 +1,163 @@
+ Image api-defense-lab/tools:0.1 Building 
+ Image api-defense-lab/dvra:d32d099 Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 1.01kB done
+#1 DONE 0.0s
+
+#2 [dvra-web internal] load git source https://github.com/theowni/Damn-Vulnerable-RESTaurant-API-Game.git#d32d09972aec7830f5f1d4a5d274cac7aae7eb82
+#2 CACHED
+
+#3 [detector internal] load build definition from Dockerfile
+#3 transferring dockerfile: 644B done
+#3 DONE 0.0s
+
+#4 [detector internal] load metadata for docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#4 DONE 0.0s
+
+#5 [detector internal] load .dockerignore
+#5 transferring context: 79B done
+#5 DONE 0.0s
+
+#6 [detector internal] load build context
+#6 transferring context: 513B done
+#6 DONE 0.0s
+
+#7 [detector 1/7] FROM docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b
+#7 resolve docker.io/library/python:3.12-slim@sha256:5e2bdb1b0d542d5039cffb8181c65930093949194a65c365dfb1b0fe13a4fa5b 0.0s done
+#7 DONE 0.0s
+
+#8 [detector 3/7] WORKDIR /lab
+#8 CACHED
+
+#9 [detector 5/7] COPY traffic/ /lab/traffic/
+#9 CACHED
+
+#10 [detector 6/7] COPY scorer/ /lab/scorer/
+#10 CACHED
+
+#11 [detector 4/7] COPY detector/ /lab/detector/
+#11 CACHED
+
+#12 [detector 2/7] RUN pip install --no-cache-dir numpy==2.1.3 scikit-learn==1.5.2 joblib==1.4.2 pyyaml==6.0.2
+#12 CACHED
+
+#13 [detector 7/7] COPY spec/ /lab/spec/
+#13 CACHED
+
+#14 [detector] exporting to image
+#14 exporting layers done
+#14 exporting manifest sha256:4b01baab59dc79b5c4e02d5bc9ce5868668042bc929ade818bd5c2755b1ae295 done
+#14 exporting config sha256:3d57ccd158969db0245ae93e6631b2d28a0b7772eecff317a727e9477b2d3a6a done
+#14 exporting attestation manifest sha256:a8d6065cc7064e3e986a68af6a7707a59bd91523158196883f8013dd5feadc1b done
+#14 exporting manifest list sha256:b3fc83f522892b19812fa82aee219d2ea2fba29c0392e2d364ccb8ca7530544e done
+#14 naming to docker.io/api-defense-lab/tools:0.1 done
+#14 unpacking to docker.io/api-defense-lab/tools:0.1 done
+#14 DONE 0.1s
+
+#15 [dvra-web internal] load metadata for docker.io/library/python:3.10-bookworm
+#15 ...
+
+#16 [detector] resolving provenance for metadata file
+#16 DONE 0.0s
+
+#17 [dvra-web internal] load metadata for docker.io/library/python:3.10-slim-bookworm
+#17 DONE 1.7s
+
+#15 [dvra-web internal] load metadata for docker.io/library/python:3.10-bookworm
+#15 DONE 2.7s
+
+#18 [dvra-web builder 1/5] FROM docker.io/library/python:3.10-bookworm@sha256:f72a86806f92fe13a49f49aeca1db0b19ea5cf4a0470b842a01b0e14314945b8
+#18 resolve docker.io/library/python:3.10-bookworm@sha256:f72a86806f92fe13a49f49aeca1db0b19ea5cf4a0470b842a01b0e14314945b8 0.0s done
+#18 DONE 0.0s
+
+#19 [dvra-web runtime  1/10] FROM docker.io/library/python:3.10-slim-bookworm@sha256:5be5aaecb962a41567bc8041f1e9e3432cb085b037fe057f9a562630b2e4b370
+#19 resolve docker.io/library/python:3.10-slim-bookworm@sha256:5be5aaecb962a41567bc8041f1e9e3432cb085b037fe057f9a562630b2e4b370 0.0s done
+#19 DONE 0.0s
+
+#20 [dvra-web runtime  9/10] RUN useradd -m app
+#20 CACHED
+
+#21 [dvra-web runtime  5/10] RUN pip install --no-cache-dir -r requirements.txt
+#21 CACHED
+
+#22 [dvra-web builder 5/5] RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
+#22 CACHED
+
+#23 [dvra-web builder 2/5] RUN pip install poetry==1.4.2
+#23 CACHED
+
+#24 [dvra-web runtime  3/10] RUN apt-get -y install libpq-dev gcc vim sudo
+#24 CACHED
+
+#25 [dvra-web runtime  6/10] COPY app ./app
+#25 CACHED
+
+#26 [dvra-web builder 4/5] COPY pyproject.toml poetry.lock ./
+#26 CACHED
+
+#27 [dvra-web runtime  4/10] COPY --from=builder /app/requirements.txt .
+#27 CACHED
+
+#28 [dvra-web runtime  7/10] WORKDIR /app
+#28 CACHED
+
+#29 [dvra-web builder 3/5] WORKDIR /app
+#29 CACHED
+
+#30 [dvra-web runtime  8/10] RUN echo 'ALL ALL=(ALL) NOPASSWD: /usr/bin/find' | sudo tee /etc/sudoers.d/find_nopasswd > /dev/null
+#30 CACHED
+
+#31 [dvra-web runtime  2/10] RUN apt-get update
+#31 CACHED
+
+#32 [dvra-web runtime 10/10] RUN chown app .
+#32 CACHED
+
+#33 [dvra-web] exporting to image
+#33 exporting layers done
+#33 exporting manifest sha256:83f6207de1c8470efdcf1467d87fa5d5296b106225422b0ac1336e7eca1ce263 done
+#33 exporting config sha256:79bf87420f6e8e869e94fc2252eaa8b6f3aa25892b011bd1a1994d115251d8a3 done
+#33 exporting attestation manifest sha256:a841678dba4015dd2d3044b79af4a14f2f14f13591c4f8775d6d8d7110c72270 done
+#33 exporting manifest list sha256:699f1d12ea926243aaea3395b8bd63c2fd540b49de7cb3886b1e1335e6b5b500 done
+#33 naming to docker.io/api-defense-lab/dvra:d32d099 done
+#33 unpacking to docker.io/api-defense-lab/dvra:d32d099 done
+#33 DONE 0.0s
+
+#34 [dvra-web] resolving provenance for metadata file
+#34 DONE 0.0s
+ Image api-defense-lab/dvra:d32d099 Built 
+ Image api-defense-lab/tools:0.1 Built 
+ Network api-defense-lab_default Creating 
+ Volume api-defense-lab_wazuh-alerts Creating 
+ Volume api-defense-lab_labdata Creating 
+ Network api-defense-lab_default Creating 
+ Volume api-defense-lab_labdata Creating 
+ Volume api-defense-lab_wazuh-alerts Creating 
+ Volume api-defense-lab_labdata Created 
+ Volume api-defense-lab_labdata Created 
+ Volume api-defense-lab_wazuh-alerts Created 
+ Volume api-defense-lab_wazuh-alerts Created 
+ Network api-defense-lab_default Created 
+ Network api-defense-lab_default Created 
+ Container api-defense-lab-dvra-db-1 Creating 
+ Container api-defense-lab-dvra-db-1 Created 
+ Container api-defense-lab-dvra-web-1 Creating 
+ Container api-defense-lab-dvra-web-1 Created 
+ Container api-defense-lab-nginx-1 Creating 
+ Container api-defense-lab-nginx-1 Created 
+ Container api-defense-lab-detector-1 Creating 
+ Container api-defense-lab-detector-1 Created 
+ Container api-defense-lab-dvra-db-1 Starting 
+ Container api-defense-lab-dvra-db-1 Started 
+ Container api-defense-lab-dvra-db-1 Waiting 
+ Container api-defense-lab-dvra-db-1 Healthy 
+ Container api-defense-lab-dvra-web-1 Starting 
+ Container api-defense-lab-dvra-web-1 Started 
+ Container api-defense-lab-dvra-web-1 Waiting 
+ Container api-defense-lab-dvra-web-1 Healthy 
+ Container api-defense-lab-nginx-1 Starting 
+ Container api-defense-lab-nginx-1 Started 
+ Container api-defense-lab-nginx-1 Waiting 
+ Container api-defense-lab-nginx-1 Healthy 
+ Container api-defense-lab-detector-1 Starting 
+ Container api-defense-lab-detector-1 Started 
