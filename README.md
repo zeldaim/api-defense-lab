@@ -443,6 +443,7 @@ I'm looking for security practitioners, developers, and open-source enthusiasts 
 - ML-based BOLA anomaly detection and the automatic blocking behaviour
 - Detection and false-positive results **on the lab's synthetic traffic** (these are lab scores, not real-world accuracy)
 - Whether `scorer` numbers land in the same range as the results table above
+- **Circularity check**: the answer key and the evaluated traffic both come from `traffic/lab_traffic.py`. A first independent check exists — [traffic-persona-lab](https://github.com/zeldaim/traffic-persona-lab), a structurally different generator (spec-driven states, persona Markov mixture, timing cross-validated against two real 1995 web traces) — sent normal traffic here (20 IPs, 100 requests) with **0 false-positive blocks**. Attack-side cross-validation (reproducing BOLA with that generator) is not done yet.
 
 **How to report** — open a [test report issue](../../issues/new?template=test-report.yml). It asks for your OS, Docker / Compose versions, the modules you enabled, and the `reports/score.json` from your run, so results can be compared side by side. You don't need to write code: installation problems, differing numbers, new attack scenarios, and better rules or models are all useful.
 
