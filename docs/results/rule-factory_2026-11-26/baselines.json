@@ -1,0 +1,882 @@
+[
+ {
+  "baseline": "사람 룰(레포 rules/sigma)",
+  "학습(IP무작위)": {
+   "attackers": {
+    "203.74.155.251": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": true,
+     "ttd": 0.0,
+     "leaked": 0
+    },
+    "172.31.131.108": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": false,
+     "ttd": null,
+     "leaked": 152
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1964,
+   "normal_flagged": 0
+  },
+  "A 4개(IP무작위)": [
+   {
+    "attackers": {
+     "203.35.40.196": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     },
+     "172.137.176.81": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.35.138.235": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     },
+     "172.129.21.147": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1994,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.137.236.219": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "203.18.245.5": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1952,
+    "normal_flagged": 0
+   }
+  ],
+  "B 변종": {
+   "attackers": {
+    "203.55.167.108": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": true,
+     "ttd": 0.0,
+     "leaked": 0
+    },
+    "192.162.134.95": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": false,
+     "ttd": null,
+     "leaked": 152
+    },
+    "203.193.171.99": {
+     "role": "probe_variant",
+     "n_req": 15,
+     "detected": true,
+     "ttd": 0.0,
+     "leaked": 0
+    },
+    "192.42.151.9": {
+     "role": "bola_variant",
+     "n_req": 150,
+     "detected": false,
+     "ttd": null,
+     "leaked": 150
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1943,
+   "normal_flagged": 0
+  },
+  "원본IP(무작위 안 함)": [
+   {
+    "attackers": {
+     "10.66.0.183": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     },
+     "10.77.0.18": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "10.77.0.220": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   }
+  ]
+ },
+ {
+  "baseline": "치트: IP 대역 10.66./10.77.",
+  "학습(IP무작위)": {
+   "attackers": {
+    "203.74.155.251": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": false,
+     "ttd": null,
+     "leaked": 17
+    },
+    "172.31.131.108": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": false,
+     "ttd": null,
+     "leaked": 152
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1964,
+   "normal_flagged": 0
+  },
+  "A 4개(IP무작위)": [
+   {
+    "attackers": {
+     "203.35.40.196": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": false,
+      "ttd": null,
+      "leaked": 17
+     },
+     "172.137.176.81": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.35.138.235": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": false,
+      "ttd": null,
+      "leaked": 17
+     },
+     "172.129.21.147": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1994,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.137.236.219": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "203.18.245.5": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": false,
+      "ttd": null,
+      "leaked": 152
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1952,
+    "normal_flagged": 0
+   }
+  ],
+  "B 변종": {
+   "attackers": {
+    "203.55.167.108": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": false,
+     "ttd": null,
+     "leaked": 17
+    },
+    "192.162.134.95": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": false,
+     "ttd": null,
+     "leaked": 152
+    },
+    "203.193.171.99": {
+     "role": "probe_variant",
+     "n_req": 15,
+     "detected": false,
+     "ttd": null,
+     "leaked": 15
+    },
+    "192.42.151.9": {
+     "role": "bola_variant",
+     "n_req": 150,
+     "detected": false,
+     "ttd": null,
+     "leaked": 150
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1943,
+   "normal_flagged": 0
+  },
+  "원본IP(무작위 안 함)": [
+   {
+    "attackers": {
+     "10.66.0.183": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     },
+     "10.77.0.18": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "10.77.0.220": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   }
+  ]
+ },
+ {
+  "baseline": "암기: 학습 탐색 경로",
+  "학습(IP무작위)": {
+   "attackers": {
+    "203.74.155.251": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": true,
+     "ttd": 0.0,
+     "leaked": 0
+    },
+    "172.31.131.108": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": true,
+     "ttd": 0.0,
+     "leaked": 0
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1964,
+   "normal_flagged": 0
+  },
+  "A 4개(IP무작위)": [
+   {
+    "attackers": {
+     "203.35.40.196": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     },
+     "172.137.176.81": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.35.138.235": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     },
+     "172.129.21.147": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1994,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.137.236.219": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "203.18.245.5": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1952,
+    "normal_flagged": 0
+   }
+  ],
+  "B 변종": {
+   "attackers": {
+    "203.55.167.108": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": true,
+     "ttd": 0.0,
+     "leaked": 0
+    },
+    "192.162.134.95": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": true,
+     "ttd": 0.0,
+     "leaked": 0
+    },
+    "203.193.171.99": {
+     "role": "probe_variant",
+     "n_req": 15,
+     "detected": false,
+     "ttd": null,
+     "leaked": 15
+    },
+    "192.42.151.9": {
+     "role": "bola_variant",
+     "n_req": 150,
+     "detected": false,
+     "ttd": null,
+     "leaked": 150
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1943,
+   "normal_flagged": 0
+  },
+  "원본IP(무작위 안 함)": [
+   {
+    "attackers": {
+     "10.66.0.183": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     },
+     "10.77.0.18": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "10.77.0.220": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 0.0,
+      "leaked": 0
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   }
+  ]
+ },
+ {
+  "baseline": "단순: 같은 IP 404 5회/30초",
+  "학습(IP무작위)": {
+   "attackers": {
+    "203.74.155.251": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": true,
+     "ttd": 4.0,
+     "leaked": 10
+    },
+    "172.31.131.108": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": true,
+     "ttd": 20.0,
+     "leaked": 51
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1964,
+   "normal_flagged": 0
+  },
+  "A 4개(IP무작위)": [
+   {
+    "attackers": {
+     "203.35.40.196": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 5.0,
+      "leaked": 11
+     },
+     "172.137.176.81": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 20.0,
+      "leaked": 50
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.35.138.235": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 5.0,
+      "leaked": 11
+     },
+     "172.129.21.147": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 20.0,
+      "leaked": 50
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1994,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.137.236.219": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 100.0,
+      "leaked": 42
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "203.18.245.5": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 173.0,
+      "leaked": 71
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1952,
+    "normal_flagged": 0
+   }
+  ],
+  "B 변종": {
+   "attackers": {
+    "203.55.167.108": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": true,
+     "ttd": 5.0,
+     "leaked": 11
+    },
+    "192.162.134.95": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": true,
+     "ttd": 20.0,
+     "leaked": 50
+    },
+    "203.193.171.99": {
+     "role": "probe_variant",
+     "n_req": 15,
+     "detected": true,
+     "ttd": 4.0,
+     "leaked": 9
+    },
+    "192.42.151.9": {
+     "role": "bola_variant",
+     "n_req": 150,
+     "detected": true,
+     "ttd": 2.0,
+     "leaked": 6
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1943,
+   "normal_flagged": 0
+  },
+  "원본IP(무작위 안 함)": [
+   {
+    "attackers": {
+     "10.66.0.183": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": true,
+      "ttd": 5.0,
+      "leaked": 11
+     },
+     "10.77.0.18": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 20.0,
+      "leaked": 50
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "10.77.0.220": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 100.0,
+      "leaked": 42
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   }
+  ]
+ },
+ {
+  "baseline": "BOLA형: /orders/N 404 10회/60초",
+  "학습(IP무작위)": {
+   "attackers": {
+    "203.74.155.251": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": false,
+     "ttd": null,
+     "leaked": 17
+    },
+    "172.31.131.108": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": true,
+     "ttd": 22.0,
+     "leaked": 56
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1964,
+   "normal_flagged": 0
+  },
+  "A 4개(IP무작위)": [
+   {
+    "attackers": {
+     "203.35.40.196": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": false,
+      "ttd": null,
+      "leaked": 17
+     },
+     "172.137.176.81": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 22.0,
+      "leaked": 55
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.35.138.235": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": false,
+      "ttd": null,
+      "leaked": 17
+     },
+     "172.129.21.147": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 22.0,
+      "leaked": 55
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1994,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "172.137.236.219": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 113.0,
+      "leaked": 47
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "203.18.245.5": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 186.0,
+      "leaked": 76
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1952,
+    "normal_flagged": 0
+   }
+  ],
+  "B 변종": {
+   "attackers": {
+    "203.55.167.108": {
+     "role": "probe",
+     "n_req": 17,
+     "detected": false,
+     "ttd": null,
+     "leaked": 17
+    },
+    "192.162.134.95": {
+     "role": "bola",
+     "n_req": 152,
+     "detected": true,
+     "ttd": 22.0,
+     "leaked": 55
+    },
+    "203.193.171.99": {
+     "role": "probe_variant",
+     "n_req": 15,
+     "detected": false,
+     "ttd": null,
+     "leaked": 15
+    },
+    "192.42.151.9": {
+     "role": "bola_variant",
+     "n_req": 150,
+     "detected": false,
+     "ttd": null,
+     "leaked": 150
+    }
+   },
+   "normal_actors": 20,
+   "normal_fp_actors": 0,
+   "normal_requests": 1943,
+   "normal_flagged": 0
+  },
+  "원본IP(무작위 안 함)": [
+   {
+    "attackers": {
+     "10.66.0.183": {
+      "role": "probe",
+      "n_req": 17,
+      "detected": false,
+      "ttd": null,
+      "leaked": 17
+     },
+     "10.77.0.18": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 22.0,
+      "leaked": 55
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1943,
+    "normal_flagged": 0
+   },
+   {
+    "attackers": {
+     "10.77.0.220": {
+      "role": "bola",
+      "n_req": 152,
+      "detected": true,
+      "ttd": 113.0,
+      "leaked": 47
+     }
+    },
+    "normal_actors": 20,
+    "normal_fp_actors": 0,
+    "normal_requests": 1986,
+    "normal_flagged": 0
+   }
+  ]
+ }
+]
