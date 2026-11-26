@@ -30,7 +30,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}   # 온라인 검사(고정한 SHA 가 정말 그 저장소의 커밋인지 · 알려진 취약 액션)
         run: zizmor --format sarif .github/workflows > zizmor.sarif || true
-      - uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+      - uses: github/codeql-action/upload-sarif@1bd86f2fdb4b86187fa4059f16f31a3202acc9ea # v4.39.4
         with:
           sarif_file: zizmor.sarif
           category: zizmor
