@@ -1,6 +1,6 @@
 # Honey API — 미끼 경로로 느린 에이전트 잡기 (2026-11-25)
 
-`agent` 시나리오([artex-fingerprint](https://github.com/zeldaim/artex-fingerprint) 정적 분석에서 뽑은 행위)에서 **느리게(variant `slow`, 경로마다 9초) 도는 에이전트는 401 순회 빈도 룰(60초에 8회)을 피해 나갔다** (알려진 한계, `tests/detection/test_sigma.py`에 기록됨). UA·속도·요청 수에 기대지 않고 잡을 방법이 필요했다.
+`agent` 시나리오([artex-fingerprint](https://github.com/zeldaim/artex-fingerprint) 정적 분석에서 뽑은 행위)에서 **느리게(variant `slow`, 경로마다 9초) 도는 에이전트는 401 순회 빈도 룰(60초에 8회)을 피해 나갔다** (알려진 한계, `tests/detection/test_sigma.py`에 기록됨 — 간격을 9초로 **고정**한 경우. 랜덤 6~12초 간격의 실측은 10회 중 9회 차단·1회 우회로 [README](../README.md#에이전트-시나리오-결과-traffic-attack-agent-2026-11-27)에 따로 적었다). UA·속도·요청 수에 기대지 않고 잡을 방법이 필요했다.
 
 ## 방법
 
